@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import mvic.System.StudyList;
+
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements StudyView {
 
