@@ -1,9 +1,9 @@
 /**
  * 
  */
-package mvic;
+package mivc;
 
-import mvic.System.LocalSettingsManager;
+import mivc.System.LocalSettingsManager;
 
 // Import our settings manager
 /**

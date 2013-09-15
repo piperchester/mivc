@@ -1,4 +1,4 @@
-package mvic.UI;
+package mivc.UI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

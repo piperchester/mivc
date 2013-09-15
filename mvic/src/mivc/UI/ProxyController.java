@@ -1,4 +1,4 @@
-package mvic.UI;
+package mivc.UI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

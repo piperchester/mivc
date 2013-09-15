@@ -1,7 +1,7 @@
 /**
  * 
  */
-package mvic.System;
+package mivc.System;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;

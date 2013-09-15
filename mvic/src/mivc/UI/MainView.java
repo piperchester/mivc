@@ -1,4 +1,4 @@
-package mvic.UI;
+package mivc.UI;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import mvic.System.StudyList;
+import mivc.System.StudyList;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements StudyView {
@@ -67,7 +67,7 @@ public class MainView extends JFrame implements StudyView {
 	
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#toggleView()
+	 * @see mivc.UI.StudyView#toggleView()
 	 */
 	@Override
 	public void toggleView() {
@@ -82,7 +82,7 @@ public class MainView extends JFrame implements StudyView {
 	
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#addViewListener(java.awt.event.ActionListener)
+	 * @see mivc.UI.StudyView#addViewListener(java.awt.event.ActionListener)
 	 */
 	@Override
 	public void addViewListener(ActionListener al) {
@@ -91,7 +91,7 @@ public class MainView extends JFrame implements StudyView {
 	
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#addOpenListener(java.awt.event.ActionListener)
+	 * @see mivc.UI.StudyView#addOpenListener(java.awt.event.ActionListener)
 	 */
 	@Override
 	public void addOpenListener(ActionListener al) {
@@ -100,7 +100,7 @@ public class MainView extends JFrame implements StudyView {
 
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#addSaveStudyListener(java.awt.event.ActionListener)
+	 * @see mivc.UI.StudyView#addSaveStudyListener(java.awt.event.ActionListener)
 	 */
 	@Override
 	public void addSaveStudyListener(ActionListener al) {
@@ -109,7 +109,7 @@ public class MainView extends JFrame implements StudyView {
 
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#addSaveViewListener(java.awt.event.ActionListener)
+	 * @see mivc.UI.StudyView#addSaveViewListener(java.awt.event.ActionListener)
 	 */
 	@Override
 	public void addSaveViewListener(ActionListener al) {
@@ -118,7 +118,7 @@ public class MainView extends JFrame implements StudyView {
 
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#addPrevListener(java.awt.event.ActionListener)
+	 * @see mivc.UI.StudyView#addPrevListener(java.awt.event.ActionListener)
 	 */
 	@Override
 	public void addPrevListener(ActionListener al) {
@@ -127,7 +127,7 @@ public class MainView extends JFrame implements StudyView {
 
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#addNextListener(java.awt.event.ActionListener)
+	 * @see mivc.UI.StudyView#addNextListener(java.awt.event.ActionListener)
 	 */
 	@Override
 	public void addNextListener(ActionListener al) {
@@ -136,7 +136,7 @@ public class MainView extends JFrame implements StudyView {
 	
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#setImages(java.awt.image.BufferedImage[])
+	 * @see mivc.UI.StudyView#setImages(java.awt.image.BufferedImage[])
 	 */
 	@Override
 	public void setImages(BufferedImage... images) {
@@ -146,7 +146,7 @@ public class MainView extends JFrame implements StudyView {
 	
 	/**
 	 * (non-Javadoc)
-	 * @see mvic.UI.StudyView#showList(java.lang.String[])
+	 * @see mivc.UI.StudyView#showList(java.lang.String[])
 	 */
 	@Override
 	public void showList(String[] studies) {
