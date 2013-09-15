@@ -22,6 +22,9 @@ public class MainView extends JFrame implements StudyView {
 	private JPanel quadView;
 	private boolean viewingSingle = true;
 	
+	/**
+	 * The main view to be used for displaying MIVC data
+	 */
 	public MainView() {
 		setLayout(new BorderLayout());
 		initializeComponents();
@@ -42,6 +45,9 @@ public class MainView extends JFrame implements StudyView {
 		setVisible(true);
 	}
 	
+	/**
+	 * Creates the components used in the GUI
+	 */
 	private void initializeComponents() {
 		toolbar = new Toolbar();
 		imageView = new JPanel(new CardLayout());
@@ -49,6 +55,9 @@ public class MainView extends JFrame implements StudyView {
 		quadView = new QuadView();
 	}
 	
+	/**
+	 * Lays the components out on the GUI
+	 */
 	private void layoutComponents() {
 		getContentPane().add(toolbar, BorderLayout.NORTH);
 		getContentPane().add(imageView, BorderLayout.CENTER);
@@ -56,6 +65,11 @@ public class MainView extends JFrame implements StudyView {
 		imageView.add(quadView, "QV");
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#toggleView()
+	 */
+	@Override
 	public void toggleView() {
 		CardLayout cl = (CardLayout)imageView.getLayout();
 		if (viewingSingle) {
@@ -66,46 +80,82 @@ public class MainView extends JFrame implements StudyView {
 		viewingSingle = !viewingSingle;
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#addViewListener(java.awt.event.ActionListener)
+	 */
+	@Override
 	public void addViewListener(ActionListener al) {
 		((Toolbar)toolbar).addViewListener(al);
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#addOpenListener(java.awt.event.ActionListener)
+	 */
 	@Override
 	public void addOpenListener(ActionListener al) {
 		((Toolbar)toolbar).addOpenListener(al);
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#addSaveStudyListener(java.awt.event.ActionListener)
+	 */
 	@Override
 	public void addSaveStudyListener(ActionListener al) {
 		((Toolbar)toolbar).addSaveStudyListener(al);
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#addSaveViewListener(java.awt.event.ActionListener)
+	 */
 	@Override
 	public void addSaveViewListener(ActionListener al) {
 		((Toolbar)toolbar).addSaveViewListener(al);
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#addPrevListener(java.awt.event.ActionListener)
+	 */
 	@Override
 	public void addPrevListener(ActionListener al) {
 		((Toolbar)toolbar).addPrevListener(al);
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#addNextListener(java.awt.event.ActionListener)
+	 */
 	@Override
 	public void addNextListener(ActionListener al) {
 		((Toolbar)toolbar).addNextListener(al);
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#setImages(java.awt.image.BufferedImage[])
+	 */
 	@Override
 	public void setImages(BufferedImage... images) {
 		// Call to the views to show the first on the SingleView
 		// and show four on the QuadView
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mvic.UI.StudyView#showList(java.lang.String[])
+	 */
 	@Override
 	public void showList(String[] studies) {
 		new StudyList(studies);
 	}
 	
+	/**
+	 * Creates the appropriate objecst and shows the GUI
+	 */
 	public static void createAndShowGUI() {
 		JFrame view = new MainView();
 		
@@ -113,6 +163,9 @@ public class MainView extends JFrame implements StudyView {
 		new ProxyController((StudyView)view);
 	}
 	
+	/**
+	 * Driver method, ensures the GUI is running on the event thread
+	 */
 	public static void main(String[] args) {
         // Set the Nimbus look and feel because it's new and cool looking
         try {

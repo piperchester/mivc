@@ -19,6 +19,9 @@ public class QuadView extends JPanel {
 	private JLabel lblImage3;
 	private JLabel lblImage4;
 	
+	/*
+	 * Creates a display for viewing four images
+	 */
 	public QuadView() {
 		setLayout(new GridLayout(2,2));
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -26,6 +29,9 @@ public class QuadView extends JPanel {
 		layoutComponents();
 	}
 	
+	/*
+	 * Initialize components for the GUI
+	 */
 	private void initializeComponents() {
 		lblImage1 = new JLabel("Image Goes Here", JLabel.CENTER);
 		lblImage1.setPreferredSize(new Dimension(100,100));
@@ -41,6 +47,9 @@ public class QuadView extends JPanel {
 		lblImage4.setBorder(DashedBorder.createBlackLineBorder());
 	}
 	
+	/*
+	 * Lay the components on the GUI
+	 */
 	private void layoutComponents() {
 		add(lblImage1);
 		add(lblImage2);
@@ -48,6 +57,13 @@ public class QuadView extends JPanel {
 		add(lblImage4);
 	}
 	
+	/**
+	 * Set the images to view on the display
+	 * @param img1 first image to display
+	 * @param img2 second image to display
+	 * @param img3 third image to display
+	 * @param img4 fourth image to display
+	 */
 	protected void setImage(BufferedImage img1, BufferedImage img2, 
 			BufferedImage img3, BufferedImage img4) {
 		lblImage1.setIcon(new ImageIcon(img1));

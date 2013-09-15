@@ -24,12 +24,18 @@ public class Toolbar extends JPanel {
 	private JButton btnPrev;
 	private JLabel lblStatus; // This is updated by the MainView
 	
+	/**
+	 * A toolbar for the GUI which contains multiple action buttons
+	 */
 	public Toolbar() {
 		setLayout(new MigLayout());
 		initializeComponents();
 		layoutComponents();
 	}
 	
+	/**
+	 * Initialize components for the GUI
+	 */
 	private void initializeComponents() {
 		btnOpen = new JButton("Open");
 		btnSaveView = new JButton("Save View");
@@ -48,6 +54,9 @@ public class Toolbar extends JPanel {
 //		btnPrev.addActionListener(controller);
 	}
 	
+	/**
+	 * Layout the components on the GUI
+	 */
 	private void layoutComponents() {
 		add(btnOpen, "gap unrelated");
 		add(btnSaveView);
@@ -58,6 +67,11 @@ public class Toolbar extends JPanel {
 		add(btnNext, "east, gap unrelated");
 	}
 	
+	/**
+	 * Update the status displayed on the GUI
+	 * @param currentImage the current image number
+	 * @param totalImages the total number of images in the study
+	 */
 	protected void setStatus(String currentImage, String totalImages) {
 		lblStatus.setText("Viewing image(s) " + currentImage 
 				+ " of " + totalImages);
