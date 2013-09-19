@@ -19,11 +19,11 @@ public class Study {
 
     public Study(String name, File[] imagePaths) {
         this.name = name;
-        this.images = new ImageProxy[imagePaths.length];
+        this.images = new StudyImage[imagePaths.length];
         
         int index = 0;
         for (File f : imagePaths) {
-            images[index++] = new ImageProxy(f);
+            images[index++] = new StudyImage(f);
         }
     }
 
@@ -34,17 +34,21 @@ public class Study {
     public BufferedImage getImage(int index) throws IOException {
         return this.images[index].getImage();
     }
+    
+    public String getImageName(int index) {
+	return this.images[index].getName();
+    }
 
     private final String name;
-    private final ImageProxy[] images;
+    private final StudyImage[] images;
     
     /**
      * Handles images held by the study.
      * @author Ty
      *
      */
-    private class ImageProxy {
-        private ImageProxy(File path) {
+    private class StudyImage {
+        private StudyImage(File path) {
             this.path = path;
         }
         
@@ -54,6 +58,10 @@ public class Study {
             }
             
             return this.image;
+        }
+        
+        private String getName() {
+            return this.path.getName();
         }
         
         private void loadImage() throws IOException {
