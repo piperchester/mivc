@@ -5,6 +5,7 @@ package mivc.System.IO;
 
 import java.io.File;
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -13,16 +14,39 @@ import java.util.List;
  */
 public class StudyManager implements DataManager, Scannable<File> {
     
+    static List<File> files = new ArrayList<File>();
+    
     protected StudyManager() { }
     
     public static StudyManager getInstance() {
 	return instance;
     }
-
+    
     @Override
     public List<File> scan(String path) {
 	// TODO Scan path and return a List of directories useable as studies
-	return null;
+	
+	listFilesAndFilesSubDirectories(path);
+	
+	return files;
+    }
+    
+    private static void listFilesAndFilesSubDirectories(String directoryName){
+ 
+        File directory = new File(directoryName);
+ 
+        //get all the files from a directory
+        File[] fList = directory.listFiles();
+ 
+        for (File file : fList){
+            if (file.isFile())
+            {
+                files.add(file);  
+            } 
+            else if (file.isDirectory()){
+                listFilesAndFilesSubDirectories(file.getAbsolutePath());
+           }
+        }
     }
 
     @Override
