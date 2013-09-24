@@ -1,7 +1,8 @@
 /**
  * StudyManager.java
  */
-package mivc.System.IO;
+
+package System.IO;
 
 import java.io.File;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * StudyManager handles basic IO operations related to studies.
  * @author Ty
  */
-public class StudyManager implements DataManager, Scannable<File> {
+public class StudyManager implements Scannable<File> {
     
     static List<File> files = new ArrayList<File>();
     
@@ -48,14 +49,32 @@ public class StudyManager implements DataManager, Scannable<File> {
            }
         }
     }
+    
+    public static List<String> listStudies(String directoryName)
+    {
+	    
+	    List<String> studies = new ArrayList<String>();
+	    
+	    File f = new File(directoryName);
+		File [] list = f.listFiles();
+		
+		for (File directory: list)
+		{
+			if (directory.isDirectory())
+			{
+				studies.add((directory.getName()));	
+			}	
+		}
+    
+		return studies;
+    }
+  
 
-    @Override
     public Object read(String path) {
 	// TODO Create a study based on a directory and its contents
 	return null;
     }
 
-    @Override
     public void write(String path, Object obj) {
 	// TODO Write a study to a specific path
     }
