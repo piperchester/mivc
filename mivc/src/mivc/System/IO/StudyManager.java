@@ -2,7 +2,7 @@
  * StudyManager.java
  */
 
-package System.IO;
+package mivc.System.IO;
 
 import java.io.File;
 import java.util.List;

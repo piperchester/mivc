@@ -1,7 +1,6 @@
 /**
  * 
  */
-package mivc;
 
 import mivc.System.LocalSettingsManager;
 
