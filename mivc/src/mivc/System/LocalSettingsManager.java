@@ -15,26 +15,32 @@ import java.io.Serializable;
  * LocalSettingsManager
  * This class will be able to hold and contain all of the settings, variables, 
  * switches that will be necessary for any project.
+ * Using the Singleton Pattern so it can be used across the entire subsystem
+ * 
+ * Usage:
+ * LocalSettingsManager.getInstance().Load(Path to Settings File);
+ * LocalSettingsManager.getInstance().set("Hello", "Hello");
  */
 public class LocalSettingsManager implements Serializable {
 
 	/**
 	 * 
 	 */
+	private static LocalSettingsManager m_instance = null;
 	private static final long serialVersionUID = 1L;
 	public HashMap<String, String>	m_strings = new HashMap<String, String>();
 	public HashMap<String, Integer> m_ints = new HashMap<String, Integer>();
 	public HashMap<String, Boolean> m_bools = new HashMap<String, Boolean>();
 	
 	/**
-	 * constructor
+	 * LocalSettingsManager_Init
 	 * Loads settings from a file
 	 * @param p_FileName - File Path to the settings file
 	 */
-	public LocalSettingsManager(String p_FileName)
+	public boolean Load(String p_FileName)
 	{
 		if (p_FileName == "")
-			return;
+			return false;
 		
 		try
 		{
@@ -60,13 +66,23 @@ public class LocalSettingsManager implements Serializable {
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
+			return false;
 		}
 		
+		return true;
 	}
 	
-	public LocalSettingsManager()
+	protected LocalSettingsManager()
 	{
 		// Do nothing, start a blank slate
+	}
+	
+	public static LocalSettingsManager getInstance()
+	{
+		if (m_instance == null)
+			m_instance = new LocalSettingsManager();
+		
+		return m_instance;
 	}
 	
 	/**
