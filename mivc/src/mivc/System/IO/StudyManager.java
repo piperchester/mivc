@@ -50,12 +50,12 @@ public class StudyManager implements Scannable<File> {
         }
     }
     
-    public static List<String> listStudies(String directoryName)
+    public List<String> listStudies()
     {
 	    
 	    List<String> studies = new ArrayList<String>();
 	    
-	    File f = new File(directoryName);
+	    File f = new File("resources/MedImageViewerStudies");
 		File [] list = f.listFiles();
 		
 		for (File directory: list)
@@ -65,7 +65,6 @@ public class StudyManager implements Scannable<File> {
 				studies.add((directory.getName()));	
 			}	
 		}
-    
 		return studies;
     }
   
