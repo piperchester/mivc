@@ -3,10 +3,14 @@ package mivc.UI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import mivc.System.Study;
+
+
 public class ProxyController {
 
 	private StudyView view;
-	//private Study currentStudy;
+	private Study currentStudy;
+	
 	
 	/**
 	 * Proxy controller is the brains for the GUI.  Currently it is designed
