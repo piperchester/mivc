@@ -12,10 +12,11 @@ import java.util.ArrayList;
 /**
  * StudyManager handles basic IO operations related to studies.
  * @author Ty
+ * @author piperchester
  */
 public class StudyManager implements Scannable<File> {
     
-    static List<File> files = new ArrayList<File>();
+    public static List<File> files = new ArrayList<File>();
     
     public StudyManager() { }
     
@@ -24,12 +25,37 @@ public class StudyManager implements Scannable<File> {
     }
     
     @Override
+    /**
+     * Scans through a directory or nested directory and adds pathnames
+     * to the ArrayList, files.
+     * @param path - the location of where the scan will begin
+     */
     public List<File> scan(String path) {
-	// TODO Scan path and return a List of directories usable as studies
-	
-    	listFilesAndFilesSubDirectories(path);
-	
+    	System.out.println("Scanning: " + path);
+    	
+    	try {
+            this.addTree(new File(path));
+            System.out.println(files);
+//            listFilesAndFilesSubDirectories(path);
+    	} catch (NullPointerException e){
+    		System.out.println("The path was not scanned...");
+    	}
+    	
     	return files;
+    }
+    
+    /**
+     * Recursively searches the directory, adding a new file/directory to the ArrayList.
+     * @param file - Starting point for the search
+     */
+    public void addTree(File file) {
+        File[] children = file.listFiles();  // Array of pathnames 
+        if (children != null) {
+            for (File child : children) {
+                files.add(child);  // Adds new pathname to the ArrayList
+                addTree(child);
+            }
+        }
     }
     
     private static void listFilesAndFilesSubDirectories(String directoryName){
