@@ -17,19 +17,19 @@ public class StudyManager implements Scannable<File> {
     
     static List<File> files = new ArrayList<File>();
     
-    protected StudyManager() { }
+    public StudyManager() { }
     
     public static StudyManager getInstance() {
-	return instance;
+    	return instance;
     }
     
     @Override
     public List<File> scan(String path) {
-	// TODO Scan path and return a List of directories useable as studies
+	// TODO Scan path and return a List of directories usable as studies
 	
-	listFilesAndFilesSubDirectories(path);
+    	listFilesAndFilesSubDirectories(path);
 	
-	return files;
+    	return files;
     }
     
     private static void listFilesAndFilesSubDirectories(String directoryName){
@@ -70,12 +70,12 @@ public class StudyManager implements Scannable<File> {
   
 
     public Object read(String path) {
-	// TODO Create a study based on a directory and its contents
-	return null;
+    	// TODO Create a study based on a directory and its contents
+    	return null;
     }
 
     public void write(String path, Object obj) {
-	// TODO Write a study to a specific path
+    	// TODO Write a study to a specific path
     }
     
     private static StudyManager instance = new StudyManager();

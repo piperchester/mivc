@@ -1,13 +1,11 @@
 /**
- * 
+ * Main.java
  */
-
 import mivc.System.LocalSettingsManager;
 
-// Import our settings manager
 /**
  * @author act4122
- *
+ * @author piperchester
  */
 public class Main {
 
@@ -15,7 +13,8 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		System.out.println("Launching system...");
+		System.out.println("Closing system...");
 	}
 
 }
