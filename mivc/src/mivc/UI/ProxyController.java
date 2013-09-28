@@ -4,12 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import mivc.System.Study;
+import mivc.System.IO.StudyManager;
 
 
 public class ProxyController {
 
 	private StudyView view;
 	private Study currentStudy;
+	public StudyManager studyManager;
 	
 	
 	/**
@@ -25,6 +27,8 @@ public class ProxyController {
 		view.addSaveViewListener(new SaveViewListener());
 		view.addNextListener(new NextListener());
 		view.addPrevListener(new PrevListener());
+		
+		studyManager = new StudyManager();
 	}
 	
 	/**
@@ -47,8 +51,17 @@ public class ProxyController {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			System.out.println("Call to open a new study");
-			view.showList(new String[] { "Study 1", "Study 2", "Study 3", "  ...  " });
-			// Display the Study List window
+			
+			studyManager.scan("studies");
+			
+			int studyCounter = 0;
+			String[] studies = new String[studyManager.studyCount];
+			for (String study : studyManager.listStudies()){
+				studies[studyCounter] = study;
+				studyCounter++;
+			}
+			
+			view.showList(studies);  // Display the Study List window
 		}
 	}
 	

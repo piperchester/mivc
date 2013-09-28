@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class StudyManager implements Scannable<File> {
     
     public static List<File> files = new ArrayList<File>();  // Holds pathnames of the directory
+    public int studyCount = 0;
     
     public StudyManager() { }
     
@@ -91,6 +92,7 @@ public class StudyManager implements Scannable<File> {
 	    for (File directory : files){
 	    	if (directory.isDirectory()){
 	    		System.out.println("Adding dir: " + directory);
+	    		studyCount++;
 	    		studies.add((directory.getName()));
 	    	}
 	    }
