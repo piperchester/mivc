@@ -2,6 +2,11 @@ package mivc.UI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import mivc.System.Study;
 import mivc.System.IO.StudyManager;
@@ -59,6 +64,14 @@ public class ProxyController {
 			for (String study : studyManager.listStudies()){
 				studies[studyCounter] = study;
 				studyCounter++;
+			}
+		
+			BufferedImage image;
+			try {
+				image = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				view.setImages(image);
+			} catch (IOException e) {
+				System.out.println("Couldn't read image...");
 			}
 			
 			view.showList(studies);  // Display the Study List window

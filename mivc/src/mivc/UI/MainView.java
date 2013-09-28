@@ -6,7 +6,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -140,8 +143,10 @@ public class MainView extends JFrame implements StudyView {
 	 */
 	@Override
 	public void setImages(BufferedImage... images) {
-		// Call to the views to show the first on the SingleView
-		// and show four on the QuadView
+		System.out.println("---Setting image---");
+		JLabel label = new JLabel(new ImageIcon(images[0]));
+		this.singleView.add(label);
+		this.pack();
 	}
 	
 	/**
