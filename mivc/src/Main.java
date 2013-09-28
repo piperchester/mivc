@@ -18,7 +18,7 @@ public class Main {
 		
 		StudyManager studyManager = StudyManager.getInstance();
 		
-		studyManager.scan("studies/axial_head_mri");	
+		studyManager.scan("studies");	
 		
 		System.out.println("Closing system...");
 	}

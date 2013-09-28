@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class StudyManager implements Scannable<File> {
     
-    public static List<File> files = new ArrayList<File>();
+    public static List<File> files = new ArrayList<File>();  // Holds pathnames of the directory
     
     public StudyManager() { }
     
@@ -35,11 +35,15 @@ public class StudyManager implements Scannable<File> {
     	
     	try {
             this.addTree(new File(path));
-            System.out.println(files);
+//            System.out.println(files);
 //            listFilesAndFilesSubDirectories(path);
     	} catch (NullPointerException e){
     		System.out.println("The path was not scanned...");
     	}
+ 
+    	
+    	System.out.println(files.size());
+    	System.out.println(this.listStudies());
     	
     	return files;
     }
@@ -52,6 +56,7 @@ public class StudyManager implements Scannable<File> {
         File[] children = file.listFiles();  // Array of pathnames 
         if (children != null) {
             for (File child : children) {
+            	
                 files.add(child);  // Adds new pathname to the ArrayList
                 addTree(child);
             }
@@ -59,7 +64,6 @@ public class StudyManager implements Scannable<File> {
     }
     
     private static void listFilesAndFilesSubDirectories(String directoryName){
- 
         File directory = new File(directoryName);
  
         //get all the files from a directory
@@ -76,21 +80,21 @@ public class StudyManager implements Scannable<File> {
         }
     }
     
+    /**
+     * Adds all studies within the files ArrayList to a String list of studies.
+     * @return a String list of study names.
+     */
     public List<String> listStudies()
-    {
-	    
+    {   
 	    List<String> studies = new ArrayList<String>();
 	    
-	    File f = new File("resources/MedImageViewerStudies");
-		File [] list = f.listFiles();
-		
-		for (File directory: list)
-		{
-			if (directory.isDirectory())
-			{
-				studies.add((directory.getName()));	
-			}	
-		}
+	    for (File directory : files){
+	    	if (directory.isDirectory()){
+	    		System.out.println("Adding dir: " + directory);
+	    		studies.add((directory.getName()));
+	    	}
+	    }
+	    
 		return studies;
     }
   
