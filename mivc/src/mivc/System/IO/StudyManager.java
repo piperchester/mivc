@@ -134,7 +134,7 @@ public class StudyManager implements Scannable<File> {
         // cannot find a usable path, null will be returned.
         
         File f = studyFiles.get(path);
-        List<File> l = new ImageManager().scan(path);
+        List<File> l = new ImageDAO().scan(path);
         
     	return new Study(f.getName(), l.toArray(new File[l.size()]));
     }

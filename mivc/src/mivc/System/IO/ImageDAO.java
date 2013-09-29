@@ -18,11 +18,11 @@ import javax.imageio.ImageIO;
  * @author Ty
  * @author act4122
  */
-public class ImageManager implements Scannable<File> {
+public class ImageDAO implements Scannable<File> {
     
-    protected ImageManager() { }
+    protected ImageDAO() { }
     
-    public static ImageManager getInstance() { 
+    public static ImageDAO getInstance() { 
         return INSTANCE; 
     }
 
@@ -105,7 +105,7 @@ public class ImageManager implements Scannable<File> {
         return false;
     }
 
-    private static final ImageManager INSTANCE = new ImageManager();
+    private static final ImageDAO INSTANCE = new ImageDAO();
     private static final String[] EXTENSIONS = new String[] 
         {"jpeg", "jpg"};
 }
