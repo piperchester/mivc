@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import mivc.System.StudyList;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements StudyView {
@@ -24,6 +23,7 @@ public class MainView extends JFrame implements StudyView {
 	private JPanel singleView;
 	private JPanel quadView;
 	private boolean viewingSingle = true;
+	private StudyList studyList = new StudyList();
 	
 	/**
 	 * The main view to be used for displaying MIVC data
@@ -137,6 +137,11 @@ public class MainView extends JFrame implements StudyView {
 		((Toolbar)toolbar).addNextListener(al);
 	}
 	
+	@Override
+	public void addStudySelectionListener(ActionListener al) {
+		studyList.addSelectionListener(al);
+	}
+	
 	/**
 	 * (non-Javadoc)
 	 * @see mivc.UI.StudyView#setImages(java.awt.image.BufferedImage[])
@@ -155,8 +160,20 @@ public class MainView extends JFrame implements StudyView {
 	 */
 	@Override
 	public void showList(String[] studies) {
-		new StudyList(studies);
+		studyList.updateList(studies);
+		studyList.setVisible(true);
 	}
+	
+	@Override
+	public String getSelectedStudy() {
+		return studyList.getSelectedStudy();
+	}
+
+	@Override
+	public boolean isDefaultSelected() {
+		return studyList.isDefaultSelected();
+	}
+	
 	
 	/**
 	 * Creates the appropriate objecst and shows the GUI
@@ -195,5 +212,6 @@ public class MainView extends JFrame implements StudyView {
             }
         });
 	}
+
 
 }

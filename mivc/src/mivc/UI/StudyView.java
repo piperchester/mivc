@@ -42,6 +42,12 @@ public interface StudyView {
 	public void addNextListener(ActionListener al);
 	
 	/**
+	 * Add a listener for the selectin of a study
+	 * @param al the object to listen to study selection
+	 */
+	public void addStudySelectionListener(ActionListener al);
+	
+	/**
 	 * Toggles the view between single and quad view
 	 */
 	public void toggleView();
@@ -57,5 +63,9 @@ public interface StudyView {
 	 * @param studies the list of studies to show
 	 */
 	public void showList(String[] studies);
+	
+	public String getSelectedStudy();
+	
+	public boolean isDefaultSelected();
 	
 }

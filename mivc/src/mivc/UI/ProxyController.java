@@ -32,6 +32,7 @@ public class ProxyController {
 		view.addSaveViewListener(new SaveViewListener());
 		view.addNextListener(new NextListener());
 		view.addPrevListener(new PrevListener());
+		view.addStudySelectionListener(new StudySelectionListener());
 		
 		studyManager = new StudyManager();
 	}
@@ -54,7 +55,7 @@ public class ProxyController {
 	 */
 	class OpenListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to open a new study");
 			
 			studyManager.scan("studies");
@@ -70,7 +71,7 @@ public class ProxyController {
 			try {
 				image = ImageIO.read(new File("studies/lung/lung034.jpg"));
 				view.setImages(image);
-			} catch (IOException e) {
+			} catch (IOException ex) {
 				System.out.println("Couldn't read image...");
 			}
 			
@@ -84,7 +85,7 @@ public class ProxyController {
 	 */
 	class SaveStudyListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to save a study");
 			// Check to see if that study exists already
 			// If it does, warn that they will overwrite
@@ -98,7 +99,7 @@ public class ProxyController {
 	 */
 	class SaveViewListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call save the view");
 			// Call to the SettingsManager to save the current view and images
 		}
@@ -110,7 +111,7 @@ public class ProxyController {
 	 */
 	class PrevListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to move to previous image(s)");
 			// Send the appropriate images to the view
 		}
@@ -122,9 +123,23 @@ public class ProxyController {
 	 */
 	class NextListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to move to next image(s)");
 			// Send the appropriate images to the view
+		}
+	}
+	
+	/**
+	 * Gets the selected study and whether it was set as the default
+	 *
+	 */
+	class StudySelectionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("You selected " + view.getSelectedStudy());
+			System.out.println("Is this the default study? " + 
+						view.isDefaultSelected());
+			// Load the selected Study, save default if it was selected
 		}
 	}
 
