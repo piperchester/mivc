@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import mivc.System.Study;
@@ -18,8 +19,7 @@ public class ProxyController {
 	private Study currentStudy;
 	private StudyDAO studyDAO;
 	private Image[] currentImages = new Image[4];
-	
-	//private List<Study> studies;
+	private List<Study> studies;
 	
 	
 	/**
@@ -35,9 +35,15 @@ public class ProxyController {
 		view.addSaveViewListener(new SaveViewListener());
 		view.addNextListener(new NextListener());
 		view.addPrevListener(new PrevListener());
-		view.addStudySelectionListener(new StudySelectionListener());
+		view.addStudySelectionListener(new StudySelectionListener());	
 		
+
 		studyDAO = new StudyDAO();
+	}
+	
+	public static void loadStudies()
+	{
+		//method here to load studies
 	}
 	
 	/**
@@ -70,10 +76,6 @@ public class ProxyController {
 				studies[studyCounter] = study;
 				studyCounter++;
 			}
-			
-			//get reference to first file in study
-			
-		
 			
 			view.showList(studies);  // Display the Study List window
 		}
@@ -143,8 +145,8 @@ public class ProxyController {
 						view.isDefaultSelected());
 			// Load the selected Study, save default if it was selected
 			
-			BufferedImage image;
 			try {
+
 				currentImages[0] = ImageIO.read(new File("studies/lung/lung034.jpg"));
 				currentImages[1] = ImageIO.read(new File("studies/lung/lung034.jpg"));
 				currentImages[2] = ImageIO.read(new File("studies/lung/lung034.jpg"));
@@ -153,9 +155,6 @@ public class ProxyController {
 			} catch (IOException ex) {
 				System.out.println("Couldn't read image...");
 			}
-			
-			
-			
 		}
 	}
 
