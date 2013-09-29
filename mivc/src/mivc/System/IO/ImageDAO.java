@@ -4,11 +4,10 @@
 package mivc.System.IO;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -18,80 +17,93 @@ import javax.imageio.ImageIO;
  * @author Ty
  * @author act4122
  */
-public class ImageDAO implements Scannable<File> {
+public class ImageDAO {
     
+	private String rootPath = "studies";
+	
     protected ImageDAO() { }
     
     public static ImageDAO getInstance() { 
         return INSTANCE; 
     }
 
-    @Override
-    public List<File> scan(String path) {
-        List<File> images = new LinkedList<File>();
-        File p = new File(path);
-        for (String s : p.list()) {
-            File f = (File) read(s);
-            if (f != null) {
-                images.add(f);
-            }
-        }
-        return images;
-    }
-
-    /**
-     * Read a non-hidden image file and return.
-     * 
-     * @param path - path to file
-     * @return File object related to the image
-     */
-    public File read(String path) {
-        File f = new File(path);
-        if (f.isDirectory() || f.isHidden()) {
-            return null;
-        }
-        
-        String extension = path.substring(path.lastIndexOf('.')).toLowerCase();
-        if (!isAcceptableExtension(extension)) {
-            return null;
-        }
-        
-        return f;
-    }
     
     /**
      * readImage
-     * @param File p_File - File handle that was opened with ImageManager.open
+     * @param path - the path to the image (not including the root path)
      * @return null if failed, handle to image if succeeded
      */
-    public BufferedImage readImage(File p_File)
+    public Image read(String path)
     {
-    	// Check to see if the file handle is valid
-    	if (p_File == null)
-    		return null;
+    	File file = new File(rootPath + "/" + path);
+    	
+    	// Parse out the extension
+    	String extension = path.substring(path.lastIndexOf('.'))
+        		.toLowerCase();
+    	// Ensure it is a file and is not hidden and it is an acceptable ext.
+        if (file.isDirectory() || file.isHidden() || 
+        		!isAcceptableExtension(extension)) {
+            return null;
+        }
     	
     	// Create a new image
-    	BufferedImage s_Image = null;
+    	Image retVal = null;
     	try
     	{
     		// Attempt to load the image
-    		s_Image = ImageIO.read(p_File);
+    		retVal = ImageIO.read(file);
     	}
     	catch (Exception ex)
     	{
     		// Failed
     		ex.printStackTrace();
-    		s_Image = null;
+    		retVal = null;
     	}
     	
     	// Return either null, or the image handle
-    	return s_Image;
+    	return retVal;
     }
 
     public void write(String path, Image image) throws IOException {
         // Not tested
         File f = new File(path);
         ImageIO.write((RenderedImage) image, f.getName().substring(f.getName().lastIndexOf('.')), f);
+    }
+    
+    public String[] listAll(String path) {
+    	// Create a file for the root folder
+    	File file = new File(rootPath + "/" + path);
+    	// Ensure it is a folder and is not hidden
+        if (!file.isDirectory() || file.isHidden()) {
+            return null;
+        }
+        
+        // Create the return object use list because we are unsure of the size
+        List<String> tmp = new ArrayList<String>();
+        
+        // List the files in the folder
+        File[] children = file.listFiles();  // Array of pathnames 
+        
+        for (File child : children) {
+            String extension = path.substring(path.lastIndexOf('.'))
+            		.toLowerCase();
+            if (isAcceptableExtension(extension)) {
+            	
+            	// Add the file to the list of images
+            	tmp.add(child.getName());
+            	
+            }
+        }
+
+        // Now that we know the true size, convert to an array
+        String[] retVal = new String[tmp.size()];
+
+        for (int i = 0; i < tmp.size(); i++) {
+        	retVal[i] = tmp.get(i);
+        }
+        
+    	// Return the list of images
+    	return retVal;
     }
     
     
