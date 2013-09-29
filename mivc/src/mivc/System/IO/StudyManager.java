@@ -41,7 +41,6 @@ public class StudyManager implements Scannable<File> {
     	studyCount = 0;
     	
     	
-    	
     	System.out.println("Scanning: " + path);
     	
     	System.out.println("files" + files.size());
@@ -76,10 +75,7 @@ public class StudyManager implements Scannable<File> {
             		
             		//add object to hash table with name and key
             		
-            		
-            		
             		//studyFiles.put(child.getName(), value)
-            		
             	}
             	
             	if(child.isFile())
