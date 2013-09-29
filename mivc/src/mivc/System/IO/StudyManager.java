@@ -7,6 +7,7 @@ package mivc.System.IO;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 
 /**
@@ -17,7 +18,9 @@ import java.util.ArrayList;
  */
 public class StudyManager implements Scannable<File> {
     
-    public static List<File> files;  // Holds pathnames of the directory
+    public static List<File> files;  // Holds pathnames of the directory //this will be deleted
+    public static Hashtable<String, List<File>> studyFiles; //new data structure to hold path names for studies
+    
     public int studyCount = 0;
     
     public StudyManager() { }
@@ -70,6 +73,9 @@ public class StudyManager implements Scannable<File> {
             	if (child.isDirectory())
             	{
             		System.out.println("study: " + child.getName());
+            		
+            		//add object to hash table with name and key
+            		
             	}
             	
                 files.add(child);  // Adds new pathname to the ArrayList
