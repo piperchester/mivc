@@ -70,13 +70,9 @@ public class ProxyController {
 				studyCounter++;
 			}
 			
-			BufferedImage image;
-			try {
-				image = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				view.setImages(image);
-			} catch (IOException ex) {
-				System.out.println("Couldn't read image...");
-			}
+			//get reference to first file in study
+			
+		
 			
 			view.showList(studies);  // Display the Study List window
 		}
@@ -143,6 +139,17 @@ public class ProxyController {
 			System.out.println("Is this the default study? " + 
 						view.isDefaultSelected());
 			// Load the selected Study, save default if it was selected
+			
+			BufferedImage image;
+			try {
+				image = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				view.setImages(image);
+			} catch (IOException ex) {
+				System.out.println("Couldn't read image...");
+			}
+			
+			
+			
 		}
 	}
 
