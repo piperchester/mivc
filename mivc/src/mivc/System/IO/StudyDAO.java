@@ -8,6 +8,8 @@ import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
 
+import mivc.System.Study;
+
 
 /**
  * StudyManager handles basic IO operations related to studies.
@@ -15,10 +17,9 @@ import java.util.ArrayList;
  * @author piperchester
  * @author Colin
  */
-public class StudyDAO implements Scannable<File> {
+public class StudyDAO {
     
-    public static List<File> files;  // Holds pathnames of the directory
-    public int studyCount = 0;
+    private String rootPath = "studies";
     
     public StudyDAO() { }
     
@@ -26,49 +27,17 @@ public class StudyDAO implements Scannable<File> {
     	return instance;
     }
     
-    @Override
-    /**
-     * Scans through a directory or nested directory and adds pathnames
-     * to the ArrayList, files.
-     * @param path - the location of where the scan will begin
-     */
-    public List<File> scan(String path) {
-    	
-    	files = new ArrayList<File>();
-    	studyCount = 0;
-    	
-    	
-    	
-    	System.out.println("Scanning: " + path);
-    	
-    	System.out.println("files" + files.size());
-    	
-    	try {
-            this.addTree(new File(path));
-//            System.out.println(files);
-//            listFilesAndFilesSubDirectories(path);
-    	} catch (NullPointerException e){
-    		System.out.println("The path was not scanned...");
-    	}
- 
-    	
-    	System.out.println(files.size());
-    	System.out.println(this.listStudies());
-    	
-    	return files;
-    }
-    
     /**
      * Recursively searches the directory, adding a new file/directory to the ArrayList.
      * @param file - Starting point for the search
      */
-    public void addTree(File file) {
+    public void addTree(List<File> files, File file) {
         File[] children = file.listFiles();  // Array of pathnames 
         if (children != null) {
             for (File child : children) {
             	
                 files.add(child);  // Adds new pathname to the ArrayList
-                addTree(child);
+                addTree(files, child);
             }
         }
     }
@@ -78,17 +47,33 @@ public class StudyDAO implements Scannable<File> {
      * Adds all studies within the files ArrayList to a String list of studies.
      * @return a String list of study names.
      */
-    public List<String> listStudies()
+    public List<Study> listStudies()
     {   
-	    List<String> studies = new ArrayList<String>();
-	    
-	    for (File directory : files){
-	    	if (directory.isDirectory()){
-	    		System.out.println("Adding dir: " + directory);
-	    		studyCount++;
-	    		studies.add((directory.getName()));
-	    	}
-	    }
+    	List<File>files = new ArrayList<File>();
+
+    	System.out.println("Scanning: " + rootPath);
+    	
+    	List<Study> studies = new ArrayList<Study>();
+    	try {
+    		File file = new File(rootPath);
+            File[] children = file.listFiles();  // Array of pathnames 
+            if (children != null) {
+                for (File child : children) {
+        	    	if (child.isDirectory()){
+        	    		System.out.println("Adding dir: " + child.getName());
+        	    		studies.add(new Study(child.getName()));
+        	    	}
+                }
+            }
+    	} catch (NullPointerException e){
+    		e.printStackTrace();
+    		System.out.println("The path was not scanned...");
+    	}
+ 
+    	
+//    	System.out.println(studies.size());
+//    	System.out.println(studies);
+
 	    
 		return studies;
     }

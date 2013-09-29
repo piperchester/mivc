@@ -17,6 +17,14 @@ import javax.imageio.ImageIO;
  */
 public class Study {
 
+    private String name;
+    private StudyImage[] images;
+	
+	public Study(String name) {
+		this.name = name;
+		
+	}
+	
     public Study(String name, File[] imagePaths) {
         this.name = name;
         this.images = new StudyImage[imagePaths.length];
@@ -36,15 +44,12 @@ public class Study {
     }
     
     public String getImageName(int index) {
-	return this.images[index].getName();
+    	return this.images[index].getName();
     }
     
     public int getSize() {
         return this.images.length;
     }
-
-    private final String name;
-    private final StudyImage[] images;
     
     /**
      * Handles images held by the study.

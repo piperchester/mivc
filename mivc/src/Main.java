@@ -18,7 +18,7 @@ public class Main {
 		
 		StudyDAO studyManager = StudyDAO.getInstance();
 		
-		studyManager.scan("studies");	
+		//studyManager.scan("studies");	
 		
 		System.out.println("Closing system...");
 	}

@@ -3,10 +3,11 @@ package mivc.UI;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 import mivc.System.Study;
@@ -17,9 +18,8 @@ public class ProxyController {
 
 	private StudyView view;
 	private Study currentStudy;
-	private StudyDAO studyDAO;
 	private Image[] currentImages = new Image[4];
-	private List<Study> studies;
+	private HashMap<String, Study> studies;
 	
 	
 	/**
@@ -36,14 +36,16 @@ public class ProxyController {
 		view.addNextListener(new NextListener());
 		view.addPrevListener(new PrevListener());
 		view.addStudySelectionListener(new StudySelectionListener());	
-		
-
-		studyDAO = new StudyDAO();
 	}
 	
-	public static void loadStudies()
-	{
-		//method here to load studies
+	public void loadStudies(boolean forceReload) {
+		if (studies == null || forceReload) {
+			studies = new HashMap<String, Study>();
+			List<Study> tmp = StudyDAO.getInstance().listStudies();
+			for (Study s : tmp) {
+				studies.put(s.getName(), s);
+			}
+		}
 	}
 	
 	/**
@@ -65,19 +67,22 @@ public class ProxyController {
 	class OpenListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Call to open a new study");
+			// Ensure studies are loaded
+			loadStudies(false);
 			
-			studyDAO.scan("studies");
-			
-			int studyCounter = 0;
-			String[] studies = new String[studyDAO.studyCount];
-			
-			for (String study : studyDAO.listStudies()){
-				studies[studyCounter] = study;
-				studyCounter++;
+			// if no studies, skip
+			if (studies == null) {
+				return;
 			}
 			
-			view.showList(studies);  // Display the Study List window
+			// Convert studies to a string array
+			String[] studyNames = new String[studies.size()];
+			int i = 0;
+			for (Entry<String, Study> entry : studies.entrySet()) {
+				studyNames[i++] = entry.getValue().getName();
+			}
+			
+			view.showList(studyNames);  // Display the Study List window
 		}
 	}
 	
