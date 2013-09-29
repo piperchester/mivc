@@ -120,8 +120,37 @@ public class ProxyController {
 	class PrevListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Call to move to previous image(s)");
-			// Send the appropriate images to the view
+			
+			// Get total number of images
+			int totalImages = currentStudy.getImageCount();
+			// Get current view (send either one or four images)
+			ViewType curView = view.getCurrentView();
+			if (curView == ViewType.SINGLE_VIEW) {
+				// If we've reached the beginning just return, otherwise, decrement
+				if (imageIndex - 1 < 0) {
+					return;
+				} else {
+					view.setImages(currentStudy.getImage(--imageIndex));
+				}
+			} else if (curView == ViewType.QUAD_VIEW) {
+				// If we are at the beginning, don't decrement
+				if (imageIndex <= 0) {
+					return;
+				}
+				// Load the images
+				imageIndex -= 4;
+				for (int i = 0; i < 4; i++) {
+					
+					if (imageIndex + (i+1) >= totalImages) {
+						currentImages[i] = null;
+					} else {
+						currentImages[i] = currentStudy.getImage(
+								imageIndex + (i + 1));
+					}
+				}
+				view.setImages(currentImages);
+				
+			}
 		}
 	}
 	
@@ -132,9 +161,7 @@ public class ProxyController {
 	class NextListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Call to move to next image(s)");
-			// Send the appropriate images to the view
-			
+
 			// Get total number of images
 			int totalImages = currentStudy.getImageCount();
 			// Get current view (send either one or four images)
@@ -164,14 +191,7 @@ public class ProxyController {
 				}
 				view.setImages(currentImages);
 				
-//				// If we've reached the end just return, otherwise, increment
-//				if (imageIndex + 1 >= totalImages) {
-//					return;
-//				} else {
-//					view.setImages(currentStudy.getImage(++imageIndex));
-//				}
 			}
-			
 		}
 	}
 	
