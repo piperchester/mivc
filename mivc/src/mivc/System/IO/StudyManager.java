@@ -19,7 +19,7 @@ import java.util.Hashtable;
 public class StudyManager implements Scannable<File> {
     
     public static List<File> files;  // Holds pathnames of the directory //this will be deleted
-    public static Hashtable<String, List<File>> studyFiles; //new data structure to hold path names for studies
+    public static Hashtable<String, File> studyFiles; //new data structure to hold path names for studies
     
     public int studyCount = 0;
     
@@ -76,7 +76,16 @@ public class StudyManager implements Scannable<File> {
             		
             		//add object to hash table with name and key
             		
+            		
+            		
+            		//studyFiles.put(child.getName(), value)
+            		
             	}
+            	
+            	if(child.isFile())
+        		{
+        			System.out.println(child.getAbsolutePath());
+        		}
             	
                 files.add(child);  // Adds new pathname to the ArrayList
                 addTree(child);
