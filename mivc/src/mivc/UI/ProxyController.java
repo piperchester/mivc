@@ -1,17 +1,36 @@
 package mivc.UI;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
+import javax.imageio.ImageIO;
+
+import java.util.List;
+import java.util.Scanner;
+import mivc.System.Study;
+import mivc.System.IO.StudyDAO;
 
 public class ProxyController {
 
 	private StudyView view;
-	//private Study currentStudy;
-	
+
+	private Study currentStudy;
+	private StudyDAO studyDAO;
+	private Image[] currentImages = new Image[4];
+	private List<Study> studies;
+
 	/**
-	 * Proxy controller is the brains for the GUI.  Currently it is designed
-	 * to work with a Java GUI but could be extended.
-	 * @param view The view that this controller will be controlling.
+	 * Proxy controller is the brains for the GUI. Currently it is designed to
+	 * work with a Java GUI but could be extended.
+	 * 
+	 * @param view
+	 *            The view that this controller will be controlling.
 	 */
 	public ProxyController(StudyView view) {
 		this.view = view;
@@ -21,11 +40,19 @@ public class ProxyController {
 		view.addSaveViewListener(new SaveViewListener());
 		view.addNextListener(new NextListener());
 		view.addPrevListener(new PrevListener());
+		view.addStudySelectionListener(new StudySelectionListener());
+
+		view.addStudySelectionListener(new StudySelectionListener());
+
+		studyDAO = new StudyDAO();
 	}
-	
+
+	public static void loadStudies() {
+		// method here to load studies
+	}
 	/**
 	 * Calls to the view to change the current view
-	 *
+	 * 
 	 */
 	class ViewListener implements ActionListener {
 		@Override
@@ -33,69 +60,126 @@ public class ProxyController {
 			view.toggleView();
 		}
 	}
-	
+
 	/**
 	 * Calls to the view to show the list of studies for the user to make a
 	 * selection
-	 *
+	 * 
 	 */
 	class OpenListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to open a new study");
-			view.showList(new String[] { "Study 1", "Study 2", "Study 3", "  ...  " });
-			// Display the Study List window
+
+			studyDAO.scan("studies");
+
+			int studyCounter = 0;
+			String[] studies = new String[studyDAO.studyCount];
+
+			for (String study : studyDAO.listStudies()) {
+				studies[studyCounter] = study;
+				studyCounter++;
+			}
+
+			String contents;
+			try {
+				contents = new Scanner(new File("default-view.txt"))
+						.useDelimiter("\\A").next();
+				System.out.println("Default study found: " + contents);
+			} catch (FileNotFoundException e1) {
+				System.out.println("No default study found...");
+				view.showList(studies); // Display the Study List window
+			}
 		}
 	}
-	
+
 	/**
 	 * Saves a new study.
-	 *
+	 * 
 	 */
 	class SaveStudyListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to save a study");
 			// Check to see if that study exists already
 			// If it does, warn that they will overwrite
 			// If it does not, save and continue
 		}
 	}
-	
+
 	/**
 	 * Gathers the pertinent information from the view in order to save it.
-	 *
+	 * 
 	 */
 	class SaveViewListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("Call save the view");
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("The current view is " + view.getCurrentView());
+			System.out.println("The current images are " + currentImages);
+			System.out.println("The current study is " + currentStudy);
 			// Call to the SettingsManager to save the current view and images
 		}
 	}
-	
+
 	/**
 	 * Moves to the previous image
-	 *
+	 * 
 	 */
 	class PrevListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to move to previous image(s)");
 			// Send the appropriate images to the view
 		}
 	}
-	
+
 	/**
 	 * Moves to the next image
-	 *
+	 * 
 	 */
 	class NextListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to move to next image(s)");
 			// Send the appropriate images to the view
 		}
 	}
 
+	/**
+	 * Gets the selected study and whether it was set as the default
+	 * 
+	 */
+	class StudySelectionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("You selected " + view.getSelectedStudy());
+			System.out.println("Is this the default study? "
+					+ view.isDefaultSelected());
+
+			if (view.isDefaultSelected()) {
+				PrintWriter writer;
+				try {
+					writer = new PrintWriter("default-view.txt", "UTF-8");
+					writer.println(view.getSelectedStudy());
+					writer.close();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (UnsupportedEncodingException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+			// Load the selected Study, save default if it was selected			
+			try {
+
+				currentImages[0] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[1] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[2] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[3] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				view.setImages(currentImages);
+			} catch (IOException ex) {
+				System.out.println("Couldn't read image...");
+			} 
+		}
+	}
 }

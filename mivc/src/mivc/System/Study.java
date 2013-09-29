@@ -38,6 +38,10 @@ public class Study {
     public String getImageName(int index) {
 	return this.images[index].getName();
     }
+    
+    public int getSize() {
+        return this.images.length;
+    }
 
     private final String name;
     private final StudyImage[] images;

@@ -1,13 +1,12 @@
 /**
- * 
+ * Main.java
  */
-
 import mivc.System.LocalSettingsManager;
+import mivc.System.IO.StudyDAO;
 
-// Import our settings manager
 /**
  * @author act4122
- *
+ * @author piperchester
  */
 public class Main {
 
@@ -15,11 +14,13 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		LocalSettingsManager s_settings = new LocalSettingsManager("./settings.txt");
-		s_settings.set("CurrentPageNumber", 0);
-		s_settings.set("CurrentStudy", "MyStudy");
+		System.out.println("---MEDICAL IMAGE VIEWING CONSOLE---");
+		
+		StudyDAO studyManager = StudyDAO.getInstance();
+		
+		studyManager.scan("studies");	
+		
+		System.out.println("Closing system...");
 	}
 
 }

@@ -3,57 +3,86 @@
  */
 package mivc.System;
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
-import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * @author act4122
- *
+ * LocalSettingsManager
+ * This class will be able to hold and contain all of the settings, variables, 
+ * switches that will be necessary for any project.
+ * Using the Singleton Pattern so it can be used across the entire subsystem
+ * 
+ * Usage:
+ * LocalSettingsManager.getInstance().Load(Path to Settings File);
+ * LocalSettingsManager.getInstance().set("Hello", "Hello");
  */
-public class LocalSettingsManager {
+public class LocalSettingsManager implements Serializable {
 
-	private HashMap<String, String>	m_strings = new HashMap<String, String>();
-	private HashMap<String, Integer> m_ints = new HashMap<String, Integer>();
-	
+	/**
+	 * 
+	 */
+	private static LocalSettingsManager m_instance = null;
+	private static final long serialVersionUID = 1L;
+	public HashMap<String, String>	m_strings = new HashMap<String, String>();
+	public HashMap<String, Integer> m_ints = new HashMap<String, Integer>();
+	public HashMap<String, Boolean> m_bools = new HashMap<String, Boolean>();
 	
 	/**
-	 * constructor
+	 * LocalSettingsManager_Init
 	 * Loads settings from a file
 	 * @param p_FileName - File Path to the settings file
 	 */
-	public LocalSettingsManager(String p_FileName)
+	public boolean Load(String p_FileName)
 	{
 		if (p_FileName == "")
-			return;
+			return false;
 		
-		// At this point we could use serialization...
 		try
 		{
-			FileInputStream s_File = new FileInputStream(p_FileName);		
-			Scanner s_Reader = new Scanner(s_File);
+			FileInputStream s_Fis =
+				new FileInputStream(p_FileName);
+		
+			ObjectInputStream s_Ois =
+				new ObjectInputStream(s_Fis);
 			
-			String s_Tmp = "";
-			while ((s_Tmp = s_Reader.next()) != "")
-			{
-				String[] s_Pair = s_Tmp.split(",,");
-				
-				if (s_Pair.length > 2)
-					System.out.println(s_Pair[0] + " : " + s_Pair[1] + " : " + s_Pair[2]);
-			}
+			LocalSettingsManager s_Tmp = 
+					(LocalSettingsManager)s_Ois.readObject();
 			
-			s_Reader.close();
-			s_File.close();
+			// Cleanup
+			s_Ois.close();
+			s_Fis.close();
 			
+			this.m_ints = s_Tmp.m_ints;
+			this.m_strings = s_Tmp.m_strings;
+			this.m_bools = s_Tmp.m_bools;
+			
+			// gc should clean up that object
 		}
 		catch (Exception ex)
 		{
-			// TODO: Handle errors
+			ex.printStackTrace();
+			return false;
 		}
+		
+		return true;
+	}
+	
+	protected LocalSettingsManager()
+	{
+		// Do nothing, start a blank slate
+	}
+	
+	public static LocalSettingsManager getInstance()
+	{
+		if (m_instance == null)
+			m_instance = new LocalSettingsManager();
+		
+		return m_instance;
 	}
 	
 	/**
@@ -64,21 +93,28 @@ public class LocalSettingsManager {
 	 */
 	public boolean Save(String p_FileName)
 	{
-		try 
-		{
-			FileOutputStream s_File = new FileOutputStream(p_FileName);
-			OutputStreamWriter s_Writer = new OutputStreamWriter(s_File);
+		if (p_FileName == "")
+			return false;
 		
-			for (Integer i = 0; i < m_ints.size(); ++i)
-			{
-				// TODO: Finish implementing or revert to using serialization
-			}
-		} 
-		catch (FileNotFoundException e) 
+		try
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			FileOutputStream s_Fos =
+					new FileOutputStream(p_FileName);
+			
+			ObjectOutputStream s_Oos =
+					new ObjectOutputStream(s_Fos);
+			
+			s_Oos.writeObject(this);
+			s_Oos.close();
+			s_Fos.close();
+			
+			System.out.println("Local Settings Manager saved to: " + p_FileName);
 		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
 		return true;
 	}
 	
@@ -112,6 +148,9 @@ public class LocalSettingsManager {
 	 */
 	public void set(String p_Key, String p_Value)
 	{
+		if (p_Key == "")
+			return;
+		
 		m_strings.put(p_Key, p_Value);
 	}
 	
@@ -123,6 +162,23 @@ public class LocalSettingsManager {
 	 */
 	public void set(String p_Key, Integer p_Value)
 	{
+		if (p_Key == "")
+			return;
+		
 		m_ints.put(p_Key, p_Value);
+	}
+	
+	/**
+	 * set
+	 * Set or creates the value in the key provided
+	 * @param String p_Key - Key to store the value in
+	 * @param Boolean p_Value - Value to store
+	 */
+	public void set(String p_Key, Boolean p_Value)
+	{
+		if (p_Key == "")
+			return;
+		
+		m_bools.put(p_Key, p_Value);
 	}
 }

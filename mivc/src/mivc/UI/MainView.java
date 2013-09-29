@@ -3,15 +3,14 @@ package mivc.UI;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import mivc.System.StudyList;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements StudyView {
@@ -20,7 +19,9 @@ public class MainView extends JFrame implements StudyView {
 	private JPanel imageView;
 	private JPanel singleView;
 	private JPanel quadView;
+	private ViewType currentView;
 	private boolean viewingSingle = true;
+	private StudyList studyList = new StudyList();
 	
 	/**
 	 * The main view to be used for displaying MIVC data
@@ -62,6 +63,7 @@ public class MainView extends JFrame implements StudyView {
 		getContentPane().add(toolbar, BorderLayout.NORTH);
 		getContentPane().add(imageView, BorderLayout.CENTER);
 		imageView.add(singleView, "SV");
+		currentView = ViewType.SINGLE_VIEW;
 		imageView.add(quadView, "QV");
 	}
 	
@@ -74,8 +76,10 @@ public class MainView extends JFrame implements StudyView {
 		CardLayout cl = (CardLayout)imageView.getLayout();
 		if (viewingSingle) {
 			cl.show(imageView, "QV");
+			currentView = ViewType.QUAD_VIEW;
 		} else {
 			cl.show(imageView, "SV");
+			currentView = ViewType.SINGLE_VIEW;
 		}
 		viewingSingle = !viewingSingle;
 	}
@@ -134,14 +138,19 @@ public class MainView extends JFrame implements StudyView {
 		((Toolbar)toolbar).addNextListener(al);
 	}
 	
+	@Override
+	public void addStudySelectionListener(ActionListener al) {
+		studyList.addSelectionListener(al);
+	}
+	
 	/**
 	 * (non-Javadoc)
 	 * @see mivc.UI.StudyView#setImages(java.awt.image.BufferedImage[])
 	 */
 	@Override
-	public void setImages(BufferedImage... images) {
-		// Call to the views to show the first on the SingleView
-		// and show four on the QuadView
+	public void setImages(Image... images) {
+		((SingleView)this.singleView).setImages(images);
+		((QuadView)this.quadView).setImages(images);
 	}
 	
 	/**
@@ -150,8 +159,25 @@ public class MainView extends JFrame implements StudyView {
 	 */
 	@Override
 	public void showList(String[] studies) {
-		new StudyList(studies);
+		studyList.updateList(studies);
+		studyList.setVisible(true);
 	}
+	
+	@Override
+	public String getSelectedStudy() {
+		return studyList.getSelectedStudy();
+	}
+
+	@Override
+	public boolean isDefaultSelected() {
+		return studyList.isDefaultSelected();
+	}
+	
+	@Override
+	public ViewType getCurrentView() {
+		return currentView;
+	}
+	
 	
 	/**
 	 * Creates the appropriate objecst and shows the GUI
@@ -190,5 +216,6 @@ public class MainView extends JFrame implements StudyView {
             }
         });
 	}
+
 
 }
