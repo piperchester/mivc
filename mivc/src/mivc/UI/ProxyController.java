@@ -1,5 +1,6 @@
 package mivc.UI;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -142,8 +143,12 @@ public class ProxyController {
 			
 			BufferedImage image;
 			try {
-				image = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				view.setImages(image);
+				Image[] images = new Image[4];
+				images[0] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				images[1] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				images[2] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				images[3] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				view.setImages(images);
 			} catch (IOException ex) {
 				System.out.println("Couldn't read image...");
 			}

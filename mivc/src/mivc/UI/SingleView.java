@@ -46,8 +46,8 @@ public class SingleView extends JPanel {
 	 * Set the image to be displayed
 	 * @param img the image to be displayed
 	 */
-	protected void setImage(BufferedImage img) {
-		this.image = img;
+	public void setImages(Image... imgs) {
+		this.image = (BufferedImage) imgs[0];
 		this.repaint();
 	}
 	

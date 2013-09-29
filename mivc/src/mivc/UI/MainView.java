@@ -3,6 +3,7 @@ package mivc.UI;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -147,8 +148,9 @@ public class MainView extends JFrame implements StudyView {
 	 * @see mivc.UI.StudyView#setImages(java.awt.image.BufferedImage[])
 	 */
 	@Override
-	public void setImages(BufferedImage... images) {
-		((SingleView)this.singleView).setImage(images[0]);
+	public void setImages(Image... images) {
+		((SingleView)this.singleView).setImages(images);
+		((QuadView)this.quadView).setImages(images);
 	}
 	
 	/**

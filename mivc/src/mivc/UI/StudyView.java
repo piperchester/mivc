@@ -1,7 +1,7 @@
 package mivc.UI;
 
+import java.awt.Image;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 public interface StudyView {
 
@@ -56,7 +56,7 @@ public interface StudyView {
 	 * Set the image(s) to display on the GUI
 	 * @param images the image(s) to be displayed
 	 */
-	public void setImages(BufferedImage... images);
+	public void setImages(Image... images);
 	
 	/**
 	 * Show a list of studies for the user to select from
