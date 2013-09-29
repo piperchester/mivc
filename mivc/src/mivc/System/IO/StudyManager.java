@@ -13,10 +13,11 @@ import java.util.ArrayList;
  * StudyManager handles basic IO operations related to studies.
  * @author Ty
  * @author piperchester
+ * @author Colin
  */
 public class StudyManager implements Scannable<File> {
     
-    public static List<File> files = new ArrayList<File>();  // Holds pathnames of the directory
+    public static List<File> files;  // Holds pathnames of the directory
     public int studyCount = 0;
     
     public StudyManager() { }
@@ -32,7 +33,14 @@ public class StudyManager implements Scannable<File> {
      * @param path - the location of where the scan will begin
      */
     public List<File> scan(String path) {
+    	
+    	files = new ArrayList<File>();
+    	
+    	
+    	
     	System.out.println("Scanning: " + path);
+    	
+    	System.out.println("files" + files.size());
     	
     	try {
             this.addTree(new File(path));
@@ -64,22 +72,6 @@ public class StudyManager implements Scannable<File> {
         }
     }
     
-    private static void listFilesAndFilesSubDirectories(String directoryName){
-        File directory = new File(directoryName);
- 
-        //get all the files from a directory
-        File[] fList = directory.listFiles();
- 
-        for (File file : fList){
-            if (file.isFile())
-            {
-                files.add(file);  
-            } 
-            else if (file.isDirectory()){
-                listFilesAndFilesSubDirectories(file.getAbsolutePath());
-           }
-        }
-    }
     
     /**
      * Adds all studies within the files ArrayList to a String list of studies.
@@ -89,6 +81,8 @@ public class StudyManager implements Scannable<File> {
     {   
 	    List<String> studies = new ArrayList<String>();
 	    
+	    
+	    
 	    for (File directory : files){
 	    	if (directory.isDirectory()){
 	    		System.out.println("Adding dir: " + directory);
@@ -96,6 +90,8 @@ public class StudyManager implements Scannable<File> {
 	    		studies.add((directory.getName()));
 	    	}
 	    }
+	    
+	    System.out.println("study size" + studies.size());
 	    
 		return studies;
     }

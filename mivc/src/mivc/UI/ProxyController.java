@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import java.util.List;
 
 import mivc.System.Study;
 import mivc.System.IO.StudyManager;
@@ -17,6 +18,7 @@ public class ProxyController {
 	private StudyView view;
 	private Study currentStudy;
 	public StudyManager studyManager;
+	//private List<Study> studies;
 	
 	
 	/**
@@ -62,10 +64,22 @@ public class ProxyController {
 			
 			int studyCounter = 0;
 			String[] studies = new String[studyManager.studyCount];
+			
+			System.out.println("study count" + studyManager.studyCount);
+			
+			List<String> testStudies = studyManager.listStudies();
+			
+			System.out.println("test studies" + testStudies.size());
+			
+			
+			
+			
 			for (String study : studyManager.listStudies()){
 				studies[studyCounter] = study;
 				studyCounter++;
 			}
+			
+			
 		
 			BufferedImage image;
 			try {
