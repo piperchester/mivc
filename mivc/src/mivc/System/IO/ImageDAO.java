@@ -84,9 +84,12 @@ public class ImageDAO {
         // List the files in the folder
         File[] children = file.listFiles();  // Array of pathnames 
         
+        
         for (File child : children) {
-            String extension = path.substring(path.lastIndexOf('.'))
+        	String cName = child.getName();
+        	String extension = cName.substring(cName.lastIndexOf('.'))
             		.toLowerCase();
+        	
             if (isAcceptableExtension(extension)) {
             	
             	// Add the file to the list of images
@@ -119,5 +122,5 @@ public class ImageDAO {
 
     private static final ImageDAO INSTANCE = new ImageDAO();
     private static final String[] EXTENSIONS = new String[] 
-        {"jpeg", "jpg"};
+        {".jpeg", ".jpg"};
 }

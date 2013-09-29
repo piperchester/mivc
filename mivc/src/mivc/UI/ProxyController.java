@@ -3,15 +3,13 @@ package mivc.UI;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.imageio.ImageIO;
 import mivc.System.Study;
 import mivc.System.IO.StudyDAO;
+import mivc.UI.StudyView.ViewType;
 
 
 public class ProxyController {
@@ -20,6 +18,7 @@ public class ProxyController {
 	private Study currentStudy;
 	private Image[] currentImages = new Image[4];
 	private HashMap<String, Study> studies;
+	private int imageIndex = 0;
 	
 	
 	/**
@@ -135,6 +134,44 @@ public class ProxyController {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to move to next image(s)");
 			// Send the appropriate images to the view
+			
+			// Get total number of images
+			int totalImages = currentStudy.getImageCount();
+			// Get current view (send either one or four images)
+			ViewType curView = view.getCurrentView();
+			if (curView == ViewType.SINGLE_VIEW) {
+				// If we've reached the end just return, otherwise, increment
+				if (imageIndex + 1 >= totalImages) {
+					return;
+				} else {
+					view.setImages(currentStudy.getImage(++imageIndex));
+				}
+			} else if (curView == ViewType.QUAD_VIEW) {
+				// If there aren't more than four images left, don't increment
+				if (totalImages - imageIndex <= 4) {
+					return;
+				}
+				// Load the images
+				imageIndex += 4;
+				for (int i = 0; i < 4; i++) {
+					// If the next image exceeds total images, leave it null
+					if (imageIndex + (i+1) >= totalImages) {
+						currentImages[i] = null;
+					} else {
+						currentImages[i] = currentStudy.getImage(
+								imageIndex + (i + 1));
+					}
+				}
+				view.setImages(currentImages);
+				
+//				// If we've reached the end just return, otherwise, increment
+//				if (imageIndex + 1 >= totalImages) {
+//					return;
+//				} else {
+//					view.setImages(currentStudy.getImage(++imageIndex));
+//				}
+			}
+			
 		}
 	}
 	
@@ -148,18 +185,26 @@ public class ProxyController {
 			System.out.println("You selected " + view.getSelectedStudy());
 			System.out.println("Is this the default study? " + 
 						view.isDefaultSelected());
-			// Load the selected Study, save default if it was selected
 			
-			try {
-
-				currentImages[0] = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				currentImages[1] = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				currentImages[2] = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				currentImages[3] = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				view.setImages(currentImages);
-			} catch (IOException ex) {
-				System.out.println("Couldn't read image...");
+			// Load the selected Study, save default if it was selected
+			String studyName = view.getSelectedStudy();
+			if (studyName == null) {
+				return;
 			}
+			if (studyName.equals("")) {
+				return;
+			}
+			// Set the current study
+			currentStudy = studies.get(studyName);
+			if (view.isDefaultSelected()) {
+				// TODO Save the default study with the settings manager
+			}
+			
+			// Get the first images
+			for (int i = 0; i < currentImages.length; i++) {
+				currentImages[i] = currentStudy.getImage(i);
+			}
+			view.setImages(currentImages);
 		}
 	}
 

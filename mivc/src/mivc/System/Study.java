@@ -19,16 +19,12 @@ public class Study {
 	
 	public Study(String name) {
 		this.name = name;
-		
+		imageNames = ImageDAO.getInstance().listAll(name);
 	}
 	
     public Study(String name, String[] imagePaths) {
         this.name = name;
         this.imageNames = imagePaths;
-    }
-    
-    public void setImageNames(String[] imagePaths) {
-    	this.imageNames = imagePaths;
     }
 
     public String getName() {
