@@ -8,17 +8,17 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import java.util.List;
-
 import mivc.System.Study;
-import mivc.System.IO.StudyManager;
+import mivc.System.IO.StudyDAO;
 
 
 public class ProxyController {
 
 	private StudyView view;
 	private Study currentStudy;
-	public StudyManager studyManager;
+	private StudyDAO studyDAO;
+	private Image[] currentImages = new Image[4];
+	
 	//private List<Study> studies;
 	
 	
@@ -37,7 +37,7 @@ public class ProxyController {
 		view.addPrevListener(new PrevListener());
 		view.addStudySelectionListener(new StudySelectionListener());
 		
-		studyManager = new StudyManager();
+		studyDAO = new StudyDAO();
 	}
 	
 	/**
@@ -61,12 +61,12 @@ public class ProxyController {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to open a new study");
 			
-			studyManager.scan("studies");
+			studyDAO.scan("studies");
 			
 			int studyCounter = 0;
-			String[] studies = new String[studyManager.studyCount];
+			String[] studies = new String[studyDAO.studyCount];
 			
-			for (String study : studyManager.listStudies()){
+			for (String study : studyDAO.listStudies()){
 				studies[studyCounter] = study;
 				studyCounter++;
 			}
@@ -100,7 +100,9 @@ public class ProxyController {
 	class SaveViewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Call save the view");
+			System.out.println("The current view is " + view.getCurrentView());
+			System.out.println("The current images are " + currentImages);
+			System.out.println("The current study is " + currentStudy);
 			// Call to the SettingsManager to save the current view and images
 		}
 	}
@@ -143,12 +145,11 @@ public class ProxyController {
 			
 			BufferedImage image;
 			try {
-				Image[] images = new Image[4];
-				images[0] = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				images[1] = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				images[2] = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				images[3] = ImageIO.read(new File("studies/lung/lung034.jpg"));
-				view.setImages(images);
+				currentImages[0] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[1] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[2] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[3] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				view.setImages(currentImages);
 			} catch (IOException ex) {
 				System.out.println("Couldn't read image...");
 			}

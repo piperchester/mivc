@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 
 public interface StudyView {
 
+	public enum ViewType { SINGLE_VIEW, QUAD_VIEW };
+	
 	/**
 	 * Add a listener for the open command
 	 * @param al the object to listen to open commands
@@ -67,5 +69,7 @@ public interface StudyView {
 	public String getSelectedStudy();
 	
 	public boolean isDefaultSelected();
+	
+	public ViewType getCurrentView();
 	
 }

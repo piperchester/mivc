@@ -15,14 +15,14 @@ import java.util.ArrayList;
  * @author piperchester
  * @author Colin
  */
-public class StudyManager implements Scannable<File> {
+public class StudyDAO implements Scannable<File> {
     
     public static List<File> files;  // Holds pathnames of the directory
     public int studyCount = 0;
     
-    public StudyManager() { }
+    public StudyDAO() { }
     
-    public static StudyManager getInstance() {
+    public static StudyDAO getInstance() {
     	return instance;
     }
     
@@ -103,5 +103,5 @@ public class StudyManager implements Scannable<File> {
     	// TODO Write a study to a specific path
     }
     
-    private static StudyManager instance = new StudyManager();
+    private static StudyDAO instance = new StudyDAO();
 }
