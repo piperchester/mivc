@@ -144,14 +144,11 @@ public class ProxyController {
 			
 			BufferedImage image;
 			try {
-				image = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				image = ImageIO.read(new File("studies/lung/lung034	.jpg"));
 				view.setImages(image);
 			} catch (IOException ex) {
 				System.out.println("Couldn't read image...");
 			}
-			
-			
-			
 		}
 	}
 

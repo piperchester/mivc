@@ -93,17 +93,16 @@ public class StudyManager implements Scannable<File> {
         }
     }
     
+    /**
+     * Returns the files for a specific study given the study name
+     * @param studyName
+     */
     public void studyFiles(String studyName)
     {
-    	//this method will return the files for a specific study given the study name
-    	
-    	
     	for(File f: files)
     	{
     		System.out.println(f.getName());
-    	}
-    	
-    	
+    	}	
     }
     
     
