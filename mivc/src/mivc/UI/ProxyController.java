@@ -18,7 +18,7 @@ public class ProxyController {
 	private StudyView view;
 	private Study currentStudy;
 	public StudyManager studyManager;
-	//private List<Study> studies;
+	private List<Study> studies;
 	
 	
 	/**
@@ -34,9 +34,14 @@ public class ProxyController {
 		view.addSaveViewListener(new SaveViewListener());
 		view.addNextListener(new NextListener());
 		view.addPrevListener(new PrevListener());
-		view.addStudySelectionListener(new StudySelectionListener());
+		view.addStudySelectionListener(new StudySelectionListener());	
 		
 		studyManager = new StudyManager();
+	}
+	
+	public static void loadStudies()
+	{
+		//method here to load studies
 	}
 	
 	/**
@@ -69,10 +74,6 @@ public class ProxyController {
 				studies[studyCounter] = study;
 				studyCounter++;
 			}
-			
-			//get reference to first file in study
-			
-		
 			
 			view.showList(studies);  // Display the Study List window
 		}
@@ -139,6 +140,7 @@ public class ProxyController {
 			System.out.println("Is this the default study? " + 
 						view.isDefaultSelected());
 			// Load the selected Study, save default if it was selected
+			
 			
 			BufferedImage image;
 			try {
