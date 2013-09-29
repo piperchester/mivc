@@ -35,6 +35,7 @@ public class StudyManager implements Scannable<File> {
     public List<File> scan(String path) {
     	
     	files = new ArrayList<File>();
+    	studyCount = 0;
     	
     	
     	
@@ -81,8 +82,6 @@ public class StudyManager implements Scannable<File> {
     {   
 	    List<String> studies = new ArrayList<String>();
 	    
-	    
-	    
 	    for (File directory : files){
 	    	if (directory.isDirectory()){
 	    		System.out.println("Adding dir: " + directory);
@@ -90,8 +89,6 @@ public class StudyManager implements Scannable<File> {
 	    		studies.add((directory.getName()));
 	    	}
 	    }
-	    
-	    System.out.println("study size" + studies.size());
 	    
 		return studies;
     }
