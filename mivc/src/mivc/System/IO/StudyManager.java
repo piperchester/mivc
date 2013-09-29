@@ -67,6 +67,11 @@ public class StudyManager implements Scannable<File> {
         if (children != null) {
             for (File child : children) {
             	
+            	if (child.isDirectory())
+            	{
+            		System.out.println("study: " + child.getName());
+            	}
+            	
                 files.add(child);  // Adds new pathname to the ArrayList
                 addTree(child);
             }
