@@ -3,13 +3,10 @@ package mivc.UI;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -22,6 +19,7 @@ public class MainView extends JFrame implements StudyView {
 	private JPanel imageView;
 	private JPanel singleView;
 	private JPanel quadView;
+	private ViewType currentView;
 	private boolean viewingSingle = true;
 	private StudyList studyList = new StudyList();
 	
@@ -65,6 +63,7 @@ public class MainView extends JFrame implements StudyView {
 		getContentPane().add(toolbar, BorderLayout.NORTH);
 		getContentPane().add(imageView, BorderLayout.CENTER);
 		imageView.add(singleView, "SV");
+		currentView = ViewType.SINGLE_VIEW;
 		imageView.add(quadView, "QV");
 	}
 	
@@ -77,8 +76,10 @@ public class MainView extends JFrame implements StudyView {
 		CardLayout cl = (CardLayout)imageView.getLayout();
 		if (viewingSingle) {
 			cl.show(imageView, "QV");
+			currentView = ViewType.QUAD_VIEW;
 		} else {
 			cl.show(imageView, "SV");
+			currentView = ViewType.SINGLE_VIEW;
 		}
 		viewingSingle = !viewingSingle;
 	}
@@ -147,11 +148,9 @@ public class MainView extends JFrame implements StudyView {
 	 * @see mivc.UI.StudyView#setImages(java.awt.image.BufferedImage[])
 	 */
 	@Override
-	public void setImages(BufferedImage... images) {
-		System.out.println("---Setting image---");
-		JLabel label = new JLabel(new ImageIcon(images[0]));
-		this.singleView.add(label);
-		this.pack();
+	public void setImages(Image... images) {
+		((SingleView)this.singleView).setImages(images);
+		((QuadView)this.quadView).setImages(images);
 	}
 	
 	/**
@@ -172,6 +171,11 @@ public class MainView extends JFrame implements StudyView {
 	@Override
 	public boolean isDefaultSelected() {
 		return studyList.isDefaultSelected();
+	}
+	
+	@Override
+	public ViewType getCurrentView() {
+		return currentView;
 	}
 	
 	

@@ -1,5 +1,6 @@
 package mivc.UI;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -15,14 +16,17 @@ import javax.imageio.ImageIO;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import mivc.System.Study;
-import mivc.System.IO.StudyManager;
+import mivc.System.IO.StudyDAO;
 
 public class ProxyController {
 
 	private StudyView view;
+
 	private Study currentStudy;
-	public StudyManager studyManager;
+	private StudyDAO studyDAO;
+	private Image[] currentImages = new Image[4];
 	private List<Study> studies;
 
 	/**
@@ -42,13 +46,14 @@ public class ProxyController {
 		view.addPrevListener(new PrevListener());
 		view.addStudySelectionListener(new StudySelectionListener());
 
-		studyManager = new StudyManager();
+		view.addStudySelectionListener(new StudySelectionListener());
+
+		studyDAO = new StudyDAO();
 	}
 
 	public static void loadStudies() {
 		// method here to load studies
 	}
-
 	/**
 	 * Calls to the view to change the current view
 	 * 
@@ -69,24 +74,25 @@ public class ProxyController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Call to open a new study");
-			
-			studyManager.scan("studies");
-			
+
+			studyDAO.scan("studies");
+
 			int studyCounter = 0;
-			String[] studies = new String[studyManager.studyCount];
-			
-			for (String study : studyManager.listStudies()){
+			String[] studies = new String[studyDAO.studyCount];
+
+			for (String study : studyDAO.listStudies()) {
 				studies[studyCounter] = study;
 				studyCounter++;
 			}
-			
+
 			String contents;
 			try {
-				contents = new Scanner(new File("default-view.txt") ).useDelimiter("\\A").next();
+				contents = new Scanner(new File("default-view.txt"))
+						.useDelimiter("\\A").next();
 				System.out.println("Default study found: " + contents);
 			} catch (FileNotFoundException e1) {
 				System.out.println("No default study found...");
-				view.showList(studies);  // Display the Study List window
+				view.showList(studies); // Display the Study List window
 			}
 		}
 	}
@@ -112,7 +118,9 @@ public class ProxyController {
 	class SaveViewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("Call save the view");
+			System.out.println("The current view is " + view.getCurrentView());
+			System.out.println("The current images are " + currentImages);
+			System.out.println("The current study is " + currentStudy);
 			// Call to the SettingsManager to save the current view and images
 		}
 	}
@@ -165,16 +173,17 @@ public class ProxyController {
 				}
 			}
 
-			// Load the selected Study, save default if it was selected
-
-			BufferedImage image;
+			// Load the selected Study, save default if it was selected			
 			try {
-				image = ImageIO.read(new File("studies/lung/lung034	.jpg"));
-				view.setImages(image);
+
+				currentImages[0] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[1] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[2] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				currentImages[3] = ImageIO.read(new File("studies/lung/lung034.jpg"));
+				view.setImages(currentImages);
 			} catch (IOException ex) {
 				System.out.println("Couldn't read image...");
-			}
+			} 
 		}
 	}
-
 }

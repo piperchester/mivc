@@ -3,8 +3,11 @@
  */
 package mivc.System.IO;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +18,7 @@ import javax.imageio.ImageIO;
  * @author Ty
  * @author act4122
  */
-public class ImageManager implements DataManager, Scannable<File> {
+public class ImageManager implements Scannable<File> {
     
     protected ImageManager() { }
     
@@ -36,14 +39,13 @@ public class ImageManager implements DataManager, Scannable<File> {
         return images;
     }
 
-    @Override
     /**
      * Read a non-hidden image file and return.
      * 
      * @param path - path to file
      * @return File object related to the image
      */
-    public Object read(String path) {
+    public File read(String path) {
         File f = new File(path);
         if (f.isDirectory() || f.isHidden()) {
             return null;
@@ -86,10 +88,10 @@ public class ImageManager implements DataManager, Scannable<File> {
     	return s_Image;
     }
 
-    @Override
-    public void write(String path, Object obj) {
-	// TODO write an image to a path.
-	
+    public void write(String path, Image image) throws IOException {
+        // Not tested
+        File f = new File(path);
+        ImageIO.write((RenderedImage) image, f.getName().substring(f.getName().lastIndexOf('.')), f);
     }
     
     

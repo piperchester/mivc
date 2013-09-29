@@ -1,23 +1,24 @@
 package mivc.UI;
 
-import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import com.sun.java.swing.plaf.windows.WindowsBorders.DashedBorder;
 
 @SuppressWarnings("serial")
 public class QuadView extends JPanel {
 
-	private JLabel lblImage1;
-	private JLabel lblImage2;
-	private JLabel lblImage3;
-	private JLabel lblImage4;
+	private BufferedImage image1;
+	private BufferedImage image2;
+	private BufferedImage image3;
+	private BufferedImage image4;
 	
 	/*
 	 * Creates a display for viewing four images
@@ -33,28 +34,14 @@ public class QuadView extends JPanel {
 	 * Initialize components for the GUI
 	 */
 	private void initializeComponents() {
-		lblImage1 = new JLabel("Image Goes Here", JLabel.CENTER);
-		lblImage1.setPreferredSize(new Dimension(100,100));
-		lblImage1.setBorder(DashedBorder.createBlackLineBorder());
-		lblImage2 = new JLabel("Image Goes Here", JLabel.CENTER);
-		lblImage2.setPreferredSize(new Dimension(100,100));
-		lblImage2.setBorder(DashedBorder.createBlackLineBorder());
-		lblImage3 = new JLabel("Image Goes Here", JLabel.CENTER);
-		lblImage3.setPreferredSize(new Dimension(100,100));
-		lblImage3.setBorder(DashedBorder.createBlackLineBorder());
-		lblImage4 = new JLabel("Image Goes Here", JLabel.CENTER);
-		lblImage4.setPreferredSize(new Dimension(100,100));
-		lblImage4.setBorder(DashedBorder.createBlackLineBorder());
+
 	}
 	
 	/*
 	 * Lay the components on the GUI
 	 */
 	private void layoutComponents() {
-		add(lblImage1);
-		add(lblImage2);
-		add(lblImage3);
-		add(lblImage4);
+
 	}
 	
 	/**
@@ -64,12 +51,77 @@ public class QuadView extends JPanel {
 	 * @param img3 third image to display
 	 * @param img4 fourth image to display
 	 */
-	protected void setImage(BufferedImage img1, BufferedImage img2, 
-			BufferedImage img3, BufferedImage img4) {
-		lblImage1.setIcon(new ImageIcon(img1));
-		lblImage2.setIcon(new ImageIcon(img2));
-		lblImage3.setIcon(new ImageIcon(img3));
-		lblImage4.setIcon(new ImageIcon(img4));
+	protected void setImages(Image... images) {
+		
+		this.image1 = (BufferedImage) images[0];
+		this.image2 = (BufferedImage) images[1];
+		this.image3 = (BufferedImage) images[2];
+		this.image4 = (BufferedImage) images[3];
+		repaint();
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		int smSize = Math.min(getHeight()/2, getWidth()/2);
+		if (image1 != null) {
+			int x = (int) Math.floor((getWidth()-smSize*2) / 2);
+			int y = (int) Math.floor((getHeight()-smSize*2) / 2);
+			g.drawImage(getSquareImage(image1, smSize), x, y, smSize, smSize, null);
+		}
+		if (image2 != null) {
+			int x = (int) Math.floor((getWidth()-smSize*2) / 2)+smSize;
+			int y = (int) (Math.floor((getHeight()-smSize*2) / 2));
+			g.drawImage(getSquareImage(image2, smSize), x, y, smSize, smSize, null);
+		}
+		if (image3 != null) {
+			int x = (int) Math.floor((getWidth()-smSize*2) / 2);
+			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + Math.floor(getHeight()/2));
+			g.drawImage(getSquareImage(image3, smSize), x, y, smSize, smSize, null);
+		}
+		if (image4 != null) {
+			int x = (int) Math.floor((getWidth()-smSize*2) / 2)+smSize;
+			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + Math.floor(getHeight()/2));
+			g.drawImage(getSquareImage(image4, smSize), x, y, smSize, smSize, null);
+		}
+	}
+	
+	
+	/**
+	 * Fancy way of making a square image whilst keeping the aspect ratio.
+	 * @param img	the image to be made square
+	 * @param dim	the desired size of the image
+	 * @return	a square image representation of the passed image using transparency
+	 * @throws IOException 
+	 */
+	public static Image getSquareImage(BufferedImage img, int dim) {
+		
+		int height = img.getHeight(null);
+		int width = img.getWidth(null);
+		
+		// Find the largest factor
+		int maxFactor = height > width ? height : width;
+		
+		// Create a blank image of the desired square size
+		BufferedImage newImg = new BufferedImage(maxFactor, maxFactor, 
+				BufferedImage.TYPE_INT_ARGB);
+		Graphics2D newG = newImg.createGraphics();
+		
+		// Compute the translation
+        double translateX = (maxFactor - width)/2;
+        double translateY = (maxFactor - height)/2;
+        
+        // Translate the image
+        AffineTransform imgTransform = 
+        		AffineTransform.getTranslateInstance(
+        				translateX, translateY);
+        // Draw on the new image's graphics with the translation
+        newG.drawRenderedImage((RenderedImage) img, imgTransform);
+        
+        // Clean up
+        newG.dispose();
+
+        return newImg;
 	}
 	
 }

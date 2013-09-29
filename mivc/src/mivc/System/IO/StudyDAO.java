@@ -7,9 +7,6 @@ package mivc.System.IO;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Hashtable;
-
-import mivc.System.Study;
 
 
 /**
@@ -18,16 +15,14 @@ import mivc.System.Study;
  * @author piperchester
  * @author Colin
  */
-public class StudyManager implements Scannable<File> {
+public class StudyDAO implements Scannable<File> {
     
-    public static List<File> files;  // Holds pathnames of the directory //this will be deleted
-    public static Hashtable<String, File> studyFiles; //new data structure to hold path names for studies
-    
+    public static List<File> files;  // Holds pathnames of the directory
     public int studyCount = 0;
     
-    public StudyManager() { }
+    public StudyDAO() { }
     
-    public static StudyManager getInstance() {
+    public static StudyDAO getInstance() {
     	return instance;
     }
     
@@ -41,6 +36,7 @@ public class StudyManager implements Scannable<File> {
     	
     	files = new ArrayList<File>();
     	studyCount = 0;
+    	
     	
     	
     	System.out.println("Scanning: " + path);
@@ -71,40 +67,10 @@ public class StudyManager implements Scannable<File> {
         if (children != null) {
             for (File child : children) {
             	
-            	if (child.isDirectory())
-            	{
-            		System.out.println("study: " + child.getName());
-            		
-            		//add object to hash table with name and key
-            		
-            		//studyFiles.put(child.getName(), value)
-            		
-            		
-            		//studyFiles.put(child.getName(), value)
-            		
-            	}
-            	
-            	if(child.isFile())
-        		{
-        			System.out.println(child.getAbsolutePath());
-        		}
-            	
                 files.add(child);  // Adds new pathname to the ArrayList
                 addTree(child);
             }
         }
-    }
-    
-    /**
-     * Returns the files for a specific study given the study name
-     * @param studyName
-     */
-    public void studyFiles(String studyName)
-    {
-    	for(File f: files)
-    	{
-    		System.out.println(f.getName());
-    	}	
     }
     
     
@@ -128,20 +94,14 @@ public class StudyManager implements Scannable<File> {
     }
   
 
-    public Study read(String path) {
-        // Because we're now using a Hashtable to store usable studies (I'm 
-        // presuming), the path provided will be used against its keys; if it
-        // cannot find a usable path, null will be returned.
-        
-        File f = studyFiles.get(path);
-        List<File> l = new ImageManager().scan(path);
-        
-    	return new Study(f.getName(), l.toArray(new File[l.size()]));
+    public Object read(String path) {
+    	// TODO Create a study based on a directory and its contents
+    	return null;
     }
 
-    public void write(String path, Study study) {
-    	File f = new File(path);
+    public void write(String path, Object obj) {
+    	// TODO Write a study to a specific path
     }
     
-    private static StudyManager instance = new StudyManager();
+    private static StudyDAO instance = new StudyDAO();
 }
