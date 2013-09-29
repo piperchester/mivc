@@ -51,7 +51,6 @@ public class StudyDAO implements Scannable<File> {
     		System.out.println("The path was not scanned...");
     	}
  
-    	
     	System.out.println(files.size());
     	System.out.println(this.listStudies());
     	

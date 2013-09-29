@@ -3,10 +3,8 @@ package mivc.UI;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -15,8 +13,6 @@ import javax.imageio.ImageIO;
 
 import java.util.List;
 import java.util.Scanner;
-
-import javax.imageio.ImageIO;
 import mivc.System.Study;
 import mivc.System.IO.StudyDAO;
 
