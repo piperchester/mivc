@@ -148,10 +148,7 @@ public class MainView extends JFrame implements StudyView {
 	 */
 	@Override
 	public void setImages(BufferedImage... images) {
-		System.out.println("---Setting image---");
-		JLabel label = new JLabel(new ImageIcon(images[0]));
-		this.singleView.add(label);
-		this.pack();
+		((SingleView)this.singleView).setImage(images[0]);
 	}
 	
 	/**
