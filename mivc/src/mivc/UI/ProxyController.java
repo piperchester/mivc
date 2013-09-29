@@ -65,22 +65,11 @@ public class ProxyController {
 			int studyCounter = 0;
 			String[] studies = new String[studyManager.studyCount];
 			
-			System.out.println("study count" + studyManager.studyCount);
-			
-			List<String> testStudies = studyManager.listStudies();
-			
-			System.out.println("test studies" + testStudies.size());
-			
-			
-			
-			
 			for (String study : studyManager.listStudies()){
 				studies[studyCounter] = study;
 				studyCounter++;
 			}
 			
-			
-		
 			BufferedImage image;
 			try {
 				image = ImageIO.read(new File("studies/lung/lung034.jpg"));
