@@ -178,6 +178,11 @@ public class MainView extends JFrame implements StudyView {
 		return currentView;
 	}
 	
+	@Override
+	public void updateStatusBar(String value) {
+		((Toolbar)toolbar).setStatus(value);
+	}
+	
 	
 	/**
 	 * Creates the appropriate objecst and shows the GUI

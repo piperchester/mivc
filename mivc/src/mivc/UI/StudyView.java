@@ -72,4 +72,6 @@ public interface StudyView {
 	
 	public ViewType getCurrentView();
 	
+	public void updateStatusBar(String value);
+	
 }

@@ -47,6 +47,29 @@ public class ProxyController {
 		}
 	}
 	
+	private void updateViewStatus() {
+		String status = "";
+		int totalImages = currentStudy.getImageCount();
+		
+		if (view.getCurrentView() == ViewType.SINGLE_VIEW) {
+			status = "Viewing " + currentStudy.getName() + 
+					" image " + (imageIndex + 1) + " of " + 
+					totalImages;
+		} else if (view.getCurrentView() == ViewType.QUAD_VIEW) {
+			int lastImage = 0;
+			if (totalImages - imageIndex <= 4) {
+				//System.out.println(totalImages + " and " + imageIndex);
+				lastImage = totalImages - 1;
+			} else {
+				lastImage = imageIndex + 4;
+			}
+			status = "Viewing " + currentStudy.getName() + 
+					" images (" + (imageIndex + 1) + " - " + lastImage + ") of " + 
+					currentStudy.getImageCount();
+		}
+		view.updateStatusBar(status);
+	}
+	
 	/**
 	 * Calls to the view to change the current view
 	 *
@@ -55,6 +78,7 @@ public class ProxyController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			view.toggleView();
+			updateViewStatus();
 		}
 	}
 	
@@ -149,8 +173,8 @@ public class ProxyController {
 					}
 				}
 				view.setImages(currentImages);
-				
 			}
+			updateViewStatus();
 		}
 	}
 	
@@ -161,7 +185,7 @@ public class ProxyController {
 	class NextListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			// TODO When changing to quad view from one of the last three images, the program shows random images
 			// Get total number of images
 			int totalImages = currentStudy.getImageCount();
 			// Get current view (send either one or four images)
@@ -190,8 +214,8 @@ public class ProxyController {
 					}
 				}
 				view.setImages(currentImages);
-				
 			}
+			updateViewStatus();
 		}
 	}
 	
@@ -225,6 +249,7 @@ public class ProxyController {
 				currentImages[i] = currentStudy.getImage(i);
 			}
 			view.setImages(currentImages);
+			updateViewStatus();
 		}
 	}
 
