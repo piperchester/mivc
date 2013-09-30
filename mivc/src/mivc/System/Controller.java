@@ -1,6 +1,5 @@
 package mivc.System;
 
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -341,7 +340,7 @@ public class Controller {
 			ViewType curView = view.getCurrentView();
 			if (curView == ViewType.SINGLE_VIEW) {
 				// If we've reached the end just return
-				if (imgIndex == totalImages) {
+				if (imgIndex >= totalImages - 1) {
 					return;
 				}
 				
