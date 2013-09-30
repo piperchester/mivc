@@ -46,8 +46,8 @@ public class StudyImage implements IStudyImage {
 						// Make sure this happens on the event thread (EDT)
 				        javax.swing.SwingUtilities.invokeLater(new Runnable() {
 				            public void run() {
-				            	System.out.println("Image loaded in (" + 
-				            			loadTime/1000.0 + ") seconds, calling repaint");
+//				            	System.out.println("Image loaded in (" + 
+//				            			loadTime/1000.0 + ") seconds, calling repaint");
 								c.repaint();
 				            }
 				        });

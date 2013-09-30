@@ -186,6 +186,22 @@ public class MainView extends JFrame implements StudyView {
 		((Toolbar)toolbar).setStatus(value);
 	}
 	
+	public String getInput(String prompt) {
+		return JOptionPane.showInputDialog(this, prompt, JOptionPane.OK_OPTION);
+	}
+	
+	public boolean getWarningConfirmation(String prompt) {
+		boolean retVal = false;
+		int dialogResult = JOptionPane.showConfirmDialog (null, 
+				prompt,
+				"Warning",
+				JOptionPane.YES_NO_OPTION);
+		if(dialogResult == JOptionPane.YES_OPTION) {
+			retVal = true;
+		}
+		return retVal;
+	}
+	
 	
 	/**
 	 * Creates the appropriate objecst and shows the GUI

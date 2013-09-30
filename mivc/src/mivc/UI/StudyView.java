@@ -76,4 +76,8 @@ public interface StudyView {
 	
 	public void updateStatusBar(String value);
 	
+	public String getInput(String prompt);
+	
+	public boolean getWarningConfirmation(String prompt);
+	
 }

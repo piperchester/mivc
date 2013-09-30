@@ -258,30 +258,34 @@ public class Controller {
 	class SaveStudyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO implement code to save a study under a different name
-			System.out.println("Call to save a study");
 			
 			// Local variable to see if the study is to be saved.
 			boolean s_create = false;
 			
-			// TODO: Replace this with the actual study name
-			// that the user places in a text field
-			if (new java.io.File("./studies/new_study").exists())
-			{
-				// Prompt the user
-				int dialogResult = JOptionPane.showConfirmDialog (null, 
-						"Would you like to overwrite?",
-						"Warning",
-						JOptionPane.YES_NO_OPTION);
-				if(dialogResult == JOptionPane.YES_OPTION)
-					s_create = true;
+			String newStudy = view.getInput("Please enter a study name");
+			
+			// Don't do anything if they didn't enter a name
+			if (newStudy == null || newStudy.equals("")) {
+				return;
 			}
-			else // Create if there is no study found already
+			
+			if (new java.io.File("./studies/" + newStudy).exists()) {
+				s_create = view.getWarningConfirmation(
+						"Would you like to overwrite?");
+			} else { // Create if there is no study found already
 				s_create = true;
+			}
 			
 			// If the creation succeeds then save the study
-			if (s_create)
-				StudyDAO.getInstance().saveStudy("ct_head", "new_study");
+			if (s_create) {
+				StudyDAO.getInstance().saveStudy(
+						currentStudy.getName(), 
+						newStudy);
+				// update the list of studies
+				loadStudies(true);
+				// Set the current study to the new study
+				updateCurrentStudy(newStudy);
+			}
 		}
 	}
 	
