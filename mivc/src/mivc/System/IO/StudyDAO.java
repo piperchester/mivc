@@ -27,21 +27,6 @@ public class StudyDAO {
     	return instance;
     }
     
-    /**
-     * Recursively searches the directory, adding a new file/directory to the ArrayList.
-     * @param file - Starting point for the search
-     */
-    public void addTree(List<File> files, File file) {
-        File[] children = file.listFiles();  // Array of pathnames 
-        if (children != null) {
-            for (File child : children) {
-            	
-                files.add(child);  // Adds new pathname to the ArrayList
-                addTree(files, child);
-            }
-        }
-    }
-    
     
     /**
      * Adds all studies within the files ArrayList to a String list of studies.
@@ -49,9 +34,8 @@ public class StudyDAO {
      */
     public List<Study> listStudies()
     {   
-    	List<File>files = new ArrayList<File>();
 
-    	System.out.println("Scanning: " + rootPath);
+//    	System.out.println("Scanning: " + rootPath);
     	
     	List<Study> studies = new ArrayList<Study>();
     	try {
@@ -60,7 +44,7 @@ public class StudyDAO {
             if (children != null) {
                 for (File child : children) {
         	    	if (child.isDirectory()){
-        	    		System.out.println("Adding dir: " + child.getName());
+//        	    		System.out.println("Adding dir: " + child.getName());
         	    		studies.add(new Study(child.getName()));
         	    	}
                 }

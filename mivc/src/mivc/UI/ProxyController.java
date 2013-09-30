@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import mivc.System.LocalSettingsManager;
 import mivc.System.Study;
 import mivc.System.IO.StudyDAO;
 import mivc.UI.StudyView.ViewType;
@@ -20,6 +21,8 @@ public class ProxyController {
 	private HashMap<String, Study> studies;
 	private int imageInterval = 0;
 	private int singleViewIndex = 0;
+	private static final String SETTINGS_PATH = "settings.prop";
+	private static final String DEFAULT_STUDY_KEY = "default_study";
 	
 	/**
 	 * Proxy controller is the brains for the GUI.  Currently it is designed
@@ -35,8 +38,33 @@ public class ProxyController {
 		view.addNextListener(new NextListener());
 		view.addPrevListener(new PrevListener());
 		view.addStudySelectionListener(new StudySelectionListener());	
+		
+		initialize();
 	}
 	
+	/**
+	 * Sets up the initial system by loading studies, settings and the default
+	 * study if there is one.
+	 */
+	private void initialize() {
+		// Load studies
+		loadStudies(true);
+		
+		// Load settings
+		LocalSettingsManager sMan = LocalSettingsManager.getInstance();
+		System.out.println("Was load successful?: " + sMan.Load(SETTINGS_PATH));
+		
+		// Load default study
+		String studyName = sMan.getString(DEFAULT_STUDY_KEY);
+		updateCurrentStudy(studyName);
+	}
+	
+	/**
+	 * Loads the studies from persistent source, if the studies are already
+	 * loaded nothing will change unless forceReload is set to true.  However,
+	 * if the studies have not been loaded it will load regardless of forceReload
+	 * @param forceReload whether or not to force reloading studies
+	 */
 	public void loadStudies(boolean forceReload) {
 		if (studies == null || forceReload) {
 			studies = new HashMap<String, Study>();
@@ -112,6 +140,30 @@ public class ProxyController {
 		}
 
 		updateViewStatus();
+	}
+	
+	/**
+	 * Ensures the study attempting to be chosen is valid and if so, sets that
+	 * study while also resetting the image cursors to the first image.  If the
+	 * name passed in .equals("") or == null the system remains status quo.
+	 * @param studyName the name of the desired study
+	 */
+	private void updateCurrentStudy(String studyName) {
+		System.out.println("Trying to set " + studyName + " as the current study");
+		if (studyName == null) {
+			return;
+		}
+		if (studyName.equals("")) {
+			return;
+		}
+		loadStudies(false);
+		// Set the current study
+		currentStudy = studies.get(studyName);
+		
+		// Get the first images
+		imageInterval = 0;
+		singleViewIndex = 0;
+		updateViewImages();
 	}
 
 	
@@ -277,22 +329,16 @@ public class ProxyController {
 			
 			// Load the selected Study, save default if it was selected
 			String studyName = view.getSelectedStudy();
-			if (studyName == null) {
-				return;
-			}
-			if (studyName.equals("")) {
-				return;
-			}
-			// Set the current study
-			currentStudy = studies.get(studyName);
+			updateCurrentStudy(studyName);
+			
+			// Set it as default if so desired by the GUI
 			if (view.isDefaultSelected()) {
 				// TODO Save the default study with the settings manager
+				LocalSettingsManager sMan = LocalSettingsManager.getInstance();
+				sMan.set(DEFAULT_STUDY_KEY, studyName);
+				System.out.println("Testing: " + sMan.getString(DEFAULT_STUDY_KEY));
+				sMan.Save(SETTINGS_PATH);
 			}
-			
-			// Get the first images
-			imageInterval = 0;
-			singleViewIndex = 0;
-			updateViewImages();;
 		}
 	}
 
