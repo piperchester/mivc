@@ -18,8 +18,8 @@ public class ProxyController {
 	private Study currentStudy;
 	private Image[] currentImages = new Image[4];
 	private HashMap<String, Study> studies;
-	private int imageIndex = 0;
-	
+	private int imageInterval = 0;
+	private int singleViewIndex = 0;
 	
 	/**
 	 * Proxy controller is the brains for the GUI.  Currently it is designed
@@ -47,28 +47,73 @@ public class ProxyController {
 		}
 	}
 	
+	/**
+	 * updates the status bar on the view, should be called any time the 
+	 * view, study or images are changed.
+	 */
 	private void updateViewStatus() {
-		String status = "";
+		// Get current view (send either one or four images)
+		ViewType curView = view.getCurrentView();
 		int totalImages = currentStudy.getImageCount();
+		String status = "";
 		
-		if (view.getCurrentView() == ViewType.SINGLE_VIEW) {
-			status = "Viewing " + currentStudy.getName() + 
-					" image " + (imageIndex + 1) + " of " + 
-					totalImages;
-		} else if (view.getCurrentView() == ViewType.QUAD_VIEW) {
+		if (curView == ViewType.SINGLE_VIEW) {
+			int imgIndex = imageInterval*4 + singleViewIndex;
+			// Update the status
+			status = "Viewing " + currentStudy.getName() + " image " + 
+					(imgIndex + 1) + " of " + totalImages;
+		} else if (curView == ViewType.QUAD_VIEW) {
+			// Update the status
 			int lastImage = 0;
-			if (totalImages - imageIndex <= 4) {
-				//System.out.println(totalImages + " and " + imageIndex);
-				lastImage = totalImages - 1;
+			if (totalImages - imageInterval*4 <= 4) {
+				lastImage = totalImages;
 			} else {
-				lastImage = imageIndex + 4;
+				lastImage = imageInterval*4 + 4;
 			}
 			status = "Viewing " + currentStudy.getName() + 
-					" images (" + (imageIndex + 1) + " - " + lastImage + ") of " + 
-					currentStudy.getImageCount();
+					" images (" + (imageInterval*4 + 1) + " - " + lastImage + 
+					") of " + currentStudy.getImageCount();
 		}
+
+		// update the status bar
 		view.updateStatusBar(status);
 	}
+	
+	/**
+	 * updates the images on the GUI, should be called any time imageInterval
+	 * or singleViewIndex are changed.
+	 * @precondition imageInterval and singleViewIndex must be set previously
+	 */
+	private void updateViewImages() {
+		
+		// Only load images if singleViewIndex is 0 or 3, otherwise, keep using
+		// the current interval of images already loaded.
+		if (singleViewIndex == 0 || singleViewIndex == 3) {
+			int totalImages = currentStudy.getImageCount();
+			for (int i = 0; i < 4; i++) {
+				int imgIndex = imageInterval*4 + i;
+				if (imgIndex >= totalImages) {
+					currentImages[i] = null;
+				} else {
+					currentImages[i] = currentStudy.getImage(imgIndex);
+				}
+			}
+		}
+		
+		// Get current view (send either one or four images)
+		ViewType curView = view.getCurrentView();
+		
+		if (curView == ViewType.SINGLE_VIEW) {
+			// Update the image(s)
+			view.setImages(currentImages[singleViewIndex]);
+		} else if (curView == ViewType.QUAD_VIEW) {
+			// Update the image(s)
+			view.setImages(currentImages);
+		}
+
+		updateViewStatus();
+	}
+
 	
 	/**
 	 * Calls to the view to change the current view
@@ -78,6 +123,7 @@ public class ProxyController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			view.toggleView();
+			updateViewImages();
 			updateViewStatus();
 		}
 	}
@@ -144,37 +190,36 @@ public class ProxyController {
 	class PrevListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			int imgIndex = imageInterval*4 + singleViewIndex;
 			
-			// Get total number of images
-			int totalImages = currentStudy.getImageCount();
 			// Get current view (send either one or four images)
 			ViewType curView = view.getCurrentView();
 			if (curView == ViewType.SINGLE_VIEW) {
-				// If we've reached the beginning just return, otherwise, decrement
-				if (imageIndex - 1 < 0) {
+				// If we've reached the beginning just return
+				if (imgIndex == 0) {
 					return;
+				}
+				
+				// if we've reached the first single image in this interval
+				// reset singleViewIndex and increment the interval
+				if (singleViewIndex == 0) {
+					imageInterval -= 1;
+					singleViewIndex = 3;
 				} else {
-					view.setImages(currentStudy.getImage(--imageIndex));
+					// Otherwise just decrement the index
+					singleViewIndex -= 1;
 				}
 			} else if (curView == ViewType.QUAD_VIEW) {
-				// If we are at the beginning, don't decrement
-				if (imageIndex <= 0) {
+				// If we are at the beginning don't decrement
+				if (imageInterval == 0) {
 					return;
 				}
-				// Load the images
-				imageIndex -= 4;
-				for (int i = 0; i < 4; i++) {
-					
-					if (imageIndex + (i+1) >= totalImages) {
-						currentImages[i] = null;
-					} else {
-						currentImages[i] = currentStudy.getImage(
-								imageIndex + (i + 1));
-					}
-				}
-				view.setImages(currentImages);
+				
+				// increment imageInterval and reset singleViewIndex
+				singleViewIndex = 3;
+				imageInterval -= 1;
 			}
-			updateViewStatus();
+			updateViewImages();
 		}
 	}
 	
@@ -185,37 +230,40 @@ public class ProxyController {
 	class NextListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO When changing to quad view from one of the last three images, the program shows random images
-			// Get total number of images
+			
 			int totalImages = currentStudy.getImageCount();
+			int imgIndex = imageInterval*4 + singleViewIndex;
+			
 			// Get current view (send either one or four images)
 			ViewType curView = view.getCurrentView();
 			if (curView == ViewType.SINGLE_VIEW) {
-				// If we've reached the end just return, otherwise, increment
-				if (imageIndex + 1 >= totalImages) {
+				// If we've reached the end just return
+				if (imgIndex == totalImages) {
 					return;
+				}
+				
+				// if we've reached the last single image in this interval
+				// reset singleViewIndex and increment the interval
+				if (singleViewIndex == 3) {
+					imageInterval += 1;
+					singleViewIndex = 0;
 				} else {
-					view.setImages(currentStudy.getImage(++imageIndex));
+					// Otherwise just increment the index
+					singleViewIndex += 1;
 				}
 			} else if (curView == ViewType.QUAD_VIEW) {
-				// If there aren't more than four images left, don't increment
-				if (totalImages - imageIndex <= 4) {
+				// If there aren't more than four images left, we reached then 
+				// end,, don't increment
+				if (totalImages - imageInterval*4 <= 4) {
 					return;
 				}
-				// Load the images
-				imageIndex += 4;
-				for (int i = 0; i < 4; i++) {
-					// If the next image exceeds total images, leave it null
-					if (imageIndex + (i+1) >= totalImages) {
-						currentImages[i] = null;
-					} else {
-						currentImages[i] = currentStudy.getImage(
-								imageIndex + (i + 1));
-					}
-				}
-				view.setImages(currentImages);
+				
+				// increment imageInterval and reset singleViewIndex
+				singleViewIndex = 0;
+				imageInterval += 1;
 			}
-			updateViewStatus();
+			updateViewImages();
+
 		}
 	}
 	
@@ -226,9 +274,6 @@ public class ProxyController {
 	class StudySelectionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("You selected " + view.getSelectedStudy());
-			System.out.println("Is this the default study? " + 
-						view.isDefaultSelected());
 			
 			// Load the selected Study, save default if it was selected
 			String studyName = view.getSelectedStudy();
@@ -245,11 +290,9 @@ public class ProxyController {
 			}
 			
 			// Get the first images
-			for (int i = 0; i < currentImages.length; i++) {
-				currentImages[i] = currentStudy.getImage(i);
-			}
-			view.setImages(currentImages);
-			updateViewStatus();
+			imageInterval = 0;
+			singleViewIndex = 0;
+			updateViewImages();;
 		}
 	}
 
