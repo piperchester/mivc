@@ -11,6 +11,7 @@ public class StudyImage implements IStudyImage {
 
 	private String path;
 	private Image img;
+	private Thread loadingThread;
 	
 	public StudyImage(String path) {
 		this.path = path;
@@ -26,30 +27,35 @@ public class StudyImage implements IStudyImage {
 			final int y, final int width, final int height) {
 		if (img == null) {
 			g.drawString("Loading Image", x + width/2-30, y + height/2-5);
-			// Load the image in a separate thread so as not to tie up the GUI, 
-			// when finished it will draw the image and call repaint
-			new Thread() {
-				@Override
-				public void run() {
-					Random rand = new Random();
-					// Input a random delay for loading of image (just for show)
-					// We will choose a random time between 0 and 3 seconds
-					final long loadTime = rand.nextInt(1000);
-					try {
-						Thread.sleep(loadTime);
-					} catch (InterruptedException e) { }
-					loadImage();
-					// Make sure this happens on the event thread (EDT)
-			        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			            public void run() {
-			            	System.out.println("Image loaded in (" + 
-			            			loadTime/1000.0 + ") seconds, calling repaint");
-							c.repaint();
-			            }
-			        });
-	
-				}
-			}.start();
+			// If some other entity calls repaint we don't want this to run 
+			// another thread
+			if (loadingThread == null) {
+				// Load the image in a separate thread so as not to tie up the 
+				// GUI, when finished it will call repaint
+				loadingThread = new Thread() {
+					@Override
+					public void run() {
+						Random rand = new Random();
+						// Input a random delay for loading of image (just for show)
+						// We will choose a random time between 0 and 3 seconds
+						final long loadTime = rand.nextInt(1000);
+						try {
+							Thread.sleep(loadTime);
+						} catch (InterruptedException e) { }
+						loadImage();
+						// Make sure this happens on the event thread (EDT)
+				        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				            public void run() {
+				            	System.out.println("Image loaded in (" + 
+				            			loadTime/1000.0 + ") seconds, calling repaint");
+								c.repaint();
+				            }
+				        });
+		
+					}
+				};
+				loadingThread.start();
+			}
 		} else {
 	        javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {
