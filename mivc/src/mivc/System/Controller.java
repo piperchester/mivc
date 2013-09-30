@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.swing.JOptionPane;
+
 import mivc.System.IO.StudyDAO;
 import mivc.UI.StudyView;
 import mivc.UI.StudyView.ViewType;
@@ -253,6 +255,23 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			// TODO implement code to save a study under a different name
 			System.out.println("Call to save a study");
+			
+			boolean s_create = false;
+			if (new java.io.File("./studies/new_study").exists())
+			{
+				int dialogResult = JOptionPane.showConfirmDialog (null, 
+						"Would you like to overwrite?",
+						"Warning",
+						JOptionPane.YES_NO_OPTION);
+				if(dialogResult == JOptionPane.YES_OPTION)
+					s_create = true;
+			}
+			else
+				s_create = true;
+			
+			if (s_create)
+				StudyDAO.getInstance().saveStudy("ct_head", "new_study");
+			
 			// Check to see if that study exists already
 			// If it does, warn that they will overwrite
 			// If it does not, save and continue

@@ -5,6 +5,10 @@
 package mivc.System.IO;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -68,8 +72,33 @@ public class StudyDAO {
     	return null;
     }
 
-    public void write(String path, Object obj) {
-    	// TODO Write a study to a specific path
+    public void saveStudy(String p_srcStudyName, String p_dstStudyName)
+    {
+    	// Check if the directory exists, if not then create the directory
+    	if (new File(p_dstStudyName).exists() == false)
+    	{
+    		File s_dstDir = new File(rootPath + "/" + p_dstStudyName);
+    		s_dstDir.mkdir();
+    	}
+    	
+    	File s_srcStudyDir = new File(rootPath + "/" + p_srcStudyName);
+    	if (s_srcStudyDir.exists())
+    	{
+    		File[] s_srcImages = s_srcStudyDir.listFiles();
+    		for (File l_img : s_srcImages)
+    		{
+    			try
+    			{
+	    			Path s_srcImg = Paths.get(l_img.getPath());
+	    			Path s_dstImg = Paths.get(rootPath + "/" + p_dstStudyName + "/" + l_img.getName());
+	    			Files.copy(s_srcImg, s_dstImg, StandardCopyOption.REPLACE_EXISTING);
+    			}
+    			catch (Exception ex)
+    			{
+    				System.err.println("Could not copy image" + l_img.getName());
+    			}
+    		}
+    	}
     }
     
     private static StudyDAO instance = new StudyDAO();
