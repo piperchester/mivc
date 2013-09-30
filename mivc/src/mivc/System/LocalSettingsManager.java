@@ -5,7 +5,6 @@ package mivc.System;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -137,6 +136,21 @@ public class LocalSettingsManager implements Serializable {
 	public Integer getInt(String p_Key)
 	{
 		return m_ints.get(p_Key);
+	}
+	
+	/**
+	 * getBoolean
+	 * Gets the boolean value to the key provided
+	 * @param p_Key - Key to search by
+	 * @return Value or false if not found
+	 */
+	public boolean getBoolean(String p_Key)
+	{
+		Boolean b = m_bools.get(p_Key);
+		if (b != null && b) {
+			return b;
+		}
+		return false;
 	}
 	
 	/**

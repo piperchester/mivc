@@ -24,6 +24,15 @@ public class ProxyController {
 	private static final String SETTINGS_PATH = "settings.prop";
 	private static final String DEFAULT_STUDY_KEY = "default_study";
 	
+	// The following properties are to be concatenated with the study name
+	// ex. settings.set(currentStudy.getName() + IMAGE_INTERVAL_KEY, imageInterval)
+	// The reasoning is that we need to be able to store view data for multiple
+	// studies so the study name is the unique identifier for the key
+	private static final String IMAGE_INTERVAL_KEY = "_image_interval";
+	private static final String SINGLE_VIEW_INDEX_KEY = "_sv_index";
+	private static final String VIEW_TYPE_KEY = "_view_type";
+	private static final String DISPLAY_STATE_SAVED_KEY = "_display_state";
+	
 	/**
 	 * Proxy controller is the brains for the GUI.  Currently it is designed
 	 * to work with a Java GUI but could be extended.
@@ -52,7 +61,7 @@ public class ProxyController {
 		
 		// Load settings
 		LocalSettingsManager sMan = LocalSettingsManager.getInstance();
-		System.out.println("Was load successful?: " + sMan.Load(SETTINGS_PATH));
+		sMan.Load(SETTINGS_PATH);
 		
 		// Load default study
 		String studyName = sMan.getString(DEFAULT_STUDY_KEY);
@@ -110,13 +119,14 @@ public class ProxyController {
 	/**
 	 * updates the images on the GUI, should be called any time imageInterval
 	 * or singleViewIndex are changed.
+	 * @param forceUpdate should the update of images be forced
 	 * @precondition imageInterval and singleViewIndex must be set previously
 	 */
-	private void updateViewImages() {
+	private void updateViewImages(boolean forceUpdate) {
 		
 		// Only load images if singleViewIndex is 0 or 3, otherwise, keep using
 		// the current interval of images already loaded.
-		if (singleViewIndex == 0 || singleViewIndex == 3) {
+		if (singleViewIndex == 0 || singleViewIndex == 3 || forceUpdate) {
 			int totalImages = currentStudy.getImageCount();
 			for (int i = 0; i < 4; i++) {
 				int imgIndex = imageInterval*4 + i;
@@ -149,7 +159,6 @@ public class ProxyController {
 	 * @param studyName the name of the desired study
 	 */
 	private void updateCurrentStudy(String studyName) {
-		System.out.println("Trying to set " + studyName + " as the current study");
 		if (studyName == null) {
 			return;
 		}
@@ -160,10 +169,32 @@ public class ProxyController {
 		// Set the current study
 		currentStudy = studies.get(studyName);
 		
-		// Get the first images
-		imageInterval = 0;
-		singleViewIndex = 0;
-		updateViewImages();
+		// Check if there is a persisted study display state, if there is, load
+		// the persisted view and images for that study but if not, just load
+		// the first images
+		LocalSettingsManager sMan = LocalSettingsManager.getInstance();
+		if (sMan.getBoolean(currentStudy.getName() + DISPLAY_STATE_SAVED_KEY)) {
+			// Get the saved display state info
+			
+			// Get the view type
+			ViewType vType = ViewType.valueOf(sMan.getString(
+					studyName + VIEW_TYPE_KEY));
+			// If the view type is different, toggle the view so it isn't
+			if (vType != view.getCurrentView()) {
+				view.toggleView();
+			}
+			
+			// Get the image variable data
+			imageInterval = sMan.getInt(studyName + IMAGE_INTERVAL_KEY);
+			singleViewIndex = sMan.getInt(studyName + SINGLE_VIEW_INDEX_KEY);
+			updateViewImages(true);
+		} else {
+			// Get the first images
+			imageInterval = 0;
+			singleViewIndex = 0;
+			updateViewImages(false);
+		}
+		
 	}
 
 	
@@ -175,7 +206,7 @@ public class ProxyController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			view.toggleView();
-			updateViewImages();
+			updateViewImages(false);
 			updateViewStatus();
 		}
 	}
@@ -214,6 +245,7 @@ public class ProxyController {
 	class SaveStudyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// TODO implement code to save a study under a different name
 			System.out.println("Call to save a study");
 			// Check to see if that study exists already
 			// If it does, warn that they will overwrite
@@ -228,10 +260,18 @@ public class ProxyController {
 	class SaveViewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("The current view is " + view.getCurrentView());
-			System.out.println("The current images are " + currentImages);
-			System.out.println("The current study is " + currentStudy);
-			// Call to the SettingsManager to save the current view and images
+			LocalSettingsManager sMan = LocalSettingsManager.getInstance();
+			sMan.set(currentStudy.getName() + IMAGE_INTERVAL_KEY, 
+					imageInterval);
+			sMan.set(currentStudy.getName() + SINGLE_VIEW_INDEX_KEY, 
+					singleViewIndex);
+			// This next value will need to be recreated as a ViewType 
+			// using ViewType.valueOf(...)
+			sMan.set(currentStudy.getName() + VIEW_TYPE_KEY, 
+					view.getCurrentView().toString());
+			sMan.set(currentStudy.getName() + DISPLAY_STATE_SAVED_KEY, true);
+			// Save the settings
+			sMan.Save(SETTINGS_PATH);
 		}
 	}
 	
@@ -271,7 +311,7 @@ public class ProxyController {
 				singleViewIndex = 3;
 				imageInterval -= 1;
 			}
-			updateViewImages();
+			updateViewImages(false);
 		}
 	}
 	
@@ -314,7 +354,7 @@ public class ProxyController {
 				singleViewIndex = 0;
 				imageInterval += 1;
 			}
-			updateViewImages();
+			updateViewImages(false);
 
 		}
 	}
@@ -333,10 +373,8 @@ public class ProxyController {
 			
 			// Set it as default if so desired by the GUI
 			if (view.isDefaultSelected()) {
-				// TODO Save the default study with the settings manager
 				LocalSettingsManager sMan = LocalSettingsManager.getInstance();
 				sMan.set(DEFAULT_STUDY_KEY, studyName);
-				System.out.println("Testing: " + sMan.getString(DEFAULT_STUDY_KEY));
 				sMan.Save(SETTINGS_PATH);
 			}
 		}
