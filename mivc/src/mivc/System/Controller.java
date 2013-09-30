@@ -13,6 +13,11 @@ import mivc.UI.StudyView;
 import mivc.UI.StudyView.ViewType;
 
 
+/**
+ * @author Colin?
+ * @author Fill me
+ * @author act4122
+ */
 public class Controller {
 
 	private StudyView view;
@@ -256,9 +261,14 @@ public class Controller {
 			// TODO implement code to save a study under a different name
 			System.out.println("Call to save a study");
 			
+			// Local variable to see if the study is to be saved.
 			boolean s_create = false;
+			
+			// TODO: Replace this with the actual study name
+			// that the user places in a text field
 			if (new java.io.File("./studies/new_study").exists())
 			{
+				// Prompt the user
 				int dialogResult = JOptionPane.showConfirmDialog (null, 
 						"Would you like to overwrite?",
 						"Warning",
@@ -266,15 +276,12 @@ public class Controller {
 				if(dialogResult == JOptionPane.YES_OPTION)
 					s_create = true;
 			}
-			else
+			else // Create if there is no study found already
 				s_create = true;
 			
+			// If the creation succeeds then save the study
 			if (s_create)
 				StudyDAO.getInstance().saveStudy("ct_head", "new_study");
-			
-			// Check to see if that study exists already
-			// If it does, warn that they will overwrite
-			// If it does not, save and continue
 		}
 	}
 	
