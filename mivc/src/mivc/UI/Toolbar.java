@@ -72,9 +72,8 @@ public class Toolbar extends JPanel {
 	 * @param currentImage the current image number
 	 * @param totalImages the total number of images in the study
 	 */
-	protected void setStatus(String currentImage, String totalImages) {
-		lblStatus.setText("Viewing image(s) " + currentImage 
-				+ " of " + totalImages);
+	protected void setStatus(String value) {
+		lblStatus.setText(value);
 	}
 
 	protected void addOpenListener(ActionListener al) {

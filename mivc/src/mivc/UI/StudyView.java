@@ -1,10 +1,14 @@
 package mivc.UI;
 
+import java.awt.Image;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+
+import mivc.System.IStudyImage;
 
 public interface StudyView {
 
+	public enum ViewType { SINGLE_VIEW, QUAD_VIEW };
+	
 	/**
 	 * Add a listener for the open command
 	 * @param al the object to listen to open commands
@@ -56,7 +60,7 @@ public interface StudyView {
 	 * Set the image(s) to display on the GUI
 	 * @param images the image(s) to be displayed
 	 */
-	public void setImages(BufferedImage... images);
+	public void setImages(IStudyImage... images);
 	
 	/**
 	 * Show a list of studies for the user to select from
@@ -67,5 +71,9 @@ public interface StudyView {
 	public String getSelectedStudy();
 	
 	public boolean isDefaultSelected();
+	
+	public ViewType getCurrentView();
+	
+	public void updateStatusBar(String value);
 	
 }

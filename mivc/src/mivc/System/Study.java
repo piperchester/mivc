@@ -3,11 +3,8 @@
  */
 package mivc.System;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.awt.Image;
+import mivc.System.IO.ImageDAO;
 
 /**
  * Holds images related to what is considered to be a study.
@@ -17,62 +14,28 @@ import javax.imageio.ImageIO;
  */
 public class Study {
 
-    public Study(String name, File[] imagePaths) {
-        this.name = name;
-        this.images = new StudyImage[imagePaths.length];
-        
-        int index = 0;
-        for (File f : imagePaths) {
-            images[index++] = new StudyImage(f);
-        }
-    }
+    private String name;
+    private IStudyImage[] images;
+	
+	public Study(String name) {
+		this.name = name;
+		images = ImageDAO.getInstance().listAll(name);
+	}
 
     public String getName() {
         return this.name;
     }
 
-    public BufferedImage getImage(int index) throws IOException {
-        return this.images[index].getImage();
+    public IStudyImage getImage(int index) {
+        return images[index];
     }
     
-    public String getImageName(int index) {
-	return this.images[index].getName();
+    public String getImagePath(int index) {
+    	return images[index].getPath();
     }
     
-    public int getSize() {
-        return this.images.length;
+    public int getImageCount() {
+        return images.length;
     }
-
-    private final String name;
-    private final StudyImage[] images;
     
-    /**
-     * Handles images held by the study.
-     * @author Ty
-     *
-     */
-    private class StudyImage {
-        private StudyImage(File path) {
-            this.path = path;
-        }
-        
-        private BufferedImage getImage() throws IOException {
-            if (this.image == null) {
-                loadImage();
-            }
-            
-            return this.image;
-        }
-        
-        private String getName() {
-            return this.path.getName();
-        }
-        
-        private void loadImage() throws IOException {
-            this.image = ImageIO.read(this.path);
-        }
-        
-        private final File path;
-        private BufferedImage image = null;
-    }
 }

@@ -56,6 +56,8 @@ public class StudyList extends JFrame implements ActionListener {
 	
 	protected void updateList(String[] studies) {
 		studiesList.setListData(studies);
+		// uncheck the default
+		cbDefault.setSelected(false);
 	}
 	
 	protected boolean isDefaultSelected() {
