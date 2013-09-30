@@ -15,32 +15,27 @@ import mivc.System.IO.ImageDAO;
 public class Study {
 
     private String name;
-    private String[] imageNames;
+    private IStudyImage[] images;
 	
 	public Study(String name) {
 		this.name = name;
-		imageNames = ImageDAO.getInstance().listAll(name);
+		images = ImageDAO.getInstance().listAll(name);
 	}
-	
-    public Study(String name, String[] imagePaths) {
-        this.name = name;
-        this.imageNames = imagePaths;
-    }
 
     public String getName() {
         return this.name;
     }
 
-    public Image getImage(int index) {
-        return ImageDAO.getInstance().read(getName() + "/" + imageNames[index]);
+    public IStudyImage getImage(int index) {
+        return images[index];
     }
     
-    public String getImageName(int index) {
-    	return imageNames[index];
+    public String getImagePath(int index) {
+    	return images[index].getPath();
     }
     
     public int getImageCount() {
-        return imageNames.length;
+        return images.length;
     }
     
 }

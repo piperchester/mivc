@@ -13,10 +13,12 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import mivc.System.IStudyImage;
+
 @SuppressWarnings("serial")
 public class SingleView extends JPanel {
 
-	private BufferedImage image;
+	private IStudyImage image;
 	
 	/**
 	 * A single image display for the GUI
@@ -46,8 +48,8 @@ public class SingleView extends JPanel {
 	 * Set the image to be displayed
 	 * @param img the image to be displayed
 	 */
-	public void setImages(Image... imgs) {
-		this.image = (BufferedImage) imgs[0];
+	public void setImages(IStudyImage... imgs) {
+		this.image = imgs[0];
 		this.repaint();
 	}
 	
@@ -58,10 +60,10 @@ public class SingleView extends JPanel {
 		if (image != null) {
 			int x = (int) Math.floor((getWidth()-smSize) / 2);
 			int y = (int) Math.floor((getHeight()-smSize) / 2);
-			g.drawImage(getSquareImage(image, smSize), x, y, smSize, smSize, null);
+			image.showImage(this, g, x, y, smSize, smSize);
+			//g.drawImage(getSquareImage(image, smSize), x, y, smSize, smSize, null);
 		}
 	}
-	
 	
 	/**
 	 * Fancy way of making a square image whilst keeping the aspect ratio.
@@ -99,5 +101,6 @@ public class SingleView extends JPanel {
 
         return newImg;
 	}
+
 	
 }

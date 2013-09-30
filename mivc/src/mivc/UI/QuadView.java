@@ -12,10 +12,12 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import mivc.System.IStudyImage;
+
 @SuppressWarnings("serial")
 public class QuadView extends JPanel {
 
-	private BufferedImage[] images = new BufferedImage[4];
+	private IStudyImage[] images = new IStudyImage[4];
 	
 	/*
 	 * Creates a display for viewing four images
@@ -48,11 +50,11 @@ public class QuadView extends JPanel {
 	 * @param img3 third image to display
 	 * @param img4 fourth image to display
 	 */
-	protected void setImages(Image... images) {
+	protected void setImages(IStudyImage... images) {
 		
 		for (int i = 0; i < images.length; i++) {
 			try {
-				this.images[i] = (BufferedImage) images[i];
+				this.images[i] = images[i];
 			} catch (NullPointerException ex) {
 				// ignore
 			}
@@ -70,22 +72,26 @@ public class QuadView extends JPanel {
 		if (images[0] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2);
 			int y = (int) Math.floor((getHeight()-smSize*2) / 2);
-			g.drawImage(getSquareImage(images[0], smSize), x, y, smSize, smSize, null);
+			images[0].showImage(this, g, x, y, smSize, smSize);
+			//g.drawImage(getSquareImage(images[0], smSize), x, y, smSize, smSize, null);
 		}
 		if (images[1] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2)+smSize;
 			int y = (int) (Math.floor((getHeight()-smSize*2) / 2));
-			g.drawImage(getSquareImage(images[1], smSize), x, y, smSize, smSize, null);
+			images[1].showImage(this, g, x, y, smSize, smSize);
+			//g.drawImage(getSquareImage(images[1], smSize), x, y, smSize, smSize, null);
 		}
 		if (images[2] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2);
-			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + Math.floor(getHeight()/2));
-			g.drawImage(getSquareImage(images[2], smSize), x, y, smSize, smSize, null);
+			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + smSize);
+			images[2].showImage(this, g, x, y, smSize, smSize);
+			//g.drawImage(getSquareImage(images[2], smSize), x, y, smSize, smSize, null);
 		}
 		if (images[3] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2)+smSize;
-			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + Math.floor(getHeight()/2));
-			g.drawImage(getSquareImage(images[3], smSize), x, y, smSize, smSize, null);
+			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + smSize);
+			images[3].showImage(this, g, x, y, smSize, smSize);
+			//g.drawImage(getSquareImage(images[3], smSize), x, y, smSize, smSize, null);
 		}
 	}
 	

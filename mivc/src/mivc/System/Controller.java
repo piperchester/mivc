@@ -16,7 +16,7 @@ public class Controller {
 
 	private StudyView view;
 	private Study currentStudy;
-	private Image[] currentImages = new Image[4];
+	private IStudyImage[] currentImages = new IStudyImage[4];
 	private HashMap<String, Study> studies;
 	private int imageInterval = 0;
 	private int singleViewIndex = 0;

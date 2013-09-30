@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import mivc.System.Controller;
+import mivc.System.IStudyImage;
 
 
 @SuppressWarnings("serial")
@@ -150,7 +151,7 @@ public class MainView extends JFrame implements StudyView {
 	 * @see mivc.UI.StudyView#setImages(java.awt.image.BufferedImage[])
 	 */
 	@Override
-	public void setImages(Image... images) {
+	public void setImages(IStudyImage... images) {
 		((SingleView)this.singleView).setImages(images);
 		((QuadView)this.quadView).setImages(images);
 	}
