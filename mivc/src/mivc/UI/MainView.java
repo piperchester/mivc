@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import mivc.System.Controller;
+
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements StudyView {
@@ -191,7 +193,7 @@ public class MainView extends JFrame implements StudyView {
 		JFrame view = new MainView();
 		
 		// Create and set the ProxyController
-		new ProxyController((StudyView)view);
+		new Controller((StudyView)view);
 	}
 	
 	/**

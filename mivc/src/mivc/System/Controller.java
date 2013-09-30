@@ -1,4 +1,4 @@
-package mivc.UI;
+package mivc.System;
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -7,13 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import mivc.System.LocalSettingsManager;
-import mivc.System.Study;
 import mivc.System.IO.StudyDAO;
+import mivc.UI.StudyView;
 import mivc.UI.StudyView.ViewType;
 
 
-public class ProxyController {
+public class Controller {
 
 	private StudyView view;
 	private Study currentStudy;
@@ -38,7 +37,7 @@ public class ProxyController {
 	 * to work with a Java GUI but could be extended.
 	 * @param view The view that this controller will be controlling.
 	 */
-	public ProxyController(StudyView view) {
+	public Controller(StudyView view) {
 		this.view = view;
 		view.addViewListener(new ViewListener());
 		view.addOpenListener(new OpenListener());
@@ -63,9 +62,24 @@ public class ProxyController {
 		LocalSettingsManager sMan = LocalSettingsManager.getInstance();
 		sMan.Load(SETTINGS_PATH);
 		
-		// Load default study
+		// Load default study if there is one, otherwise, show the list
 		String studyName = sMan.getString(DEFAULT_STUDY_KEY);
-		updateCurrentStudy(studyName);
+		if (studyName == null) {
+			showStudiesListView();
+		} else {
+			updateCurrentStudy(studyName);
+		}
+	}
+	
+	private void showStudiesListView() {
+		// Convert studies to a string array
+		String[] studyNames = new String[studies.size()];
+		int i = 0;
+		for (Entry<String, Study> entry : studies.entrySet()) {
+			studyNames[i++] = entry.getValue().getName();
+		}
+		
+		view.showList(studyNames);  // Display the Study List window
 	}
 	
 	/**
@@ -227,14 +241,7 @@ public class ProxyController {
 				return;
 			}
 			
-			// Convert studies to a string array
-			String[] studyNames = new String[studies.size()];
-			int i = 0;
-			for (Entry<String, Study> entry : studies.entrySet()) {
-				studyNames[i++] = entry.getValue().getName();
-			}
-			
-			view.showList(studyNames);  // Display the Study List window
+			showStudiesListView();
 		}
 	}
 	
@@ -260,6 +267,10 @@ public class ProxyController {
 	class SaveViewListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// Don't bother if they havn't selected a study
+			if (currentStudy == null) {
+				return;
+			}
 			LocalSettingsManager sMan = LocalSettingsManager.getInstance();
 			sMan.set(currentStudy.getName() + IMAGE_INTERVAL_KEY, 
 					imageInterval);
