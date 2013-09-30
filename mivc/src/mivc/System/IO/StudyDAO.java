@@ -20,6 +20,7 @@ import mivc.System.Study;
  * @author Ty
  * @author piperchester
  * @author Colin
+ * @author act4122
  */
 public class StudyDAO {
     
@@ -72,6 +73,13 @@ public class StudyDAO {
     	return null;
     }
 
+    /**
+     * saveStudy
+     * Saves a study to a new location, this is a destructive task
+     * it will overwrite without prompt, please do the prompting in the UI.
+     * @param String p_srcStudyName - Source study name, not the entire path
+     * @param String p_dstStudyName - Destination study name, not the entire path
+     */
     public void saveStudy(String p_srcStudyName, String p_dstStudyName)
     {
     	// Check if the directory exists, if not then create the directory
@@ -81,20 +89,24 @@ public class StudyDAO {
     		s_dstDir.mkdir();
     	}
     	
+    	// Check to make sure that the soruce study exists.
     	File s_srcStudyDir = new File(rootPath + "/" + p_srcStudyName);
     	if (s_srcStudyDir.exists())
     	{
+    		// Loop through and copy every file.
     		File[] s_srcImages = s_srcStudyDir.listFiles();
     		for (File l_img : s_srcImages)
     		{
     			try
     			{
+    				// Formatting
 	    			Path s_srcImg = Paths.get(l_img.getPath());
 	    			Path s_dstImg = Paths.get(rootPath + "/" + p_dstStudyName + "/" + l_img.getName());
 	    			Files.copy(s_srcImg, s_dstImg, StandardCopyOption.REPLACE_EXISTING);
     			}
     			catch (Exception ex)
     			{
+    				// Gracefully show an error message.
     				System.err.println("Could not copy image" + l_img.getName());
     			}
     		}
