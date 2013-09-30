@@ -25,24 +25,25 @@ public class StudyImage implements IStudyImage {
 	public void showImage(final Component c, final Graphics g, final int x, 
 			final int y, final int width, final int height) {
 		if (img == null) {
-			g.drawString("Loading Image", width/2-30, height/2-5);
+			g.drawString("Loading Image", x + width/2-30, y + height/2-5);
 			// Load the image in a separate thread so as not to tie up the GUI, 
 			// when finished it will draw the image and call repaint
 			new Thread() {
 				@Override
 				public void run() {
 					Random rand = new Random();
-					loadImage();
 					// Input a random delay for loading of image (just for show)
 					// We will choose a random time between 0 and 3 seconds
+					final long loadTime = rand.nextInt(1000);
 					try {
-						Thread.sleep(rand.nextInt(3000));
+						Thread.sleep(loadTime);
 					} catch (InterruptedException e) { }
+					loadImage();
 					// Make sure this happens on the event thread (EDT)
 			        javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			            public void run() {
-			            	System.out.println("Drawing image now");
-			            	c.getGraphics().drawImage(img, x, y, width, height, null);
+			            	System.out.println("Image loaded in (" + 
+			            			loadTime/1000.0 + ") seconds, calling repaint");
 							c.repaint();
 			            }
 			        });
@@ -52,6 +53,7 @@ public class StudyImage implements IStudyImage {
 		} else {
 	        javax.swing.SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {
+	            	//System.out.println("Drawing image now");
 	            	c.getGraphics().drawImage(img, x, y, width, height, null);
 	            }
 	        });

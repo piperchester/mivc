@@ -73,25 +73,21 @@ public class QuadView extends JPanel {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2);
 			int y = (int) Math.floor((getHeight()-smSize*2) / 2);
 			images[0].showImage(this, g, x, y, smSize, smSize);
-			//g.drawImage(getSquareImage(images[0], smSize), x, y, smSize, smSize, null);
 		}
 		if (images[1] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2)+smSize;
 			int y = (int) (Math.floor((getHeight()-smSize*2) / 2));
 			images[1].showImage(this, g, x, y, smSize, smSize);
-			//g.drawImage(getSquareImage(images[1], smSize), x, y, smSize, smSize, null);
 		}
 		if (images[2] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2);
 			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + smSize);
 			images[2].showImage(this, g, x, y, smSize, smSize);
-			//g.drawImage(getSquareImage(images[2], smSize), x, y, smSize, smSize, null);
 		}
 		if (images[3] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2)+smSize;
 			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + smSize);
 			images[3].showImage(this, g, x, y, smSize, smSize);
-			//g.drawImage(getSquareImage(images[3], smSize), x, y, smSize, smSize, null);
 		}
 	}
 	
