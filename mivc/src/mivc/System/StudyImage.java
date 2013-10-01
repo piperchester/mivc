@@ -23,6 +23,7 @@ public class StudyImage implements IStudyImage {
 		img = ImageDAO.getInstance().read(path);
 	}
 	
+	@Override
 	public void showImage(final Component c, final Graphics g, final int x, 
 			final int y, final int width, final int height) {
 		if (img == null) {
@@ -45,7 +46,8 @@ public class StudyImage implements IStudyImage {
 						loadImage();
 						// Make sure this happens on the event thread (EDT)
 				        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-				            public void run() {
+				            @Override
+							public void run() {
 //				            	System.out.println("Image loaded in (" + 
 //				            			loadTime/1000.0 + ") seconds, calling repaint");
 								c.repaint();
@@ -58,7 +60,8 @@ public class StudyImage implements IStudyImage {
 			}
 		} else {
 	        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	            public void run() {
+	            @Override
+				public void run() {
 	            	//System.out.println("Drawing image now");
 	            	c.getGraphics().drawImage(img, x, y, width, height, null);
 	            }

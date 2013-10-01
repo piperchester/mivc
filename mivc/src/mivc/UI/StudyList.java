@@ -10,6 +10,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -26,7 +27,7 @@ public class StudyList extends JFrame implements ActionListener {
 		layoutComponents();
 		
 		// Setup JFrame deets.
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		pack(); // Pack before setting location (this determines size)
 		
 		// Get the current screen's size

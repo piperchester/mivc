@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.swing.JOptionPane;
-
 import mivc.System.IO.StudyDAO;
 import mivc.UI.StudyView;
 import mivc.UI.StudyView.ViewType;

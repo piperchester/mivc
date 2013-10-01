@@ -264,7 +264,8 @@ public class MainView extends JFrame implements StudyView {
 		}
 		
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 createAndShowGUI();
             }
         });

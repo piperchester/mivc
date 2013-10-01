@@ -3,7 +3,6 @@
  */
 package mivc.System;
 
-import java.awt.Image;
 import mivc.System.IO.ImageDAO;
 
 /**

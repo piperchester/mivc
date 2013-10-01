@@ -1,8 +1,7 @@
 /**
  * Main.java
  */
-import mivc.System.LocalSettingsManager;
-import mivc.System.IO.StudyDAO;
+
 
 /**
  * @author act4122
@@ -16,11 +15,6 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("---MEDICAL IMAGE VIEWING CONSOLE---");
 		
-		StudyDAO studyManager = StudyDAO.getInstance();
-		
-		//studyManager.scan("studies");	
-		
-		System.out.println("Closing system...");
 	}
 
 }
