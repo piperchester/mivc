@@ -54,20 +54,36 @@ public class StudyList extends JFrame implements ActionListener {
 		add(btnOpen, "gapleft push, h 5%");
 	}
 	
+	/**
+	 * Update the list's content
+	 * @param studies the array of strings to display
+	 */
 	protected void updateList(String[] studies) {
 		studiesList.setListData(studies);
 		// uncheck the default
 		cbDefault.setSelected(false);
 	}
 	
+	/**
+	 * See if the default option is selected
+	 * @return whether or not the default option is selected
+	 */
 	protected boolean isDefaultSelected() {
 		return cbDefault.isSelected();
 	}
-	
+
+	/**
+	 * Get the selection made in the list
+	 * @return the selected item from the list
+	 */
 	protected String getSelectedStudy() {
 		return studiesList.getSelectedValue();
 	}
 	
+	/**
+	 * Add a listener for the open button click
+	 * @param al the listener to register for this event
+	 */
 	protected void addSelectionListener(ActionListener al) {
 		btnOpen.addActionListener(al);
 	}

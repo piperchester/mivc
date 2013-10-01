@@ -3,7 +3,6 @@ package mivc.UI;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -141,6 +140,10 @@ public class MainView extends JFrame implements StudyView {
 		((Toolbar)toolbar).addNextListener(al);
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mivc.UI.StudyView#addStudySelectionListener(java.awt.event.ActionListener)
+	 */
 	@Override
 	public void addStudySelectionListener(ActionListener al) {
 		studyList.addSelectionListener(al);
@@ -148,7 +151,7 @@ public class MainView extends JFrame implements StudyView {
 	
 	/**
 	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#setImages(java.awt.image.BufferedImage[])
+	 * @see mivc.UI.StudyView#setImages(mivc.System.IStudyImage[])
 	 */
 	@Override
 	public void setImages(IStudyImage... images) {
@@ -166,30 +169,56 @@ public class MainView extends JFrame implements StudyView {
 		studyList.setVisible(true);
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mivc.UI.StudyView#getSelectedStudy()
+	 */
 	@Override
 	public String getSelectedStudy() {
 		return studyList.getSelectedStudy();
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see mivc.UI.StudyView#isDefaultSelected()
+	 */
 	@Override
 	public boolean isDefaultSelected() {
 		return studyList.isDefaultSelected();
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mivc.UI.StudyView#getCurrentView()
+	 */
 	@Override
 	public ViewType getCurrentView() {
 		return currentView;
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mivc.UI.StudyView#updateStatusBar(java.lang.String)
+	 */
 	@Override
 	public void updateStatusBar(String value) {
 		((Toolbar)toolbar).setStatus(value);
 	}
-	
+
+	/**
+	 * (non-Javadoc)
+	 * @see mivc.UI.StudyView#getInput(java.lang.String)
+	 */
+	@Override
 	public String getInput(String prompt) {
 		return JOptionPane.showInputDialog(this, prompt, JOptionPane.OK_OPTION);
 	}
 	
+	/**
+	 * (non-Javadoc)
+	 * @see mivc.UI.StudyView#getWarningConfirmation(java.lang.String)
+	 */
+	@Override
 	public boolean getWarningConfirmation(String prompt) {
 		boolean retVal = false;
 		int dialogResult = JOptionPane.showConfirmDialog (null, 
