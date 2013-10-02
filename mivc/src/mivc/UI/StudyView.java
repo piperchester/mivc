@@ -1,7 +1,8 @@
 package mivc.UI;
 
-import java.awt.Image;
 import java.awt.event.ActionListener;
+
+import mivc.System.IStudyImage;
 
 public interface StudyView {
 
@@ -58,7 +59,7 @@ public interface StudyView {
 	 * Set the image(s) to display on the GUI
 	 * @param images the image(s) to be displayed
 	 */
-	public void setImages(Image... images);
+	public void setImages(IStudyImage... images);
 	
 	/**
 	 * Show a list of studies for the user to select from
@@ -66,10 +67,42 @@ public interface StudyView {
 	 */
 	public void showList(String[] studies);
 	
+	/**
+	 * Get the selected study from the study selection window
+	 * @return the selected study name
+	 */
 	public String getSelectedStudy();
 	
+	/**
+	 * Find out if the default option was selected
+	 * @return whether or not the default option was selected
+	 */
 	public boolean isDefaultSelected();
 	
+	/**
+	 * Get the current view type being displayed on the view
+	 * @return the current view type
+	 */
 	public ViewType getCurrentView();
+	
+	/**
+	 * Update the status bar with a message
+	 * @param value the message to show on the status bar
+	 */
+	public void updateStatusBar(String value);
+	
+	/**
+	 * Get an input from the user of the application
+	 * @param prompt the question to prompt to the user
+	 * @return the value entered by the user
+	 */
+	public String getInput(String prompt);
+	
+	/**
+	 * Get a confirmation for a warning from the user of the application
+	 * @param prompt the warning to prompt the user with
+	 * @return whether or not the user agrees with the prompt
+	 */
+	public boolean getWarningConfirmation(String prompt);
 	
 }

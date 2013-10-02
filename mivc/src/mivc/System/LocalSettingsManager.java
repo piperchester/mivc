@@ -4,6 +4,7 @@
 package mivc.System;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -23,14 +24,11 @@ import java.io.Serializable;
  */
 public class LocalSettingsManager implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static LocalSettingsManager m_instance = null;
 	private static final long serialVersionUID = 1L;
-	public HashMap<String, String>	m_strings = new HashMap<String, String>();
-	public HashMap<String, Integer> m_ints = new HashMap<String, Integer>();
-	public HashMap<String, Boolean> m_bools = new HashMap<String, Boolean>();
+	private Map<String, String>	m_strings = new HashMap<String, String>();
+	private Map<String, Integer> m_ints = new HashMap<String, Integer>();
+	private Map<String, Boolean> m_bools = new HashMap<String, Boolean>();
 	
 	/**
 	 * LocalSettingsManager_Init
@@ -138,6 +136,21 @@ public class LocalSettingsManager implements Serializable {
 	public Integer getInt(String p_Key)
 	{
 		return m_ints.get(p_Key);
+	}
+	
+	/**
+	 * getBoolean
+	 * Gets the boolean value to the key provided
+	 * @param p_Key - Key to search by
+	 * @return Value or false if not found
+	 */
+	public boolean getBoolean(String p_Key)
+	{
+		Boolean b = m_bools.get(p_Key);
+		if (b != null && b) {
+			return b;
+		}
+		return false;
 	}
 	
 	/**

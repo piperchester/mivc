@@ -1,0 +1,511 @@
+commit 97de0c78ee9e0a479972bc98a44a4d48aeaec9a0
+Author: BerlGeof <ggb9189@g.rit.edu>
+Date:   Mon Sep 30 14:30:15 2013 -0400
+
+    Recommitting some fixed git issues
+
+commit 08c1ff4b790d65de570227aab31da7a473d12803
+Merge: 72d77f7 f86de0c
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Mon Sep 30 13:00:34 2013 -0400
+
+    Merge branch 'development' of github.com:piperchester/mivc into development
+    
+    Conflicts:
+    	mivc/src/mivc/System/IO/StudyManager.java
+    	mivc/src/mivc/UI/ProxyController.java
+    
+    merge
+
+commit f86de0ce046d595bd89ba0db5d9b5c2e19afbbf9
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 11:50:45 2013 -0400
+
+    Sorry for all of the commits, I am trying to keep it up to date because
+    I don't want anymore merge conflicts.  Anyway, fixed an off-by-one error
+    in Controller
+
+commit a6cce291610de612d0033c60881801705194fdba
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 11:47:39 2013 -0400
+
+    Fixed flickering issue, when repaint was getting called by other
+    objects, it was starting new image loading threads and loading images
+    repeatedly until they were all finished.  Now it won't create a new
+    thread if the image is already in the process of being loaded.
+
+commit a5562a9d2250a80a9cb437b8d6b672d75833c445
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 11:41:00 2013 -0400
+
+    Changed the picture load time to a random between 0 and 1 second to
+    simulate more realistic network speeds.  Also fixed a glitch with the
+    loading of the images.
+
+commit 968f6059cc333756a304d9f6e4b24b6a15789783
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 11:21:58 2013 -0400
+
+    implemented a modified Proxy Pattern, we only have two.  I created the
+    Image Proxy that we intended on having.  I simulated a loading time in
+    the proxy by calling Thread.sleep() for a random time between 0 and 3
+    seconds.  This was only so that you could see that the ImageProxy
+    handles showing a loading message while the image is loading.
+
+commit f553fe82739c743c0d216ae67993307b724a5d0c
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 08:36:49 2013 -0400
+
+    Changed ProxyController to just Controller and moved it to the System
+    package since it's part of the system not the UI.  Updated the program
+    to open the studies list if no default study is selected (per Colin's
+    suggestion, thanks)
+
+commit 4646a27e99562415979bb6a4a49afe45bcfeceb7
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 08:13:44 2013 -0400
+
+    Forgot to "Add" settings last time
+
+commit 5c181a40c1c16d41a28575e1434f6cf0a5a78631
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 08:11:31 2013 -0400
+
+    Just a small update, upon showing the list of studies, the default
+    checkbox will be reset to unchecked.
+
+commit d539e6b983312275bd4d010c7958a6a00f5786e7
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 08:04:47 2013 -0400
+
+    Save View is working.  I've included the settings file and the default
+    study is set to "x ray" and the saved view for x ray is QUAD_VIEW of
+    images 5 through 8.  The only thing we have left off the top of my head
+    is the implementation of Save Study.
+
+commit 0da555ff078a2924df521bf5879d1dca9d2da9ad
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Mon Sep 30 07:25:51 2013 -0400
+
+    Saving a default study is functional (I didn't include the settings file
+    in the commit for now)
+
+commit 27524b65796aea37f0c076a95f78ae31d5a69e07
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 22:55:55 2013 -0400
+
+    Sured up the code for calculating which image should be displayed.
+    Everything is still as function as it was previously.
+
+commit 30ac3c9beec2378cdee9d5369c9a870eff0914e0
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 19:47:10 2013 -0400
+
+    Status bar is updating successfully
+
+commit b49367e2238b4ca515dee19198b54a2ebd33a30a
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 19:10:33 2013 -0400
+
+    Previous and next are both functional for both views now
+
+commit 1eda42f0eee104cf8ddefba83fb8b88c545cd7e7
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 19:00:11 2013 -0400
+
+    Successfully loading images and using "Next" in single and quad view
+
+commit 05d046e38d9db02f5ad175d08d09800581d572cb
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 17:58:26 2013 -0400
+
+    trying again
+
+commit 6c9dd3ea72f1558562a809dd3435c3e84b1c3d3f
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 17:55:30 2013 -0400
+
+    committing classpath sorry, trying to fix conflicts
+
+commit f1acec9308f4bc67606746f8b945e9ce5dadf231
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 17:47:30 2013 -0400
+
+    Updated Study and ImageDAO
+
+commit 869398fe2d8cdb8d2ff47f0b8e82b34971a9aba7
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 16:38:18 2013 -0400
+
+    Changed ImageManager to ImageDAO
+
+commit 5c5fb9430ae108458fc13bed34139294a41e9880
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 16:34:43 2013 -0400
+
+    Modified the loading of studies
+
+commit a33537c268f9e8599daef088d7d0cd419ed74c3c
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 15:42:39 2013 -0400
+
+    fixed more conflicts
+
+commit 7a580959996501ec1abbea71160b4b92b5e5704e
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 15:37:24 2013 -0400
+
+    Fixed conflicts
+
+commit 1f59c41eac728ce00557099bfd38f040ed247f2b
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 15:29:55 2013 -0400
+
+    Added methods to save the view
+
+commit 2b35e62fbff28fc6f53cad20fb2c49829cfbb504
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 15:12:42 2013 -0400
+
+    QuadView is fully functional
+
+commit e0bbb57c560740cc69ce2a9334ea9aa2803c5883
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 14:37:37 2013 -0400
+
+    Viewing an image is fully functional, just have the proxy controller
+    call view.setImages(...)
+
+commit 72d77f7558ea034678871927a0effb5824dfcd67
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 12:39:55 2013 -0400
+
+    working on study manager hash table
+
+commit cb860a4454c4523f60310959b3250d2c0d957846
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 12:32:52 2013 -0400
+
+    working on study manager data structure
+
+commit 16a8e8df5c486c2d1b457d1fb45680bbe4c2f9e5
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 12:23:36 2013 -0400
+
+    working on fixing study manager data structure
+
+commit 906554e4aa0328318e0b82637cc783b655e1fe30
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 11:57:48 2013 -0400
+
+    working on the loading of studies
+
+commit 745b11c7c96d62d831965d9bf9cc2674ea3985d9
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 10:26:17 2013 -0400
+
+    working on displaying images in study view
+
+commit d745c1e0ff79d598ab9725f63e6dd95124ecf7be
+Merge: ec26a0c 26796af
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 10:13:31 2013 -0400
+
+    Merge branch 'development' of github.com:piperchester/mivc into development
+    
+    merge
+
+commit ec26a0c6a836710847ea9c6ec8b34671e1a415e3
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 10:06:54 2013 -0400
+
+    implemented fix for issue #18 for duplicate studies
+
+commit 26796af094c14bf4a6b7bf75fa809f024072c8ad
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 10:06:54 2013 -0400
+
+    implemented fix for duplicate studies in study list
+
+commit 03405d4a4891e2d8fc5ddce1b45985e9198ea036
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 09:51:31 2013 -0400
+
+    implementing possible fix for duplicate studies in Study List
+
+commit 2ca885859db75030d8996c12589beb9a6a6b65de
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 09:02:27 2013 -0400
+
+    updated presentation materials
+
+commit f14d512dd770632cfd682bc4e9ad5ebc50261430
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Sun Sep 29 08:41:13 2013 -0400
+
+    fixed issue with java library
+
+commit 971449ae6baf26887ee051fb5f2406047f84d8c2
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 01:25:51 2013 -0400
+
+    Added selection capabilities to the list of studies.  There seems to be
+    an issue where if the studies list is called on twice, the second time
+    it is four times the size.  I didn't test with three but I assume it was
+    be four or sixteen times larger.
+
+commit 25bbd7d3114ed84eb81457ffdaff8de8fba545a7
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Sun Sep 29 00:26:12 2013 -0400
+
+    Added a bunch of text to the design.doc
+
+commit 59cf03be3eece6c21d47ae026b43415c29145dd9
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Sat Sep 28 18:27:21 2013 -0400
+
+    Successfully present image, needs work.
+
+commit 6e5f5a1cf55437aaecf981b60d229df29d3d761e
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Sat Sep 28 15:24:21 2013 -0400
+
+    Display studies on open press.
+
+commit 520c9195ef1b9de46776b313cd0bf674e792d009
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Fri Sep 27 20:32:50 2013 -0400
+
+    Enhance study listing.
+
+commit f5540f57c3dd85ea843731308be01c9da18987ee
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Fri Sep 27 19:53:04 2013 -0400
+
+    Implement basic scan, reorg studies structure.
+
+commit c8afbf7898c4eb0eb9352e4ecc0729772dbb3bbb
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Fri Sep 27 18:38:52 2013 -0400
+
+    Minor styling.
+
+commit 018fd35a7d009fee2d6503afa0638def5d0cf476
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Fri Sep 27 13:30:16 2013 -0400
+
+    working on file IO
+
+commit a54e3fb7d90c6c6de43a58ad26474da2060353f6
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Fri Sep 27 13:16:39 2013 -0400
+
+    fixed Study class import
+
+commit e829cb24f3dee01af494895765c6e023161abec2
+Author: berlgeof <Geoff_Berl@mksinst.com>
+Date:   Fri Sep 27 07:55:36 2013 -0400
+
+    Added basic skeleton for presentation material.
+
+commit e9d73fdde4c826d649ac5c598d7df93d42b1259e
+Merge: fadb851 d724307
+Author: tjm7733 <tjm7733@rit.edu>
+Date:   Thu Sep 26 10:23:43 2013 -0400
+
+    Merge branch 'development' of https://github.com/piperchester/mivc into development
+
+commit fadb851c3ef8fec59a7c24d6077fc93b62c1a21b
+Author: tjm7733 <tjm7733@rit.edu>
+Date:   Thu Sep 26 10:22:37 2013 -0400
+
+    Added getSize method to Study
+
+commit d7243073d77274c190c3204eafdb8e23e8fdd6fe
+Author: act4122 <act4122@rit.edu>
+Date:   Wed Sep 25 21:43:22 2013 -0400
+
+    Cleaned up the main class
+    Changed the pattern of the LocalSettingsManager.
+
+commit 46555c3b2b731edee0b730cd3dfba9a281c965b7
+Author: act4122 <act4122@rit.edu>
+Date:   Wed Sep 25 21:08:49 2013 -0400
+
+    Added reading of the actual image handle that can be used directly with
+    the viewer.
+
+commit e3d939ac01edfb41b67a3f46c4553552c77295ee
+Author: act4122 <act4122@rit.edu>
+Date:   Wed Sep 25 20:57:08 2013 -0400
+
+    Final re-coded class because git fucking sucks.
+    Should work just fine. If there are any issues let me know.
+
+commit be307c1ef02d0adbf7ef684330e36fb3cc550dd2
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Wed Sep 25 19:10:52 2013 -0400
+
+    fixed file structure
+
+commit a54fc91ea1fbeae848447b163d6e592ce4389457
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Wed Sep 25 18:27:46 2013 -0400
+
+    Rename packages.
+
+commit b45b716a4abfb0f525d2c57ba194677eab2643ca
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Tue Sep 24 12:35:20 2013 -0400
+
+    implemented method to list studies in a working directory
+
+commit 8b1d6aa5143a6390611307038fb093de48740807
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Mon Sep 23 15:57:24 2013 -0400
+
+    working on file io implementation
+
+commit a844a5fc9442381628dc428156d30b05c3e5ff49
+Author: Ty <tjm7733@rit.edu>
+Date:   Thu Sep 19 11:46:58 2013 -0400
+
+    Refactored Study
+    Renamed ImageProxy to StudyImage
+    Added getName functionality to StudyImage
+    Added getImageName functionality to Study
+
+commit 8ffdc75da7a224c4402d0dade568ba6f3d40c2b7
+Merge: 302c5a2 846e08a
+Author: tjm7733 <tjm7733@rit.edu>
+Date:   Wed Sep 18 19:52:42 2013 -0400
+
+    Merge branch 'development' of https://github.com/piperchester/mivc into development
+
+commit 302c5a231d08f12060a770bc25c3316e8fd3a933
+Author: tjm7733 <tjm7733@rit.edu>
+Date:   Wed Sep 18 19:51:33 2013 -0400
+
+    Added functionality to ImageManager
+
+commit 846e08a1ae6554ed9096df55fe5f03c1b1a83490
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Wed Sep 18 19:18:27 2013 -0400
+
+    Rearrange file hierarchy.
+
+commit 9f53f3ba6b90923c58084e835e44d3e245b5355b
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Wed Sep 18 19:16:54 2013 -0400
+
+    Rename directory to mivc.
+
+commit 0d1aefbabf37b4aa48429a9feaaebdfc2ab5b59c
+Merge: 433463e 4b017fe
+Author: tjm7733 <tjm7733@rit.edu>
+Date:   Wed Sep 18 18:59:01 2013 -0400
+
+    Merge branch 'development' of https://github.com/piperchester/mivc into development
+
+commit 433463e89c2a55026789db5c3b2f90fabf3e2b40
+Author: tjm7733 <tjm7733@rit.edu>
+Date:   Wed Sep 18 18:47:21 2013 -0400
+
+    Modifed Study to use Proxy pattern for handling images.
+
+commit 4b017fe3d1b31958d7603bb08cba7c5f73e8a569
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Wed Sep 18 18:40:18 2013 -0400
+
+    added project image files
+
+commit eec14751a5f290133bcee540c308f503fe19862f
+Author: Colin Ferris <colin@colinferris.com>
+Date:   Wed Sep 18 16:26:13 2013 -0400
+
+    configured git ignore file
+
+commit 279b8e1f4ca71b79b4026a5ad779ea94629f4966
+Author: Ty <tjm7733@rit.edu>
+Date:   Tue Sep 17 07:01:42 2013 -0400
+
+    Added Study class
+    Added DataManager interface
+    Added Scannable interface
+    Added StudyManager class (needs more work)
+    Added ImageManager class (needs more work)
+
+commit 9685597a431ce190d09c967e725c5a2286a211e0
+Author: BerlGeof <ggb9189@g.rit.edu>
+Date:   Sun Sep 15 16:41:04 2013 -0400
+
+    Changed package and project name(s)
+
+commit 30a548e64278ebfdccce4b136d2e7ea72cec1f07
+Author: BerlGeof <ggb9189@g.rit.edu>
+Date:   Sun Sep 15 16:37:41 2013 -0400
+
+    Added Javadoc
+
+commit 5d0d39d26419f40946d23893bc2e28ecb12edf33
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Sun Sep 15 16:35:30 2013 -0400
+
+    Modify .classpath.
+
+commit d4413f405d63c79fe6906afff49be44dc9f1b92e
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Sun Sep 15 16:28:55 2013 -0400
+
+    Add jars, remove duplicate .gitignore.
+
+commit c70324d0403e69d988a28b08c014993ac4d67ad7
+Author: BerlGeof <ggb9189@g.rit.edu>
+Date:   Sun Sep 15 15:11:23 2013 -0400
+
+    Updated some references to projects
+
+commit 4033b08495f795ee12cf41b8cf6202fa8944165b
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Sun Sep 15 15:04:51 2013 -0400
+
+    Remove .jar ignore from .gitignore.
+
+commit 5fcaef4e06736180520707c83ffccc9cbe9015e8
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Sun Sep 15 14:59:30 2013 -0400
+
+    Improve .gitignore.
+
+commit 1f92aecc7f81ad73d859ac10855a2d866401afc9
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Sun Sep 15 14:55:11 2013 -0400
+
+    Remove duplicate Main.java.
+
+commit 61bd4709183d96d705d99f7929a5bc2f290466e0
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Sun Sep 15 14:43:52 2013 -0400
+
+    Remove duplicate files.
+
+commit 2b5facf0ed693da27a77b35b5d164e40e05d6103
+Author: act4122 <act4122@rit.edu>
+Date:   Wed Sep 11 19:42:43 2013 -0400
+
+    Initial commit of the entire project that can be used in eclipse,
+    Imported the views and other source files.
+    
+    Created the LocalSettingsManager base
+
+commit d3b3abf3f695d88cbd052db6ec1ad4f4826fbbfa
+Author: ribbs2521 <ribbs2521@gmail.com>
+Date:   Tue Sep 10 20:13:34 2013 -0400
+
+    Committing Initial GUI mock up
+
+commit d7710b0223ad2a1adfe5a8cb069793d503473ae1
+Author: Piper Chester <piperchester@gmail.com>
+Date:   Fri Sep 6 14:36:07 2013 -0700
+
+    Initial commit

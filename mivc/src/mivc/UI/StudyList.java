@@ -10,6 +10,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -26,7 +27,7 @@ public class StudyList extends JFrame implements ActionListener {
 		layoutComponents();
 		
 		// Setup JFrame deets.
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		pack(); // Pack before setting location (this determines size)
 		
 		// Get the current screen's size
@@ -54,18 +55,36 @@ public class StudyList extends JFrame implements ActionListener {
 		add(btnOpen, "gapleft push, h 5%");
 	}
 	
+	/**
+	 * Update the list's content
+	 * @param studies the array of strings to display
+	 */
 	protected void updateList(String[] studies) {
 		studiesList.setListData(studies);
+		// uncheck the default
+		cbDefault.setSelected(false);
 	}
 	
+	/**
+	 * See if the default option is selected
+	 * @return whether or not the default option is selected
+	 */
 	protected boolean isDefaultSelected() {
 		return cbDefault.isSelected();
 	}
-	
+
+	/**
+	 * Get the selection made in the list
+	 * @return the selected item from the list
+	 */
 	protected String getSelectedStudy() {
 		return studiesList.getSelectedValue();
 	}
 	
+	/**
+	 * Add a listener for the open button click
+	 * @param al the listener to register for this event
+	 */
 	protected void addSelectionListener(ActionListener al) {
 		btnOpen.addActionListener(al);
 	}

@@ -5,8 +5,14 @@
 package mivc.System.IO;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.ArrayList;
+
+import mivc.System.Study;
 
 
 /**
@@ -14,11 +20,11 @@ import java.util.ArrayList;
  * @author Ty
  * @author piperchester
  * @author Colin
+ * @author act4122
  */
-public class StudyDAO implements Scannable<File> {
+public class StudyDAO {
     
-    public static List<File> files;  // Holds pathnames of the directory
-    public int studyCount = 0;
+    private String rootPath = "studies";
     
     public StudyDAO() { }
     
@@ -26,68 +32,37 @@ public class StudyDAO implements Scannable<File> {
     	return instance;
     }
     
-    @Override
-    /**
-     * Scans through a directory or nested directory and adds pathnames
-     * to the ArrayList, files.
-     * @param path - the location of where the scan will begin
-     */
-    public List<File> scan(String path) {
-    	
-    	files = new ArrayList<File>();
-    	studyCount = 0;
-    	
-    	
-    	
-    	System.out.println("Scanning: " + path);
-    	
-    	System.out.println("files" + files.size());
-    	
-    	try {
-            this.addTree(new File(path));
-//            System.out.println(files);
-//            listFilesAndFilesSubDirectories(path);
-    	} catch (NullPointerException e){
-    		System.out.println("The path was not scanned...");
-    	}
- 
-    	System.out.println(files.size());
-    	System.out.println(this.listStudies());
-    	
-    	return files;
-    }
-    
-    /**
-     * Recursively searches the directory, adding a new file/directory to the ArrayList.
-     * @param file - Starting point for the search
-     */
-    public void addTree(File file) {
-        File[] children = file.listFiles();  // Array of pathnames 
-        if (children != null) {
-            for (File child : children) {
-            	
-                files.add(child);  // Adds new pathname to the ArrayList
-                addTree(child);
-            }
-        }
-    }
-    
     
     /**
      * Adds all studies within the files ArrayList to a String list of studies.
      * @return a String list of study names.
      */
-    public List<String> listStudies()
+    public List<Study> listStudies()
     {   
-	    List<String> studies = new ArrayList<String>();
-	    
-	    for (File directory : files){
-	    	if (directory.isDirectory()){
-	    		System.out.println("Adding dir: " + directory);
-	    		studyCount++;
-	    		studies.add((directory.getName()));
-	    	}
-	    }
+
+//    	System.out.println("Scanning: " + rootPath);
+    	
+    	List<Study> studies = new ArrayList<Study>();
+    	try {
+    		File file = new File(rootPath);
+            File[] children = file.listFiles();  // Array of pathnames 
+            if (children != null) {
+                for (File child : children) {
+        	    	if (child.isDirectory()){
+//        	    		System.out.println("Adding dir: " + child.getName());
+        	    		studies.add(new Study(child.getName()));
+        	    	}
+                }
+            }
+    	} catch (NullPointerException e){
+    		e.printStackTrace();
+    		System.out.println("The path was not scanned...");
+    	}
+ 
+    	
+//    	System.out.println(studies.size());
+//    	System.out.println(studies);
+
 	    
 		return studies;
     }
@@ -98,8 +73,44 @@ public class StudyDAO implements Scannable<File> {
     	return null;
     }
 
-    public void write(String path, Object obj) {
-    	// TODO Write a study to a specific path
+    /**
+     * saveStudy
+     * Saves a study to a new location, this is a destructive task
+     * it will overwrite without prompt, please do the prompting in the UI.
+     * @param String p_srcStudyName - Source study name, not the entire path
+     * @param String p_dstStudyName - Destination study name, not the entire path
+     */
+    public void saveStudy(String p_srcStudyName, String p_dstStudyName)
+    {
+    	// Check if the directory exists, if not then create the directory
+    	if (new File(p_dstStudyName).exists() == false)
+    	{
+    		File s_dstDir = new File(rootPath + "/" + p_dstStudyName);
+    		s_dstDir.mkdir();
+    	}
+    	
+    	// Check to make sure that the soruce study exists.
+    	File s_srcStudyDir = new File(rootPath + "/" + p_srcStudyName);
+    	if (s_srcStudyDir.exists())
+    	{
+    		// Loop through and copy every file.
+    		File[] s_srcImages = s_srcStudyDir.listFiles();
+    		for (File l_img : s_srcImages)
+    		{
+    			try
+    			{
+    				// Formatting
+	    			Path s_srcImg = Paths.get(l_img.getPath());
+	    			Path s_dstImg = Paths.get(rootPath + "/" + p_dstStudyName + "/" + l_img.getName());
+	    			Files.copy(s_srcImg, s_dstImg, StandardCopyOption.REPLACE_EXISTING);
+    			}
+    			catch (Exception ex)
+    			{
+    				// Gracefully show an error message.
+    				System.err.println("Could not copy image" + l_img.getName());
+    			}
+    		}
+    	}
     }
     
     private static StudyDAO instance = new StudyDAO();

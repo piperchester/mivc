@@ -46,12 +46,6 @@ public class Toolbar extends JPanel {
 		btnPrev = new JButton("< prev");
 		btnPrev.setPreferredSize(new Dimension(40, 25));
 		lblStatus = new JLabel("Viewing image(s) n of n");
-//		btnOpen.addActionListener(controller);
-//		btnSaveView.addActionListener(controller);
-//		btnSaveStudy.addActionListener(controller);
-//		btnChangeView.addActionListener(controller);
-//		btnNext.addActionListener(controller);
-//		btnPrev.addActionListener(controller);
 	}
 	
 	/**
@@ -72,31 +66,54 @@ public class Toolbar extends JPanel {
 	 * @param currentImage the current image number
 	 * @param totalImages the total number of images in the study
 	 */
-	protected void setStatus(String currentImage, String totalImages) {
-		lblStatus.setText("Viewing image(s) " + currentImage 
-				+ " of " + totalImages);
+	protected void setStatus(String value) {
+		lblStatus.setText(value);
 	}
 
+	/**
+	 * Add a listener to the open event
+	 * @param al the listener to register for this event
+	 */
 	protected void addOpenListener(ActionListener al) {
 		btnOpen.addActionListener(al);
 	}
 	
+	/**
+	 * Add a listener to the view toggle event
+	 * @param al the listener to register for this event
+	 */
 	protected void addViewListener(ActionListener al) {
 		btnChangeView.addActionListener(al);
 	}
 	
+	/**
+	 * Add a listener to the Save Study event
+	 * @param al the listener to register for this event
+	 */
 	protected void addSaveStudyListener(ActionListener al) {
 		btnSaveStudy.addActionListener(al);
 	}
 	
+	/**
+	 * Add a listener to the Save View event
+	 * @param al the listener to register for this event
+	 */
 	protected void addSaveViewListener(ActionListener al) {
 		btnSaveView.addActionListener(al);
 	}
 	
+	/**
+	 * Add a listener to the previous event
+	 * @param al the listener to register for this event
+	 */
 	protected void addPrevListener(ActionListener al) {
 		btnPrev.addActionListener(al);
 	}
 	
+	/**
+	 * Add a listener to the next event
+	 * @param al the listener to register for this event
+	 */
 	protected void addNextListener(ActionListener al) {
 		btnNext.addActionListener(al);
 	}
