@@ -46,6 +46,7 @@ public class Toolbar extends JPanel {
 		btnPrev = new JButton("< prev");
 		btnPrev.setPreferredSize(new Dimension(40, 25));
 		lblStatus = new JLabel("Viewing image(s) n of n");
+		lblStatus.setPreferredSize(new Dimension(300, 30));
 	}
 	
 	/**
