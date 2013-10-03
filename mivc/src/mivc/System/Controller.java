@@ -103,7 +103,7 @@ public class Controller {
 	}
 	
 	/**
-	 * updates the status bar on the view, should be called any time the 
+	 * Updates the status bar on the view. Should be called any time the 
 	 * view, study or images are changed.
 	 */
 	private void updateViewStatus() {
@@ -135,7 +135,7 @@ public class Controller {
 	}
 	
 	/**
-	 * updates the images on the GUI, should be called any time imageInterval
+	 * Updates the images on the GUI, should be called any time imageInterval
 	 * or singleViewIndex are changed.
 	 * @param forceUpdate should the update of images be forced
 	 * @precondition imageInterval and singleViewIndex must be set previously
@@ -212,7 +212,6 @@ public class Controller {
 			singleViewIndex = 0;
 			updateViewImages(false);
 		}
-		
 	}
 
 	
@@ -393,7 +392,6 @@ public class Controller {
 				imageInterval += 1;
 			}
 			updateViewImages(false);
-
 		}
 	}
 	
@@ -403,8 +401,12 @@ public class Controller {
 	 */
 	class StudySelectionListener implements ActionListener {
 		@Override
+		/**
+		 * Loads the selected Study, saves it as default if it was selected.
+		 * Otherwise, set it as default if so desired by the GUI.
+		 * @param e an ActionEvent
+		 */
 		public void actionPerformed(ActionEvent e) {
-			
 			// Load the selected Study, save default if it was selected
 			String studyName = view.getSelectedStudy();
 			updateCurrentStudy(studyName);
@@ -417,5 +419,4 @@ public class Controller {
 			}
 		}
 	}
-
 }
