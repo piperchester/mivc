@@ -4,9 +4,6 @@ Group f262-01p1d: Geoff Berl, Piper Chester, Colin Ferris, Ty Kennedy, Allen Tho
 File Locations:
 	The Studies folder has to be in the root folder and labelled ‘studies’ for the system to function properly.
 
-Functional Limitations:
-	Studies aren’t being saved
-
 Settings:
 	Currently the settings file is being saved in the root directory of the project
 
@@ -28,7 +25,7 @@ Open: This button will present a list of studies for the user to select. The use
 
 Save View: This button will save the current image and view type being viewed for the current study.  That is to say that if you are viewing Images 4 - 8 of the “Lung” study in the four image view, the next time you open this view it will automatically open to images 4 - 8 of the “Lung” study.
 
-Save Study: This button is currently not functional.  However, its intended use is to allow a user to save the current view as a new study or overwrite the current study.
+Save Study: By clicking this button you will be prompted to enter a name.
 
 View: This button will present the current image of the study, and the next 3 images of the study in a 2x2 presentation view. If pressed again, it will present the first image of the study as a single view. This button toggles between the single and the 2x2 views for the images in the study.
 
