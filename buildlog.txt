@@ -1,0 +1,22 @@
+init:
+deps-clean:
+Updating property file: /home/act4122/NetBeansProjects/mivc/build/built-clean.properties
+Deleting directory /home/act4122/NetBeansProjects/mivc/build
+clean:
+init:
+deps-jar:
+Created dir: /home/act4122/NetBeansProjects/mivc/build
+Updating property file: /home/act4122/NetBeansProjects/mivc/build/built-jar.properties
+Created dir: /home/act4122/NetBeansProjects/mivc/build/classes
+Created dir: /home/act4122/NetBeansProjects/mivc/build/empty
+Created dir: /home/act4122/NetBeansProjects/mivc/build/generated-sources/ap-source-output
+Compiling 14 source files to /home/act4122/NetBeansProjects/mivc/build/classes
+compile:
+Created dir: /home/act4122/NetBeansProjects/mivc/dist
+Copying 1 file to /home/act4122/NetBeansProjects/mivc/build
+Copy libraries to /home/act4122/NetBeansProjects/mivc/dist/lib.
+Building jar: /home/act4122/NetBeansProjects/mivc/dist/mivc.jar
+To run this application from the command line without Ant, try:
+java -jar "/home/act4122/NetBeansProjects/mivc/dist/mivc.jar"
+jar:
+BUILD SUCCESSFUL (total time: 0 seconds)
