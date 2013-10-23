@@ -3,6 +3,7 @@ package mivc.System;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import mivc.System.IO.ImageDAO;
@@ -67,6 +68,25 @@ public class StudyImage implements IStudyImage {
 	            }
 	        });
 		}
+	}
+	
+	public int[][] GetPixelData()
+	{
+		BufferedImage s_bufImage = new BufferedImage(img.getHeight(null), img.getWidth(null), BufferedImage.TYPE_INT_ARGB);
+		s_bufImage.getGraphics().drawImage(img, 0, 0, null);
+		int s_width = s_bufImage.getWidth();
+		int s_height = s_bufImage.getHeight();
+		int[][] s_result = new int[s_height][s_width];
+
+		for (int row = 0; row < s_height; row++) 
+		{
+			for (int col = 0; col < s_width; col++) 
+			{
+				s_result[row][col] = s_bufImage.getRGB(col, row);
+			}
+		}
+		
+		return s_result;
 	}
 
 	@Override

@@ -3,6 +3,13 @@
  */
 package mivc.System;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
 import mivc.System.IO.ImageDAO;
 
 /**
@@ -19,8 +26,48 @@ public class Study {
 	public Study(String name) {
 		this.name = name;
 		images = ImageDAO.getInstance().listAll(name);
+		
+		// TODO: Remove Me after testing
+		ArrayList<int[][]> s_imageData = new ArrayList<int[][]>();
+		for (int i = 0; i < images.length; ++i)
+		{
+			s_imageData.add(((StudyImage)images[i]).GetPixelData());
+		}
+		
+		// retrieve image
+	    BufferedImage bi = getLineImage(145, s_imageData);
+	    File outputfile = new File("saved.png");
+	    try {
+			ImageIO.write(bi, "png", outputfile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
+	public BufferedImage getLineImage(int p_y, ArrayList<int[][]> p_imageDatas)
+	{
+		BufferedImage s_bufImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+		for (int i = 0; i < 256; ++i)
+		{
+			// For every vertical line, grab/set the horizontal line
+			for (int j = 0; j < 256; ++j)
+			{
+				int s_rgb = 0;
+				// Loop through and get all of the horizontal lines add them up by color then divide by the count
+				for (int k = 0; k < p_imageDatas.size(); ++k)
+				{
+					int[][] s_currentImage = p_imageDatas.get(k);
+					s_rgb += s_currentImage[i][j];
+				}
+				s_rgb = s_rgb / p_imageDatas.size();
+				
+				s_bufImage.setRGB(j, i, s_rgb);
+			}
+		}
+		return s_bufImage;
+	}
+	
     public String getName() {
         return this.name;
     }
