@@ -29,7 +29,6 @@ public class ImageDAO {
     public static ImageDAO getInstance() { 
         return INSTANCE; 
     }
-
     
     /**
      * readImage
