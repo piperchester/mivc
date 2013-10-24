@@ -27,12 +27,6 @@ public interface StudyView {
 	public void addSaveViewListener(ActionListener al);
 	
 	/**
-	 * Add a listener for the view command
-	 * @param al the object to listen to view commands
-	 */
-	public void addViewListener(ActionListener al);
-	
-	/**
 	 * Add a listener for the previous image command
 	 * @param al the object to listen to previous image commands
 	 */

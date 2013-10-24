@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import mivc.System.Controller;
+import mivc.System.SessionHandler;
 import mivc.System.IStudyImage;
 
 
@@ -24,11 +24,13 @@ public class MainView extends JFrame implements StudyView {
 	private ViewType currentView;
 	private boolean viewingSingle = true;
 	private StudyList studyList = new StudyList();
+	private SessionHandler session;
 	
 	/**
 	 * The main view to be used for displaying MIVC data
 	 */
-	public MainView() {
+	public MainView(SessionHandler session) {
+		this.session = session;
 		setLayout(new BorderLayout());
 		initializeComponents();
 		layoutComponents();
@@ -52,7 +54,7 @@ public class MainView extends JFrame implements StudyView {
 	 * Creates the components used in the GUI
 	 */
 	private void initializeComponents() {
-		toolbar = new Toolbar();
+		toolbar = new Toolbar(this, session);
 		imageView = new JPanel(new CardLayout());
 		singleView = new SingleView();
 		quadView = new QuadView();
@@ -84,15 +86,6 @@ public class MainView extends JFrame implements StudyView {
 			currentView = ViewType.SINGLE_VIEW;
 		}
 		viewingSingle = !viewingSingle;
-	}
-	
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#addViewListener(java.awt.event.ActionListener)
-	 */
-	@Override
-	public void addViewListener(ActionListener al) {
-		((Toolbar)toolbar).addViewListener(al);
 	}
 	
 	/**
@@ -236,10 +229,7 @@ public class MainView extends JFrame implements StudyView {
 	 * Creates the appropriate objecst and shows the GUI
 	 */
 	public static void createAndShowGUI() {
-		JFrame view = new MainView();
-		
-		// Create and set the ProxyController
-		new Controller((StudyView)view);
+		JFrame view = new MainView(new SessionHandler());
 	}
 	
 	/**

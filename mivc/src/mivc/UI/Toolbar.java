@@ -1,11 +1,15 @@
 package mivc.UI;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import mivc.System.ChangeViewCommand;
+import mivc.System.SessionHandler;
 import net.miginfocom.swing.MigLayout;
 
 /*
@@ -14,7 +18,7 @@ import net.miginfocom.swing.MigLayout;
  */
 
 @SuppressWarnings("serial")
-public class Toolbar extends JPanel {
+public class Toolbar extends JPanel implements ActionListener {
 
 	private JButton btnOpen;
 	private JButton btnSaveView;
@@ -23,11 +27,15 @@ public class Toolbar extends JPanel {
 	private JButton btnNext;
 	private JButton btnPrev;
 	private JLabel lblStatus; // This is updated by the MainView
+	private StudyView parent;
+	private SessionHandler session;
 	
 	/**
 	 * A toolbar for the GUI which contains multiple action buttons
 	 */
-	public Toolbar() {
+	public Toolbar(StudyView parent, SessionHandler session) {
+		this.parent = parent;
+		this.session = session;
 		setLayout(new MigLayout());
 		initializeComponents();
 		layoutComponents();
@@ -41,6 +49,7 @@ public class Toolbar extends JPanel {
 		btnSaveView = new JButton("Save View");
 		btnSaveStudy = new JButton("Save Study");
 		btnChangeView = new JButton("View");
+		btnChangeView.addActionListener(this);
 		btnNext = new JButton("next >");
 		btnNext.setPreferredSize(new Dimension(40, 25));
 		btnPrev = new JButton("< prev");
@@ -80,14 +89,6 @@ public class Toolbar extends JPanel {
 	}
 	
 	/**
-	 * Add a listener to the view toggle event
-	 * @param al the listener to register for this event
-	 */
-	protected void addViewListener(ActionListener al) {
-		btnChangeView.addActionListener(al);
-	}
-	
-	/**
 	 * Add a listener to the Save Study event
 	 * @param al the listener to register for this event
 	 */
@@ -117,6 +118,14 @@ public class Toolbar extends JPanel {
 	 */
 	protected void addNextListener(ActionListener al) {
 		btnNext.addActionListener(al);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object src = e.getSource();
+		if (src == btnChangeView) {
+			session.addCommand(new ChangeViewCommand(parent));
+		}
 	}
 	
 }

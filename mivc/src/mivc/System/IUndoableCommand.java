@@ -6,11 +6,12 @@ package mivc.System;
  * 
  * @author berlgeof
  */
-public interface ICommand {
+public interface IUndoableCommand {
 
 	/**
-	 * Carries out the command.
+	 * "Undoes" the command, that is, state is returned to that which it
+	 * was previous to executing the command.
 	 */
-	public void execute();
+	public void undo();
 	
 }

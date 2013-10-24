@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Stack;
 
 import mivc.System.IO.StudyDAO;
 import mivc.UI.StudyView;
@@ -16,7 +17,7 @@ import mivc.UI.StudyView.ViewType;
  * @author Fill me
  * @author act4122
  */
-public class Controller {
+public class SessionHandler {
 
 	private StudyView view;
 	private Study currentStudy;
@@ -26,6 +27,7 @@ public class Controller {
 	private int singleViewIndex = 0;
 	private static final String SETTINGS_PATH = "settings.prop";
 	private static final String DEFAULT_STUDY_KEY = "default_study";
+	private Stack<IUndoableCommand> undoOperations;
 	
 	// The following properties are to be concatenated with the study name
 	// ex. settings.set(currentStudy.getName() + IMAGE_INTERVAL_KEY, imageInterval)
@@ -41,9 +43,8 @@ public class Controller {
 	 * to work with a Java GUI but could be extended.
 	 * @param view The view that this controller will be controlling.
 	 */
-	public Controller(StudyView view) {
-		this.view = view;
-		view.addViewListener(new ViewListener());
+	public SessionHandler() {
+		// TODO fix this --> this.view = view;
 		view.addOpenListener(new OpenListener());
 		view.addSaveStudyListener(new SaveStudyListener());
 		view.addSaveViewListener(new SaveViewListener());
@@ -100,6 +101,19 @@ public class Controller {
 				studies.put(s.getName(), s);
 			}
 		}
+	}
+	
+	// TODO Add Javadoc.
+	public void addCommand(ICommand command) {
+		// If this command is undoable, store if for possible undoing later.
+		if (command instanceof IUndoableCommand) {
+			if (undoOperations == null) {
+				undoOperations = new Stack<IUndoableCommand>();
+			}
+			undoOperations.push((IUndoableCommand) command);
+		}
+		// Execute the command
+		command.execute();
 	}
 	
 	/**
@@ -211,20 +225,6 @@ public class Controller {
 			imageInterval = 0;
 			singleViewIndex = 0;
 			updateViewImages(false);
-		}
-	}
-
-	
-	/**
-	 * Calls to the view to change the current view
-	 *
-	 */
-	class ViewListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			view.toggleView();
-			updateViewImages(false);
-			updateViewStatus();
 		}
 	}
 	
