@@ -4,18 +4,25 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import mivc.System.SessionHandler;
+import mivc.System.CommandHandler;
 import mivc.System.IStudyImage;
+import mivc.System.SelectStudyCommand;
+import mivc.System.Study;
 
 
 @SuppressWarnings("serial")
-public class MainView extends JFrame implements StudyView {
+public class MainView extends JFrame implements StudyView, ActionListener {
 
 	private JPanel toolbar;
 	private JPanel imageView;
@@ -24,13 +31,18 @@ public class MainView extends JFrame implements StudyView {
 	private ViewType currentView;
 	private boolean viewingSingle = true;
 	private StudyList studyList = new StudyList();
-	private SessionHandler session;
+	private CommandHandler invoker;
+	private Map<String, Study> studies;
+	private Study currentStudy;
+	private int imageInterval = 0;
+	private int singleViewIndex = 0;
+	private IStudyImage[] currentImages = new IStudyImage[4];
 	
 	/**
 	 * The main view to be used for displaying MIVC data
 	 */
-	public MainView(SessionHandler session) {
-		this.session = session;
+	public MainView(CommandHandler invoker) {
+		this.invoker = invoker;
 		setLayout(new BorderLayout());
 		initializeComponents();
 		layoutComponents();
@@ -45,8 +57,9 @@ public class MainView extends JFrame implements StudyView {
 		int x = screen.width/2-getSize().width/2;
 		int y = screen.height/2-getSize().height/2;
 		setLocation(x, y);
-		setTitle("MIVC");
+		setTitle("Medical Image Viewing Console");
 		
+		studyList.btnOpen.addActionListener(this);
 		setVisible(true);
 	}
 	
@@ -54,7 +67,7 @@ public class MainView extends JFrame implements StudyView {
 	 * Creates the components used in the GUI
 	 */
 	private void initializeComponents() {
-		toolbar = new Toolbar(this, session);
+		toolbar = new Toolbar(this, invoker);
 		imageView = new JPanel(new CardLayout());
 		singleView = new SingleView();
 		quadView = new QuadView();
@@ -86,15 +99,6 @@ public class MainView extends JFrame implements StudyView {
 			currentView = ViewType.SINGLE_VIEW;
 		}
 		viewingSingle = !viewingSingle;
-	}
-	
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#addOpenListener(java.awt.event.ActionListener)
-	 */
-	@Override
-	public void addOpenListener(ActionListener al) {
-		((Toolbar)toolbar).addOpenListener(al);
 	}
 
 	/**
@@ -135,15 +139,6 @@ public class MainView extends JFrame implements StudyView {
 	
 	/**
 	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#addStudySelectionListener(java.awt.event.ActionListener)
-	 */
-	@Override
-	public void addStudySelectionListener(ActionListener al) {
-		studyList.addSelectionListener(al);
-	}
-	
-	/**
-	 * (non-Javadoc)
 	 * @see mivc.UI.StudyView#setImages(mivc.System.IStudyImage[])
 	 */
 	@Override
@@ -157,44 +152,25 @@ public class MainView extends JFrame implements StudyView {
 	 * @see mivc.UI.StudyView#showList(java.lang.String[])
 	 */
 	@Override
-	public void showList(String[] studies) {
-		studyList.updateList(studies);
+	public void showList(List<Study> studies) {
+		if (this.studies == null) {
+			this.studies = new HashMap<String, Study>();
+		}
+		String[] names = new String[studies.size()];
+		int i = 0;
+		for (Study s : studies) {
+			names[i++] = s.getName();
+			this.studies.put(s.getName(), s);
+		}
+		studyList.updateList(names);
 		studyList.setVisible(true);
 	}
 	
 	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#getSelectedStudy()
+	 * Update the status bar with a message
+	 * @param value the message to show on the status bar
 	 */
-	@Override
-	public String getSelectedStudy() {
-		return studyList.getSelectedStudy();
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#isDefaultSelected()
-	 */
-	@Override
-	public boolean isDefaultSelected() {
-		return studyList.isDefaultSelected();
-	}
-	
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#getCurrentView()
-	 */
-	@Override
-	public ViewType getCurrentView() {
-		return currentView;
-	}
-	
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#updateStatusBar(java.lang.String)
-	 */
-	@Override
-	public void updateStatusBar(String value) {
+	private void updateStatusBar(String value) {
 		((Toolbar)toolbar).setStatus(value);
 	}
 
@@ -229,7 +205,7 @@ public class MainView extends JFrame implements StudyView {
 	 * Creates the appropriate objecst and shows the GUI
 	 */
 	public static void createAndShowGUI() {
-		JFrame view = new MainView(new SessionHandler());
+		new MainView(new CommandHandler());
 	}
 	
 	/**
@@ -259,6 +235,98 @@ public class MainView extends JFrame implements StudyView {
                 createAndShowGUI();
             }
         });
+	}
+
+	public void setCurrentStudy(String name) {
+		this.currentStudy = studies.get(name);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == studyList.btnOpen) {
+			invoker.addCommand(new SelectStudyCommand(this, 
+					studyList.getSelectedStudy()));
+		}
+	}
+
+	@Override
+	public void setImageInterval(int interval) {
+		this.imageInterval = interval;
+		updateViewImages(false);
+	}
+
+	@Override
+	public void setSingleViewIndex(int index) {
+		this.singleViewIndex = index;
+		updateViewImages(false);
+	}
+	
+	/**
+	 * Updates the status bar on the view. Should be called any time the 
+	 * view, study or images are changed.
+	 */
+	private void updateViewStatus() {
+		// Get current view (send either one or four images)
+		int totalImages = currentStudy.getImageCount();
+		String status = "";
+		
+		if (currentView == ViewType.SINGLE_VIEW) {
+			int imgIndex = imageInterval*4 + singleViewIndex;
+			// Update the status
+			status = "Viewing " + currentStudy.getName() + " image " + 
+					(imgIndex + 1) + " of " + totalImages;
+		} else if (currentView == ViewType.QUAD_VIEW) {
+			// Update the status
+			int lastImage = 0;
+			if (totalImages - imageInterval*4 <= 4) {
+				lastImage = totalImages;
+			} else {
+				lastImage = imageInterval*4 + 4;
+			}
+			status = "Viewing " + currentStudy.getName() + 
+					" images (" + (imageInterval*4 + 1) + " - " + lastImage + 
+					") of " + currentStudy.getImageCount();
+		}
+
+		// update the status bar
+		updateStatusBar(status);
+	}
+	
+	/**
+	 * Updates the images on the GUI, should be called any time imageInterval
+	 * or singleViewIndex are changed.
+	 * @param forceUpdate should the update of images be forced
+	 * @precondition imageInterval and singleViewIndex must be set previously
+	 */
+	private void updateViewImages(boolean forceUpdate) {
+		
+		// This used to be modified to only run on specific occasions.
+		// TODO see if we can revert back to old code when this was in Controller.
+		int totalImages = currentStudy.getImageCount();
+		for (int i = 0; i < 4; i++) {
+			int imgIndex = imageInterval*4 + i;
+			if (imgIndex >= totalImages) {
+				currentImages[i] = null;
+			} else {
+				currentImages[i] = currentStudy.getImage(imgIndex);
+			}
+		}
+		
+		
+		if (currentView == ViewType.SINGLE_VIEW) {
+			// Update the image(s)
+			setImages(currentImages[singleViewIndex]);
+		} else if (currentView == ViewType.QUAD_VIEW) {
+			// Update the image(s)
+			setImages(currentImages);
+		}
+
+		updateViewStatus();
+	}
+
+	@Override
+	public ViewType getCurrentView() {
+		return currentView;
 	}
 
 

@@ -9,7 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import mivc.System.ChangeViewCommand;
-import mivc.System.SessionHandler;
+import mivc.System.ListStudiesCommand;
+import mivc.System.CommandHandler;
 import net.miginfocom.swing.MigLayout;
 
 /*
@@ -28,14 +29,14 @@ public class Toolbar extends JPanel implements ActionListener {
 	private JButton btnPrev;
 	private JLabel lblStatus; // This is updated by the MainView
 	private StudyView parent;
-	private SessionHandler session;
+	private CommandHandler invoker;
 	
 	/**
 	 * A toolbar for the GUI which contains multiple action buttons
 	 */
-	public Toolbar(StudyView parent, SessionHandler session) {
+	public Toolbar(StudyView parent, CommandHandler invoker) {
 		this.parent = parent;
-		this.session = session;
+		this.invoker = invoker;
 		setLayout(new MigLayout());
 		initializeComponents();
 		layoutComponents();
@@ -46,13 +47,16 @@ public class Toolbar extends JPanel implements ActionListener {
 	 */
 	private void initializeComponents() {
 		btnOpen = new JButton("Open");
+		btnOpen.addActionListener(this);
 		btnSaveView = new JButton("Save View");
 		btnSaveStudy = new JButton("Save Study");
 		btnChangeView = new JButton("View");
 		btnChangeView.addActionListener(this);
 		btnNext = new JButton("next >");
+		btnNext.addActionListener(this);
 		btnNext.setPreferredSize(new Dimension(40, 25));
 		btnPrev = new JButton("< prev");
+		btnPrev.addActionListener(this);
 		btnPrev.setPreferredSize(new Dimension(40, 25));
 		lblStatus = new JLabel("Viewing image(s) n of n");
 		lblStatus.setPreferredSize(new Dimension(300, 30));
@@ -78,14 +82,6 @@ public class Toolbar extends JPanel implements ActionListener {
 	 */
 	protected void setStatus(String value) {
 		lblStatus.setText(value);
-	}
-
-	/**
-	 * Add a listener to the open event
-	 * @param al the listener to register for this event
-	 */
-	protected void addOpenListener(ActionListener al) {
-		btnOpen.addActionListener(al);
 	}
 	
 	/**
@@ -124,7 +120,13 @@ public class Toolbar extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
 		if (src == btnChangeView) {
-			session.addCommand(new ChangeViewCommand(parent));
+			invoker.addCommand(new ChangeViewCommand(parent));
+		} else if (src == btnOpen) {
+			invoker.addCommand(new ListStudiesCommand(parent));
+		} else if (src == btnPrev) {
+			invoker.undo();
+		} else if (src == btnNext) {
+			invoker.redo();
 		}
 	}
 	

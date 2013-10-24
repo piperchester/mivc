@@ -4,8 +4,6 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.util.Random;
-
 import mivc.System.IO.ImageDAO;
 
 public class StudyImage implements IStudyImage {
@@ -37,13 +35,6 @@ public class StudyImage implements IStudyImage {
 				loadingThread = new Thread() {
 					@Override
 					public void run() {
-						Random rand = new Random();
-						// Input a random delay for loading of image (just for show)
-						// We will choose a random time between 0 and 3 seconds
-						final long loadTime = rand.nextInt(1000);
-						try {
-							Thread.sleep(loadTime);
-						} catch (InterruptedException e) { }
 						loadImage();
 						// Make sure this happens on the event thread (EDT)
 				        javax.swing.SwingUtilities.invokeLater(new Runnable() {

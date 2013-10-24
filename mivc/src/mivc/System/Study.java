@@ -4,11 +4,7 @@
 package mivc.System;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 import mivc.System.IO.ImageDAO;
 
@@ -26,23 +22,6 @@ public class Study {
 	public Study(String name) {
 		this.name = name;
 		images = ImageDAO.getInstance().listAll(name);
-		
-		// TODO: Remove Me after testing
-		ArrayList<int[][]> s_imageData = new ArrayList<int[][]>();
-		for (int i = 0; i < images.length; ++i)
-		{
-			s_imageData.add(((StudyImage)images[i]).GetPixelData());
-		}
-		
-		// retrieve image
-	    BufferedImage bi = getLineImage(145, s_imageData);
-	    File outputfile = new File("saved.png");
-	    try {
-			ImageIO.write(bi, "png", outputfile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public BufferedImage getLineImage(int p_y, ArrayList<int[][]> p_imageDatas)

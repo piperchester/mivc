@@ -19,7 +19,7 @@ public class StudyList extends JFrame implements ActionListener {
 
 	private JList<String> studiesList;
 	private JCheckBox cbDefault;
-	private JButton btnOpen;
+	protected JButton btnOpen;
 	
 	public StudyList() {
 		setLayout(new MigLayout("fill", "", ""));
@@ -79,14 +79,6 @@ public class StudyList extends JFrame implements ActionListener {
 	 */
 	protected String getSelectedStudy() {
 		return studiesList.getSelectedValue();
-	}
-	
-	/**
-	 * Add a listener for the open button click
-	 * @param al the listener to register for this event
-	 */
-	protected void addSelectionListener(ActionListener al) {
-		btnOpen.addActionListener(al);
 	}
 
 	@Override
