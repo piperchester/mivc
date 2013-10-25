@@ -57,9 +57,8 @@ public interface StudyView {
 	
 	/**
 	 * Show a list of studies for the user to select from
-	 * @param studies the list of studies to show
 	 */
-	public void showList(List<Study> studies);
+	public void showList();
 	
 	/**
 	 * Get the current view type being displayed on the view
@@ -92,5 +91,7 @@ public interface StudyView {
 	public int getSingleViewIndex();
 	
 	public Study getCurrentStudy();
+	
+	public void updateStudies(List<Study> studies);
 	
 }

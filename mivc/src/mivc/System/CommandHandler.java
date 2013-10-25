@@ -14,72 +14,18 @@ import mivc.System.IO.StudyDAO;
  */
 public class CommandHandler {
 
-//	private StudyView view;
-//	private Study currentStudy;
-//	private IStudyImage[] currentImages = new IStudyImage[4];
 	private HashMap<String, Study> studies;
-//	private int imageInterval = 0;
-//	private int singleViewIndex = 0;
-	private static final String SETTINGS_PATH = "settings.prop";
+	public static final String SETTINGS_PATH = "settings.prop";
 	private Stack<IUndoableCommand> undoOperations;
 	private Stack<IUndoableCommand> redoOperations;
 	
-	// The following properties are to be concatenated with the study name
-	// ex. settings.set(currentStudy.getName() + IMAGE_INTERVAL_KEY, imageInterval)
-	// The reasoning is that we need to be able to store view data for multiple
-	// studies so the study name is the unique identifier for the key
-//	private static final String DEFAULT_STUDY_KEY = "default_study";
-//	private static final String IMAGE_INTERVAL_KEY = "_image_interval";
-//	private static final String SINGLE_VIEW_INDEX_KEY = "_sv_index";
-//	private static final String VIEW_TYPE_KEY = "_view_type";
-//	private static final String DISPLAY_STATE_SAVED_KEY = "_display_state";
 	
 	/**
-	 * Proxy controller is the brains for the GUI.  Currently it is designed
-	 * to work with a Java GUI but could be extended.
-	 * @param view The view that this controller will be controlling.
+	 * CommandHandler...
 	 */
 	public CommandHandler() {
-//		view.addSaveStudyListener(new SaveStudyListener());
-//		view.addSaveViewListener(new SaveViewListener());
-//		view.addNextListener(new NextListener());
-//		view.addPrevListener(new PrevListener());
-//		view.addStudySelectionListener(new StudySelectionListener());	
-		
-		initialize();
+
 	}
-	
-	/**
-	 * Sets up the initial system by loading studies, settings and the default
-	 * study if there is one.
-	 */
-	private void initialize() {
-		// Load studies
-		loadStudies(true);
-		
-		// Load settings
-		LocalSettings.getInstance().Load(SETTINGS_PATH);
-		
-//		// Load default study if there is one, otherwise, show the list
-//		String studyName = LocalSettingsManager.getInstance()
-//						.getString(DEFAULT_STUDY_KEY);
-//		if (studyName == null) {
-//			showStudiesListView();
-//		} else {
-//			updateCurrentStudy(studyName);
-//		}
-	}
-	
-//	private void showStudiesListView() {
-//		// Convert studies to a string array
-//		String[] studyNames = new String[studies.size()];
-//		int i = 0;
-//		for (Entry<String, Study> entry : studies.entrySet()) {
-//			studyNames[i++] = entry.getValue().getName();
-//		}
-//		
-//		view.showList(studyNames);  // Display the Study List window
-//	}
 	
 	/**
 	 * Loads the studies from persistent source, if the studies are already
@@ -150,74 +96,7 @@ public class CommandHandler {
 		undoOperations.push(cmd);
 		((ICommand)cmd).execute();
 	}
-	
-//	/**
-//	 * Updates the status bar on the view. Should be called any time the 
-//	 * view, study or images are changed.
-//	 */
-//	private void updateViewStatus() {
-//		// Get current view (send either one or four images)
-//		ViewType curView = view.getCurrentView();
-//		int totalImages = currentStudy.getImageCount();
-//		String status = "";
-//		
-//		if (curView == ViewType.SINGLE_VIEW) {
-//			int imgIndex = imageInterval*4 + singleViewIndex;
-//			// Update the status
-//			status = "Viewing " + currentStudy.getName() + " image " + 
-//					(imgIndex + 1) + " of " + totalImages;
-//		} else if (curView == ViewType.QUAD_VIEW) {
-//			// Update the status
-//			int lastImage = 0;
-//			if (totalImages - imageInterval*4 <= 4) {
-//				lastImage = totalImages;
-//			} else {
-//				lastImage = imageInterval*4 + 4;
-//			}
-//			status = "Viewing " + currentStudy.getName() + 
-//					" images (" + (imageInterval*4 + 1) + " - " + lastImage + 
-//					") of " + currentStudy.getImageCount();
-//		}
-//
-//		// update the status bar
-//		view.updateStatusBar(status);
-//	}
-	
-//	/**
-//	 * Updates the images on the GUI, should be called any time imageInterval
-//	 * or singleViewIndex are changed.
-//	 * @param forceUpdate should the update of images be forced
-//	 * @precondition imageInterval and singleViewIndex must be set previously
-//	 */
-//	private void updateViewImages(boolean forceUpdate) {
-//		
-//		// Only load images if singleViewIndex is 0 or 3, otherwise, keep using
-//		// the current interval of images already loaded.
-//		if (singleViewIndex == 0 || singleViewIndex == 3 || forceUpdate) {
-//			int totalImages = currentStudy.getImageCount();
-//			for (int i = 0; i < 4; i++) {
-//				int imgIndex = imageInterval*4 + i;
-//				if (imgIndex >= totalImages) {
-//					currentImages[i] = null;
-//				} else {
-//					currentImages[i] = currentStudy.getImage(imgIndex);
-//				}
-//			}
-//		}
-//		
-//		// Get current view (send either one or four images)
-//		ViewType curView = view.getCurrentView();
-//		
-//		if (curView == ViewType.SINGLE_VIEW) {
-//			// Update the image(s)
-//			view.setImages(currentImages[singleViewIndex]);
-//		} else if (curView == ViewType.QUAD_VIEW) {
-//			// Update the image(s)
-//			view.setImages(currentImages);
-//		}
-//
-//		updateViewStatus();
-//	}
+
 	
 //	/**
 //	 * Ensures the study attempting to be chosen is valid and if so, sets that
@@ -262,14 +141,6 @@ public class CommandHandler {
 //			updateViewImages(false);
 //		}
 //	}
-	
-	protected String[] getStudies() {
-		if (studies == null) {
-			return null;
-		}
-		String[] retVal = new String[studies.size()];
-		return studies.keySet().toArray(retVal);
-	}
 	
 
 //	/**
@@ -336,111 +207,5 @@ public class CommandHandler {
 //		}
 //	}
 //	
-//	/**
-//	 * Moves to the previous image
-//	 *
-//	 */
-//	class PrevListener implements ActionListener {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			int imgIndex = imageInterval*4 + singleViewIndex;
-//			
-//			// Get current view (send either one or four images)
-//			ViewType curView = view.getCurrentView();
-//			if (curView == ViewType.SINGLE_VIEW) {
-//				// If we've reached the beginning just return
-//				if (imgIndex == 0) {
-//					return;
-//				}
-//				
-//				// if we've reached the first single image in this interval
-//				// reset singleViewIndex and increment the interval
-//				if (singleViewIndex == 0) {
-//					imageInterval -= 1;
-//					singleViewIndex = 3;
-//				} else {
-//					// Otherwise just decrement the index
-//					singleViewIndex -= 1;
-//				}
-//			} else if (curView == ViewType.QUAD_VIEW) {
-//				// If we are at the beginning don't decrement
-//				if (imageInterval == 0) {
-//					return;
-//				}
-//				
-//				// increment imageInterval and reset singleViewIndex
-//				singleViewIndex = 3;
-//				imageInterval -= 1;
-//			}
-//			updateViewImages(false);
-//		}
-//	}
-//	
-//	/**
-//	 * Moves to the next image
-//	 *
-//	 */
-//	class NextListener implements ActionListener {
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			
-//			int totalImages = currentStudy.getImageCount();
-//			int imgIndex = imageInterval*4 + singleViewIndex;
-//			
-//			// Get current view (send either one or four images)
-//			ViewType curView = view.getCurrentView();
-//			if (curView == ViewType.SINGLE_VIEW) {
-//				// If we've reached the end just return
-//				if (imgIndex >= totalImages - 1) {
-//					return;
-//				}
-//				
-//				// if we've reached the last single image in this interval
-//				// reset singleViewIndex and increment the interval
-//				if (singleViewIndex == 3) {
-//					imageInterval += 1;
-//					singleViewIndex = 0;
-//				} else {
-//					// Otherwise just increment the index
-//					singleViewIndex += 1;
-//				}
-//			} else if (curView == ViewType.QUAD_VIEW) {
-//				// If there aren't more than four images left, we reached then 
-//				// end,, don't increment
-//				if (totalImages - imageInterval*4 <= 4) {
-//					return;
-//				}
-//				
-//				// increment imageInterval and reset singleViewIndex
-//				singleViewIndex = 0;
-//				imageInterval += 1;
-//			}
-//			updateViewImages(false);
-//		}
-//	}
-//	
-//	/**
-//	 * Gets the selected study and whether it was set as the default
-//	 *
-//	 */
-//	class StudySelectionListener implements ActionListener {
-//		@Override
-//		/**
-//		 * Loads the selected Study, saves it as default if it was selected.
-//		 * Otherwise, set it as default if so desired by the GUI.
-//		 * @param e an ActionEvent
-//		 */
-//		public void actionPerformed(ActionEvent e) {
-//			// Load the selected Study, save default if it was selected
-//			String studyName = view.getSelectedStudy();
-//			updateCurrentStudy(studyName);
-//			
-//			// Set it as default if so desired by the GUI
-//			if (view.isDefaultSelected()) {
-//				LocalSettingsManager sMan = LocalSettingsManager.getInstance();
-//				sMan.set(DEFAULT_STUDY_KEY, studyName);
-//				sMan.Save(SETTINGS_PATH);
-//			}
-//		}
-//	}
+
 }

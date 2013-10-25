@@ -7,10 +7,12 @@ public class SelectStudyCommand implements ICommand {
 
 	private StudyView receiver;
 	private String studyName;
+	private boolean defaultStudy;
 	
-	public SelectStudyCommand(StudyView receiver, String sName) {
+	public SelectStudyCommand(StudyView receiver, String sName, boolean defaultStudy) {
 		this.receiver = receiver;
 		this.studyName = sName;
+		this.defaultStudy = defaultStudy;
 	}
 	
 	@Override
@@ -23,6 +25,12 @@ public class SelectStudyCommand implements ICommand {
 		}
 		// Set the current study
 		receiver.setCurrentStudy(studyName);
+		
+		// Save the settings as the default if necessary
+		if (defaultStudy) {
+			LocalSettings.getInstance().set(StudyView.DEFAULT_STUDY_KEY, studyName);
+			LocalSettings.getInstance().Save(CommandHandler.SETTINGS_PATH);
+		}
 		
 		// Check if there is a persisted study display state, if there is, load
 		// the persisted view and images for that study but if not, just load

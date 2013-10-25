@@ -13,7 +13,9 @@ public class ListStudiesCommand implements ICommand {
 	
 	@Override
 	public void execute() {
+		// Update the studies list
+		receiver.updateStudies(StudyDAO.getInstance().listStudies());
 		// Display the Study List window
-		receiver.showList(StudyDAO.getInstance().listStudies());  
+		receiver.showList();  
 	}
 }

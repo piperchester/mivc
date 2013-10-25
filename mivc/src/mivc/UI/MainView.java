@@ -23,6 +23,7 @@ import javax.swing.UIManager;
 import mivc.System.CommandHandler;
 import mivc.System.IStudyImage;
 import mivc.System.SelectStudyCommand;
+import mivc.System.StartUpCommand;
 import mivc.System.Study;
 
 
@@ -68,6 +69,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 		addUndoRedo();
 		
 		studyList.btnOpen.addActionListener(this);
+		invoker.addCommand(new StartUpCommand(this));
 		setVisible(true);
 	}
 	
@@ -219,18 +221,28 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	
 	/**
 	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#showList(java.lang.String[])
+	 * @see mivc.UI.StudyView#updateStudies(java.util.List)
 	 */
 	@Override
-	public void showList(List<Study> studies) {
+	public void updateStudies(List<Study> studies) {
 		if (this.studies == null) {
 			this.studies = new HashMap<String, Study>();
 		}
+		for (Study s : studies) {
+			this.studies.put(s.getName(), s);
+		}
+	}
+	
+	/**
+	 * (non-Javadoc)
+	 * @see mivc.UI.StudyView#showList(java.util.List)
+	 */
+	@Override
+	public void showList() {
 		String[] names = new String[studies.size()];
 		int i = 0;
-		for (Study s : studies) {
-			names[i++] = s.getName();
-			this.studies.put(s.getName(), s);
+		for (Map.Entry<String, Study> e : studies.entrySet()) {
+			names[i++] = e.getKey();
 		}
 		studyList.updateList(names);
 		studyList.setVisible(true);
@@ -315,7 +327,8 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == studyList.btnOpen) {
 			invoker.addCommand(new SelectStudyCommand(this, 
-					studyList.getSelectedStudy()));
+					studyList.getSelectedStudy(), 
+					studyList.isDefaultSelected()));
 		}
 	}
 
