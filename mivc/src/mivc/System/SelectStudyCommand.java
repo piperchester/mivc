@@ -29,7 +29,7 @@ public class SelectStudyCommand implements ICommand {
 		// Save the settings as the default if necessary
 		if (defaultStudy) {
 			LocalSettings.getInstance().set(StudyView.DEFAULT_STUDY_KEY, studyName);
-			LocalSettings.getInstance().Save(CommandHandler.SETTINGS_PATH);
+			LocalSettings.getInstance().Save(LocalSettings.SETTINGS_PATH);
 		}
 		
 		// Check if there is a persisted study display state, if there is, load

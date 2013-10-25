@@ -14,7 +14,7 @@ public class StartUpCommand implements ICommand {
 	@Override
 	public void execute() {
 		// Load settings
-		LocalSettings.getInstance().Load(CommandHandler.SETTINGS_PATH);
+		LocalSettings.getInstance().Load(LocalSettings.SETTINGS_PATH);
 		
 		// Get default study name if there is one
 		String studyName = LocalSettings.getInstance()

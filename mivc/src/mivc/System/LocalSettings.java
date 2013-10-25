@@ -26,6 +26,7 @@ public class LocalSettings implements Serializable {
 
 	private static LocalSettings m_instance = null;
 	private static final long serialVersionUID = 1L;
+	public static final String SETTINGS_PATH = "settings.prop";
 	private Map<String, String>	m_strings = new HashMap<String, String>();
 	private Map<String, Integer> m_ints = new HashMap<String, Integer>();
 	private Map<String, Boolean> m_bools = new HashMap<String, Boolean>();

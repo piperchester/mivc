@@ -15,7 +15,6 @@ import mivc.System.IO.StudyDAO;
 public class CommandHandler {
 
 	private HashMap<String, Study> studies;
-	public static final String SETTINGS_PATH = "settings.prop";
 	private Stack<IUndoableCommand> undoOperations;
 	private Stack<IUndoableCommand> redoOperations;
 	

@@ -31,7 +31,7 @@ public class SaveViewCommand implements ICommand {
 		LocalSettings.getInstance().set(currentStudy.getName() + 
 				StudyView.DISPLAY_STATE_SAVED_KEY, true);
 		// Save the settings
-		LocalSettings.getInstance().Save(CommandHandler.SETTINGS_PATH);
+		LocalSettings.getInstance().Save(LocalSettings.SETTINGS_PATH);
 	}
 
 }
