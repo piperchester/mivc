@@ -85,9 +85,12 @@ public interface StudyView {
 	
 	
 	// TODO simplify this method
-	public void setImageInterval(int interval);
+	public void setImageIndexing(int interval, int index);
 	
-	// TODO simplify this method
-	public void setSingleViewIndex(int index);
+	public int getImageInterval();
+	
+	public int getSingleViewIndex();
+	
+	public Study getCurrentStudy();
 	
 }

@@ -6,13 +6,18 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import mivc.System.CommandHandler;
@@ -59,6 +64,9 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 		setLocation(x, y);
 		setTitle("Medical Image Viewing Console");
 		
+		// Add undo and redo key commands
+		addUndoRedo();
+		
 		studyList.btnOpen.addActionListener(this);
 		setVisible(true);
 	}
@@ -84,6 +92,67 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 		imageView.add(quadView, "QV");
 	}
 	
+	private void addUndoRedo() {
+		// Apply the Undo and Redo keystrokes
+		KeyStroke undoStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Z, 
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		KeyStroke redoStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Y, 
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask());
+		Action undoRedoAction = new AbstractAction("UNDOREDO") {
+			@Override
+			public void actionPerformed(ActionEvent e) {	
+				switch (e.getActionCommand().charAt(0)-0) {
+				case 26: 
+					invoker.undo();
+					break;
+				case 25:
+					invoker.redo();
+					break;
+				default:
+					// Do nothing
+				}
+			}
+		};
+		// UNDO
+		singleView.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+				undoStroke, Action.NAME);
+		singleView.getInputMap(JComponent.WHEN_FOCUSED).put(undoStroke, Action.NAME);
+		singleView.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				undoStroke, Action.NAME);
+		quadView.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+				undoStroke, Action.NAME);
+		quadView.getInputMap(JComponent.WHEN_FOCUSED).put(undoStroke, Action.NAME);
+		quadView.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				undoStroke, Action.NAME);
+		toolbar.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+				undoStroke, Action.NAME);
+		toolbar.getInputMap(JComponent.WHEN_FOCUSED).put(undoStroke, Action.NAME);
+		toolbar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				undoStroke, Action.NAME);
+		
+		// REDO
+		singleView.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+				redoStroke, Action.NAME);
+		singleView.getInputMap(JComponent.WHEN_FOCUSED).put(redoStroke, Action.NAME);
+		singleView.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				redoStroke, Action.NAME);
+		quadView.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+				redoStroke, Action.NAME);
+		quadView.getInputMap(JComponent.WHEN_FOCUSED).put(redoStroke, Action.NAME);
+		quadView.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				redoStroke, Action.NAME);
+		toolbar.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
+				redoStroke, Action.NAME);
+		toolbar.getInputMap(JComponent.WHEN_FOCUSED).put(redoStroke, Action.NAME);
+		toolbar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				redoStroke, Action.NAME);
+		
+		// Apply to the actionMap
+		singleView.getActionMap().put(Action.NAME, undoRedoAction);
+		quadView.getActionMap().put(Action.NAME, undoRedoAction);
+		toolbar.getActionMap().put(Action.NAME, undoRedoAction);
+	}
+	
 	/**
 	 * (non-Javadoc)
 	 * @see mivc.UI.StudyView#toggleView()
@@ -99,6 +168,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 			currentView = ViewType.SINGLE_VIEW;
 		}
 		viewingSingle = !viewingSingle;
+		updateViewImages();
 	}
 
 	/**
@@ -250,15 +320,10 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	}
 
 	@Override
-	public void setImageInterval(int interval) {
+	public void setImageIndexing(int interval, int index) {
 		this.imageInterval = interval;
-		updateViewImages(false);
-	}
-
-	@Override
-	public void setSingleViewIndex(int index) {
 		this.singleViewIndex = index;
-		updateViewImages(false);
+		updateViewImages();
 	}
 	
 	/**
@@ -298,7 +363,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	 * @param forceUpdate should the update of images be forced
 	 * @precondition imageInterval and singleViewIndex must be set previously
 	 */
-	private void updateViewImages(boolean forceUpdate) {
+	private void updateViewImages() {
 		
 		// This used to be modified to only run on specific occasions.
 		// TODO see if we can revert back to old code when this was in Controller.
@@ -327,6 +392,21 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	@Override
 	public ViewType getCurrentView() {
 		return currentView;
+	}
+
+	@Override
+	public int getImageInterval() {
+		return imageInterval;
+	}
+
+	@Override
+	public int getSingleViewIndex() {
+		return singleViewIndex;
+	}
+
+	@Override
+	public Study getCurrentStudy() {
+		return currentStudy;
 	}
 
 

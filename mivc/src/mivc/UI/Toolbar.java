@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import mivc.System.ChangeViewCommand;
 import mivc.System.ListStudiesCommand;
 import mivc.System.CommandHandler;
+import mivc.System.NextImageCommand;
+import mivc.System.PrevImageCommand;
 import net.miginfocom.swing.MigLayout;
 
 /*
@@ -124,9 +126,9 @@ public class Toolbar extends JPanel implements ActionListener {
 		} else if (src == btnOpen) {
 			invoker.addCommand(new ListStudiesCommand(parent));
 		} else if (src == btnPrev) {
-			invoker.undo();
+			invoker.addCommand(new PrevImageCommand(parent));
 		} else if (src == btnNext) {
-			invoker.redo();
+			invoker.addCommand(new NextImageCommand(parent));
 		}
 	}
 	

@@ -122,7 +122,7 @@ public class CommandHandler {
 		if (undoOperations == null) {
 			return;
 		}
-		if (undoOperations.size() < 0) {
+		if (undoOperations.size() <= 0) {
 			return;
 		}
 		if (redoOperations == null) {
@@ -139,7 +139,7 @@ public class CommandHandler {
 		if (redoOperations == null) {
 			return;
 		}
-		if (redoOperations.size() < 0) {
+		if (redoOperations.size() <= 0) {
 			return;
 		}
 		if (undoOperations == null) {

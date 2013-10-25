@@ -41,14 +41,13 @@ public class SelectStudyCommand implements ICommand {
 			}
 			
 			// Get the image variable data
-			receiver.setImageInterval(LocalSettings.getInstance().getInt(studyName + 
-					StudyView.IMAGE_INTERVAL_KEY));
-			receiver.setSingleViewIndex(LocalSettings.getInstance().getInt(studyName + 
+			receiver.setImageIndexing(LocalSettings.getInstance().getInt(
+					studyName + StudyView.IMAGE_INTERVAL_KEY), 
+					LocalSettings.getInstance().getInt(studyName + 
 					StudyView.SINGLE_VIEW_INDEX_KEY));
 		} else {
 			// Get the first images
-			receiver.setImageInterval(0);
-			receiver.setSingleViewIndex(0);
+			receiver.setImageIndexing(0, 0);
 		}
 	}
 
