@@ -13,6 +13,8 @@ import mivc.System.ListStudiesCommand;
 import mivc.System.CommandHandler;
 import mivc.System.NextImageCommand;
 import mivc.System.PrevImageCommand;
+import mivc.System.SaveStudyCommand;
+import mivc.System.SaveViewCommand;
 import net.miginfocom.swing.MigLayout;
 
 /*
@@ -51,7 +53,9 @@ public class Toolbar extends JPanel implements ActionListener {
 		btnOpen = new JButton("Open");
 		btnOpen.addActionListener(this);
 		btnSaveView = new JButton("Save View");
+		btnSaveView.addActionListener(this);
 		btnSaveStudy = new JButton("Save Study");
+		btnSaveStudy.addActionListener(this);
 		btnChangeView = new JButton("View");
 		btnChangeView.addActionListener(this);
 		btnNext = new JButton("next >");
@@ -129,6 +133,10 @@ public class Toolbar extends JPanel implements ActionListener {
 			invoker.addCommand(new PrevImageCommand(parent));
 		} else if (src == btnNext) {
 			invoker.addCommand(new NextImageCommand(parent));
+		} else if (src == btnSaveView) {
+			invoker.addCommand(new SaveViewCommand(parent));
+		} else if (src == btnSaveStudy) {
+			invoker.addCommand(new SaveStudyCommand(parent));
 		}
 	}
 	
