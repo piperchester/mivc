@@ -103,11 +103,14 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 		Action undoRedoAction = new AbstractAction("UNDOREDO") {
 			@Override
 			public void actionPerformed(ActionEvent e) {	
+				System.out.println(e.getActionCommand());
 				switch (e.getActionCommand().charAt(0)-0) {
 				case 26: 
+				case 'z':
 					invoker.undo();
 					break;
 				case 25:
+				case 'y':
 					invoker.redo();
 					break;
 				default:
