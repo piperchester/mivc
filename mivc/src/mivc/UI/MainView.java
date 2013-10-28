@@ -378,7 +378,9 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 			} else {
 				// OLD -> currentImages[i] = currentStudy.getImage(imgIndex);
 				// NEW
-				currentImages[i] = procurator.getImage(imgIndex, currentStudy);
+				currentImages[i] = procurator.getImage(imgIndex, currentStudy, 
+						((Toolbar) toolbar).getMinWindow(), 
+						((Toolbar) toolbar).getMaxWindow());
 			}
 		}
 		

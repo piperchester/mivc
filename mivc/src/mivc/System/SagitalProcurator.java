@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 public class SagitalProcurator implements ImageProcurator {
 
 	@Override
-	public BufferedImage getImage(int index, Study study) {
+	public BufferedImage getImage(int index, Study study, int min, int max) {
 		// Make an image that is as tall as our normal images but only as wide as
 		// the number of images in our layered stack.
 		BufferedImage retVal = new BufferedImage(study.getMaxZ(), 
@@ -42,7 +42,11 @@ public class SagitalProcurator implements ImageProcurator {
 				AffineTransformOp.TYPE_BILINEAR);
 		resized = op.filter(resized, null);
 		
-		return resized;
+    	if (min > 0 || max < 255) {
+    		return ImageUtil.windowImage(resized, min, max);
+    	} else {
+    		return resized;
+    	}
 	}
 
 }

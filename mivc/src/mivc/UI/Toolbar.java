@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import mivc.System.ChangeReconstructionCommand;
 import mivc.System.ChangeViewCommand;
@@ -34,6 +35,8 @@ public class Toolbar extends JPanel implements ActionListener {
 	private JButton btnNext;
 	private JButton btnPrev;
 	private JLabel lblStatus; // This is updated by the MainView
+	private JTextField tfMinWindow;
+	private JTextField tfMaxWindow;
 	private StudyView parent;
 	private CommandHandler invoker;
 	
@@ -70,6 +73,10 @@ public class Toolbar extends JPanel implements ActionListener {
 		btnPrev.setPreferredSize(new Dimension(40, 25));
 		lblStatus = new JLabel("Viewing image(s) n of n");
 		lblStatus.setPreferredSize(new Dimension(300, 30));
+		tfMinWindow = new JTextField();
+		tfMinWindow.setPreferredSize(new Dimension(50, 30));
+		tfMaxWindow = new JTextField();
+		tfMaxWindow.setPreferredSize(new Dimension(50, 30));
 	}
 	
 	/**
@@ -83,6 +90,9 @@ public class Toolbar extends JPanel implements ActionListener {
 		add(btnChangeView, "wrap, push");
 		add(btnPrev, "west, grow");
 		add(lblStatus, "span 2, gap unrelated");
+		add(new JLabel("Windowing: "), "skip 1, split 2");
+		add(tfMinWindow);
+		add(tfMaxWindow);
 		add(btnNext, "east, gap unrelated");
 	}
 	
@@ -147,4 +157,18 @@ public class Toolbar extends JPanel implements ActionListener {
 		}
 	}
 	
+	protected int getMinWindow() {
+		if (tfMinWindow.getText().equals("")) {
+			return 0;
+		}
+		return Integer.parseInt(tfMinWindow.getText());
+	}
+
+	protected int getMaxWindow() {
+		if (tfMaxWindow.getText().equals("")) {
+			return 255;
+		}
+		return Integer.parseInt(tfMaxWindow.getText());
+	}
+
 }

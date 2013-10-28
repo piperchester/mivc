@@ -45,8 +45,6 @@ public class Study {
 	}
 	
 	/**
-	 * This method retrieves images, on average, about 62% faster than the 
-	 * loadBoxData(String path) method 
 	 * @param path the path to the images
 	 */
 	private void loadBoxDataMT() {

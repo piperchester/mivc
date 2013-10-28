@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 public class AxialProcurator implements ImageProcurator {
 
 	@Override
-	public BufferedImage getImage(int index, Study study) {
+	public BufferedImage getImage(int index, Study study, int min, int max) {
 		BufferedImage retVal = new BufferedImage(study.getMaxX(), 
 				study.getMaxY(),
 				BufferedImage.TYPE_INT_RGB);
@@ -17,7 +17,11 @@ public class AxialProcurator implements ImageProcurator {
     		}
     	}
     	
-    	return retVal;
+    	if (min > 0 || max < 255) {
+    		return ImageUtil.windowImage(retVal, min, max);
+    	} else {
+    		return retVal;
+    	}
 	}
 
 }

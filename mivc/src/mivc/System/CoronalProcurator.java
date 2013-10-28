@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 public class CoronalProcurator implements ImageProcurator {
 
 	@Override
-	public BufferedImage getImage(int index, Study study) {
+	public BufferedImage getImage(int index, Study study, int min, int max) {
 		// Make an image that is as wide as our normal images but only as tall as
 		// the number of images in our layered stack.
 		BufferedImage retVal = new BufferedImage(study.getMaxZ(), 
@@ -43,7 +43,11 @@ public class CoronalProcurator implements ImageProcurator {
 		resized = op.filter(resized, null);
 		
 		
-		return resized;
+    	if (min > 0 || max < 255) {
+    		return ImageUtil.windowImage(resized, min, max);
+    	} else {
+    		return resized;
+    	}
 	}
 
 }
