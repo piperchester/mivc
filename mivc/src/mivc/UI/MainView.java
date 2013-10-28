@@ -400,7 +400,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 		// Update the reference image
 		((ReferenceView) referenceView).setImage(
 				currentProcurator.getReferenceImage(
-				imageInterval*4 + 1 + singleViewIndex, 
+				imageInterval*4 + singleViewIndex, 
 				currentStudy));
 		
 		updateViewStatus();

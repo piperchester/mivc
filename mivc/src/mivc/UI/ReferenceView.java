@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
 public class ReferenceView extends JPanel {
@@ -28,6 +29,7 @@ public class ReferenceView extends JPanel {
 	 */
 	private void initializeComponents() {
 		setPreferredSize(new Dimension(100, 100));
+		setBorder(new EmptyBorder(10,10,10,10));
 	}
 	
 	/**
