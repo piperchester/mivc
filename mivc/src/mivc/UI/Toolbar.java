@@ -73,9 +73,9 @@ public class Toolbar extends JPanel implements ActionListener {
 		btnPrev.setPreferredSize(new Dimension(40, 25));
 		lblStatus = new JLabel("Viewing image(s) n of n");
 		lblStatus.setPreferredSize(new Dimension(300, 30));
-		tfMinWindow = new JTextField();
+		tfMinWindow = new JTextField("0");
 		tfMinWindow.setPreferredSize(new Dimension(50, 30));
-		tfMaxWindow = new JTextField();
+		tfMaxWindow = new JTextField("255");
 		tfMaxWindow.setPreferredSize(new Dimension(50, 30));
 	}
 	

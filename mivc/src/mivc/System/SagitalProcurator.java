@@ -1,7 +1,10 @@
 package mivc.System;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -9,7 +12,7 @@ import java.awt.image.BufferedImage;
 public class SagitalProcurator implements ImageProcurator {
 
 	@Override
-	public BufferedImage getImage(int index, Study study, int min, int max) {
+	public BufferedImage getReconstructedImage(int index, Study study, int min, int max) {
 		// Make an image that is as tall as our normal images but only as wide as
 		// the number of images in our layered stack.
 		BufferedImage retVal = new BufferedImage(study.getMaxZ(), 
@@ -47,6 +50,34 @@ public class SagitalProcurator implements ImageProcurator {
     	} else {
     		return resized;
     	}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see mivc.System.ImageProcurator#getReferenceImage(int, mivc.System.Study)
+	 */
+	@Override
+	public BufferedImage getReferenceImage(int index, Study study) {
+		System.out.println("Drawing line at " + index);
+		BufferedImage retVal = new BufferedImage(study.getMaxX(), 
+				study.getMaxY(),
+				BufferedImage.TYPE_INT_RGB);
+		
+    	for (int x = 0; x < retVal.getWidth(); x++) {
+    		for (int y = 0; y < retVal.getHeight(); y++) {
+    			// Store the current x, y data into the array
+    			retVal.setRGB(x, y, study.getPixel(x, y, 0));
+    		}
+    	}
+    	
+    	Graphics2D g2 = retVal.createGraphics();
+    	g2.setColor(Color.yellow);
+    	Stroke brush = new BasicStroke(4);
+    	g2.setStroke(brush);
+    	g2.drawLine(index, 0, index, retVal.getHeight());
+    	g2.dispose();
+    	
+    	return retVal;
 	}
 
 }

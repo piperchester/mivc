@@ -35,6 +35,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	private JPanel imageView;
 	private JPanel singleView;
 	private JPanel quadView;
+	private JPanel referenceView;
 	private ViewType currentView;
 	private ReconstructionType imageType = ReconstructionType.AXIAL;
 	private boolean viewingSingle = true;
@@ -81,6 +82,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	 */
 	private void initializeComponents() {
 		toolbar = new Toolbar(this, invoker);
+		referenceView = new ReferenceView();
 		imageView = new JPanel(new CardLayout());
 		singleView = new SingleView();
 		quadView = new QuadView();
@@ -92,6 +94,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	private void layoutComponents() {
 		getContentPane().add(toolbar, BorderLayout.NORTH);
 		getContentPane().add(imageView, BorderLayout.CENTER);
+		getContentPane().add(referenceView, BorderLayout.WEST);
 		imageView.add(singleView, "SV");
 		currentView = ViewType.SINGLE_VIEW;
 		imageView.add(quadView, "QV");
@@ -378,7 +381,8 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 			} else {
 				// OLD -> currentImages[i] = currentStudy.getImage(imgIndex);
 				// NEW
-				currentImages[i] = procurator.getImage(imgIndex, currentStudy, 
+				currentImages[i] = procurator.getReconstructedImage(imgIndex, 
+						currentStudy, 
 						((Toolbar) toolbar).getMinWindow(), 
 						((Toolbar) toolbar).getMaxWindow());
 			}
@@ -393,6 +397,12 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 			setImages(currentImages);
 		}
 
+		// Update the reference image
+		((ReferenceView) referenceView).setImage(
+				currentProcurator.getReferenceImage(
+				imageInterval*4 + 1 + singleViewIndex, 
+				currentStudy));
+		
 		updateViewStatus();
 	}
 
