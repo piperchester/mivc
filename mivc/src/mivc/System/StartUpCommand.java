@@ -1,7 +1,9 @@
 package mivc.System;
 
+import mivc.System.IO.LocalSettings;
 import mivc.System.IO.StudyDAO;
 import mivc.UI.StudyView;
+import mivc.UI.StudyView.ReconstructionType;
 
 public class StartUpCommand implements ICommand {
 
@@ -13,6 +15,10 @@ public class StartUpCommand implements ICommand {
 	
 	@Override
 	public void execute() {
+		// Default to the Axial view
+		receiver.updateImageType(ReconstructionType.AXIAL);
+		receiver.updateImageProcurator(new AxialProcurator());
+		
 		// Load settings
 		LocalSettings.getInstance().Load(LocalSettings.SETTINGS_PATH);
 		
@@ -20,11 +26,13 @@ public class StartUpCommand implements ICommand {
 		String studyName = LocalSettings.getInstance()
 						.getString(StudyView.DEFAULT_STUDY_KEY);
 		
+		// Update the studies list
+		receiver.updateStudies(StudyDAO.getInstance().listStudies());
 		if (studyName != null) {
-			// Update the studies list
-			receiver.updateStudies(StudyDAO.getInstance().listStudies());
 			// Set the default study to the current study by running the SelectStudyCommand
 			new SelectStudyCommand(receiver, studyName, false).execute();
+		} else {
+			receiver.showList();
 		}
 	}
 

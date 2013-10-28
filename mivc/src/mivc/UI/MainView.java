@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import mivc.System.CommandHandler;
-import mivc.System.IStudyImage;
+import mivc.System.ImageProcurator;
 import mivc.System.SelectStudyCommand;
 import mivc.System.StartUpCommand;
 import mivc.System.Study;
@@ -35,14 +36,16 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	private JPanel singleView;
 	private JPanel quadView;
 	private ViewType currentView;
+	private ReconstructionType imageType = ReconstructionType.AXIAL;
 	private boolean viewingSingle = true;
 	private StudyList studyList = new StudyList();
 	private CommandHandler invoker;
 	private Map<String, Study> studies;
 	private Study currentStudy;
+	private ImageProcurator currentProcurator;
 	private int imageInterval = 0;
 	private int singleViewIndex = 0;
-	private IStudyImage[] currentImages = new IStudyImage[4];
+	private BufferedImage[] currentImages = new BufferedImage[4];
 	
 	/**
 	 * The main view to be used for displaying MIVC data
@@ -170,43 +173,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 			currentView = ViewType.SINGLE_VIEW;
 		}
 		viewingSingle = !viewingSingle;
-		updateViewImages();
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#addSaveStudyListener(java.awt.event.ActionListener)
-	 */
-	@Override
-	public void addSaveStudyListener(ActionListener al) {
-		((Toolbar)toolbar).addSaveStudyListener(al);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#addSaveViewListener(java.awt.event.ActionListener)
-	 */
-	@Override
-	public void addSaveViewListener(ActionListener al) {
-		((Toolbar)toolbar).addSaveViewListener(al);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#addPrevListener(java.awt.event.ActionListener)
-	 */
-	@Override
-	public void addPrevListener(ActionListener al) {
-		((Toolbar)toolbar).addPrevListener(al);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * @see mivc.UI.StudyView#addNextListener(java.awt.event.ActionListener)
-	 */
-	@Override
-	public void addNextListener(ActionListener al) {
-		((Toolbar)toolbar).addNextListener(al);
+		updateViewImages(currentProcurator);
 	}
 	
 	/**
@@ -214,7 +181,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	 * @see mivc.UI.StudyView#setImages(mivc.System.IStudyImage[])
 	 */
 	@Override
-	public void setImages(IStudyImage... images) {
+	public void setImages(BufferedImage... images) {
 		((SingleView)this.singleView).setImages(images);
 		((QuadView)this.quadView).setImages(images);
 	}
@@ -336,7 +303,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	public void setImageIndexing(int interval, int index) {
 		this.imageInterval = interval;
 		this.singleViewIndex = index;
-		updateViewImages();
+		updateViewImages(currentProcurator);
 	}
 	
 	/**
@@ -345,25 +312,36 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	 */
 	private void updateViewStatus() {
 		// Get current view (send either one or four images)
-		int totalImages = currentStudy.getImageCount();
+		int totalImageCount = 0;
+		String reconView = "";
+		if (imageType == ReconstructionType.AXIAL) {
+			totalImageCount = currentStudy.getMaxZ();
+			reconView = "Axial";
+		} else if (imageType == ReconstructionType.SAGITAL) {
+			totalImageCount = currentStudy.getMaxY();
+			reconView = "Sagital";
+		} else if (imageType == ReconstructionType.CORONAL) {
+			totalImageCount = currentStudy.getMaxX();
+			reconView = "Coronal";
+		}
 		String status = "";
 		
 		if (currentView == ViewType.SINGLE_VIEW) {
 			int imgIndex = imageInterval*4 + singleViewIndex;
 			// Update the status
-			status = "Viewing " + currentStudy.getName() + " image " + 
-					(imgIndex + 1) + " of " + totalImages;
+			status = "Viewing " + reconView + " " +	currentStudy.getName() + 
+					" image " +	(imgIndex + 1) + " of " + totalImageCount;
 		} else if (currentView == ViewType.QUAD_VIEW) {
 			// Update the status
 			int lastImage = 0;
-			if (totalImages - imageInterval*4 <= 4) {
-				lastImage = totalImages;
+			if (totalImageCount - imageInterval*4 <= 4) {
+				lastImage = totalImageCount;
 			} else {
 				lastImage = imageInterval*4 + 4;
 			}
-			status = "Viewing " + currentStudy.getName() + 
+			status = "Viewing " + reconView + " " +	currentStudy.getName() + 
 					" images (" + (imageInterval*4 + 1) + " - " + lastImage + 
-					") of " + currentStudy.getImageCount();
+					") of " + totalImageCount;
 		}
 
 		// update the status bar
@@ -376,17 +354,28 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	 * @param forceUpdate should the update of images be forced
 	 * @precondition imageInterval and singleViewIndex must be set previously
 	 */
-	private void updateViewImages() {
+	private void updateViewImages(ImageProcurator procurator) {
+		// If the current doesn't match the new, update currentProcurator
+		if (!procurator.equals(currentProcurator)) {
+			currentProcurator = procurator;
+		}
 		
-		// This used to be modified to only run on specific occasions.
-		// TODO see if we can revert back to old code when this was in Controller.
-		int totalImages = currentStudy.getImageCount();
+		int totalImageCount = 0;
+		if (imageType == ReconstructionType.AXIAL) {
+			totalImageCount = currentStudy.getMaxZ();
+		} else if (imageType == ReconstructionType.SAGITAL) {
+			totalImageCount = currentStudy.getMaxY();
+		} else if (imageType == ReconstructionType.CORONAL) {
+			totalImageCount = currentStudy.getMaxX();
+		}
 		for (int i = 0; i < 4; i++) {
 			int imgIndex = imageInterval*4 + i;
-			if (imgIndex >= totalImages) {
+			if (imgIndex >= totalImageCount) {
 				currentImages[i] = null;
 			} else {
-				currentImages[i] = currentStudy.getImage(imgIndex);
+				// OLD -> currentImages[i] = currentStudy.getImage(imgIndex);
+				// NEW
+				currentImages[i] = procurator.getImage(imgIndex, currentStudy);
 			}
 		}
 		
@@ -420,6 +409,21 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	@Override
 	public Study getCurrentStudy() {
 		return currentStudy;
+	}
+
+	@Override
+	public void updateImageType(ReconstructionType type) {
+		this.imageType = type;
+	}
+
+	@Override
+	public ReconstructionType getCurrentImageType() {
+		return imageType;
+	}
+
+	@Override
+	public void updateImageProcurator(ImageProcurator procurator) {
+		this.currentProcurator = procurator;
 	}
 
 

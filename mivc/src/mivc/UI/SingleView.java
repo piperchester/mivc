@@ -3,15 +3,15 @@ package mivc.UI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-
-import mivc.System.IStudyImage;
 
 @SuppressWarnings("serial")
 public class SingleView extends JPanel {
 
-	private IStudyImage image;
+	private BufferedImage image;
 	
 	/**
 	 * A single image display for the GUI
@@ -41,7 +41,7 @@ public class SingleView extends JPanel {
 	 * Set the image to be displayed
 	 * @param imgs 0 to many images to be displayed
 	 */
-	public void setImages(IStudyImage... imgs) {
+	public void setImages(BufferedImage... imgs) {
 		this.image = imgs[0];
 		this.repaint();
 	}
@@ -53,7 +53,7 @@ public class SingleView extends JPanel {
 		if (image != null) {
 			int x = (int) Math.floor((getWidth()-smSize) / 2);
 			int y = (int) Math.floor((getHeight()-smSize) / 2);
-			image.showImage(this, g, x, y, smSize, smSize);
+			g.drawImage(image, x, y, smSize, smSize, null);
 			//g.drawImage(getSquareImage(image, smSize), x, y, smSize, smSize, null);
 		}
 	}

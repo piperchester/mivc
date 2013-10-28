@@ -1,7 +1,7 @@
 /**
  * 
  */
-package mivc.System;
+package mivc.System.IO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +64,8 @@ public class LocalSettings implements Serializable {
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			System.err.println("No Settings Found... continuing with default");
+			//ex.printStackTrace();
 			return false;
 		}
 		

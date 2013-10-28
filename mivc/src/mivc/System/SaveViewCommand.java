@@ -1,5 +1,6 @@
 package mivc.System;
 
+import mivc.System.IO.LocalSettings;
 import mivc.UI.StudyView;
 
 public class SaveViewCommand implements ICommand {

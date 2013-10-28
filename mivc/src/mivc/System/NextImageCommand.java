@@ -1,6 +1,7 @@
 package mivc.System;
 
 import mivc.UI.StudyView;
+import mivc.UI.StudyView.ReconstructionType;
 import mivc.UI.StudyView.ViewType;
 
 public class NextImageCommand implements ICommand, IUndoableCommand {
@@ -18,7 +19,15 @@ public class NextImageCommand implements ICommand, IUndoableCommand {
 		ViewType currentView = receiver.getCurrentView();
 		
 		
-		int totalImages = receiver.getCurrentStudy().getImageCount();
+		int totalImages = 0;
+		ReconstructionType type = receiver.getCurrentImageType();
+		if (type == ReconstructionType.AXIAL) {
+			totalImages = receiver.getCurrentStudy().getMaxZ();
+		} else if (type == ReconstructionType.SAGITAL) {
+			totalImages = receiver.getCurrentStudy().getMaxY();
+		} else if (type == ReconstructionType.CORONAL) {
+			totalImages = receiver.getCurrentStudy().getMaxX();
+		}
 		int imgIndex = interval*4 + index;
 		
 		// Get current view (send either one or four images)

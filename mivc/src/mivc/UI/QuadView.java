@@ -2,15 +2,15 @@ package mivc.UI;
 
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-
-import mivc.System.IStudyImage;
 
 @SuppressWarnings("serial")
 public class QuadView extends JPanel {
 
-	private IStudyImage[] images = new IStudyImage[4];
+	private BufferedImage[] images = new BufferedImage[4];
 	
 	/*
 	 * Creates a display for viewing four images
@@ -40,7 +40,7 @@ public class QuadView extends JPanel {
 	 * Set the images to view on the display
 	 * @param images 0 to many images to be displayed
 	 */
-	protected void setImages(IStudyImage... images) {
+	protected void setImages(BufferedImage... images) {
 		
 		for (int i = 0; i < images.length; i++) {
 			try {
@@ -62,22 +62,22 @@ public class QuadView extends JPanel {
 		if (images[0] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2);
 			int y = (int) Math.floor((getHeight()-smSize*2) / 2);
-			images[0].showImage(this, g, x, y, smSize, smSize);
+			g.drawImage(images[0], x, y, smSize, smSize, null);
 		}
 		if (images[1] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2)+smSize;
 			int y = (int) (Math.floor((getHeight()-smSize*2) / 2));
-			images[1].showImage(this, g, x, y, smSize, smSize);
+			g.drawImage(images[1], x, y, smSize, smSize, null);
 		}
 		if (images[2] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2);
 			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + smSize);
-			images[2].showImage(this, g, x, y, smSize, smSize);
+			g.drawImage(images[2], x, y, smSize, smSize, null);
 		}
 		if (images[3] != null) {
 			int x = (int) Math.floor((getWidth()-smSize*2) / 2)+smSize;
 			int y = (int) (Math.floor((getHeight()-smSize*2) / 2)  + smSize);
-			images[3].showImage(this, g, x, y, smSize, smSize);
+			g.drawImage(images[3], x, y, smSize, smSize, null);
 		}
 	}
 }

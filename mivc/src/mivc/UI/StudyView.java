@@ -1,9 +1,9 @@
 package mivc.UI;
 
-import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
-import mivc.System.IStudyImage;
+import mivc.System.ImageProcurator;
 import mivc.System.Study;
 
 public interface StudyView {
@@ -19,30 +19,7 @@ public interface StudyView {
 	public static final String DISPLAY_STATE_SAVED_KEY = "_display_state";
 
 	public enum ViewType { SINGLE_VIEW, QUAD_VIEW };
-	
-	/**
-	 * Add a listener for the save study command 
-	 * @param al the object to listen to save study commands
-	 */
-	public void addSaveStudyListener(ActionListener al);
-	
-	/**
-	 * Add a listener for the save view command
-	 * @param al the object to listen to save view commands
-	 */
-	public void addSaveViewListener(ActionListener al);
-	
-	/**
-	 * Add a listener for the previous image command
-	 * @param al the object to listen to previous image commands
-	 */
-	public void addPrevListener(ActionListener al);
-	
-	/**
-	 * Add a listener for the next image command
-	 * @param al the object to listen to next image commands
-	 */
-	public void addNextListener(ActionListener al);
+	public enum ReconstructionType {SAGITAL, CORONAL, AXIAL};
 	
 	/**
 	 * Toggles the view between single and quad view
@@ -53,7 +30,7 @@ public interface StudyView {
 	 * Set the image(s) to display on the GUI
 	 * @param images the image(s) to be displayed
 	 */
-	public void setImages(IStudyImage... images);
+	public void setImages(BufferedImage... images);
 	
 	/**
 	 * Show a list of studies for the user to select from
@@ -94,4 +71,9 @@ public interface StudyView {
 	
 	public void updateStudies(List<Study> studies);
 	
+	public void updateImageType(ReconstructionType type);
+	
+	public ReconstructionType getCurrentImageType();
+	
+	public void updateImageProcurator(ImageProcurator procurator);
 }
