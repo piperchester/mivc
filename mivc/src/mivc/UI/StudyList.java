@@ -23,6 +23,7 @@ public class StudyList extends JFrame implements ActionListener {
 	
 	public StudyList() {
 		setLayout(new MigLayout("fill", "", ""));
+		setAlwaysOnTop(true);
 		initializeComponents();
 		layoutComponents();
 		

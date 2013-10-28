@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import mivc.System.ChangeReconstructionCommand;
 import mivc.System.ChangeViewCommand;
 import mivc.System.ListStudiesCommand;
 import mivc.System.CommandHandler;
@@ -29,6 +30,7 @@ public class Toolbar extends JPanel implements ActionListener {
 	private JButton btnSaveView;
 	private JButton btnSaveStudy;
 	private JButton btnChangeView;
+	private JButton btnChangeViewType;
 	private JButton btnNext;
 	private JButton btnPrev;
 	private JLabel lblStatus; // This is updated by the MainView
@@ -58,6 +60,8 @@ public class Toolbar extends JPanel implements ActionListener {
 		btnSaveStudy.addActionListener(this);
 		btnChangeView = new JButton("View");
 		btnChangeView.addActionListener(this);
+		btnChangeViewType = new JButton("Change Reconstruction");
+		btnChangeViewType.addActionListener(this);
 		btnNext = new JButton("next >");
 		btnNext.addActionListener(this);
 		btnNext.setPreferredSize(new Dimension(40, 25));
@@ -75,6 +79,7 @@ public class Toolbar extends JPanel implements ActionListener {
 		add(btnOpen, "gap unrelated");
 		add(btnSaveView);
 		add(btnSaveStudy);
+		add(btnChangeViewType);
 		add(btnChangeView, "wrap, push");
 		add(btnPrev, "west, grow");
 		add(lblStatus, "span 2, gap unrelated");
@@ -137,6 +142,8 @@ public class Toolbar extends JPanel implements ActionListener {
 			invoker.addCommand(new SaveViewCommand(parent));
 		} else if (src == btnSaveStudy) {
 			invoker.addCommand(new SaveStudyCommand(parent));
+		} else if (src == btnChangeViewType) {
+			invoker.addCommand(new ChangeReconstructionCommand(parent));
 		}
 	}
 	

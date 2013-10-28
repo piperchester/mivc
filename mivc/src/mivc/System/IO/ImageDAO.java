@@ -12,9 +12,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import mivc.System.IStudyImage;
-import mivc.System.StudyImage;
-
 /**
  * ImageManager handles basic IO operations related to images.
  * @author Ty
@@ -72,7 +69,7 @@ public class ImageDAO {
         ImageIO.write((RenderedImage) image, f.getName().substring(f.getName().lastIndexOf('.')), f);
     }
     
-    public IStudyImage[] listAll(String path) {
+    public String[] listAll(String path) {
     	// Create a file for the root folder
     	File file = new File(rootPath + "/" + path);
     	// Ensure it is a folder and is not hidden
@@ -81,7 +78,7 @@ public class ImageDAO {
         }
         
         // Create the return object use list because we are unsure of the size
-        List<IStudyImage> tmp = new ArrayList<IStudyImage>();
+        List<String> tmp = new ArrayList<String>();
         
         // List the files in the folder
         File[] children = file.listFiles();  // Array of pathnames 
@@ -95,13 +92,13 @@ public class ImageDAO {
             if (isAcceptableExtension(extension)) {
             	
             	// Add the file to the list of images
-            	tmp.add(new StudyImage(path + "/" + child.getName()));
+            	tmp.add(rootPath + "/" + path + "/" + child.getName());
             	
             }
         }
 
         // Now that we know the true size, convert to an array
-        IStudyImage[] retVal = new IStudyImage[tmp.size()];
+        String[] retVal = new String[tmp.size()];
 
         for (int i = 0; i < tmp.size(); i++) {
         	retVal[i] = tmp.get(i);

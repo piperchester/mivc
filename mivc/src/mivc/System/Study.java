@@ -3,8 +3,19 @@
  */
 package mivc.System;
 
+
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import javax.imageio.ImageIO;
 
 import mivc.System.IO.ImageDAO;
 
@@ -17,50 +28,140 @@ import mivc.System.IO.ImageDAO;
 public class Study {
 
     private String name;
-    private IStudyImage[] images;
+    private String[] imagePaths;
+    private List<Integer[][]> boxData;
 	
 	public Study(String name) {
 		this.name = name;
-		images = ImageDAO.getInstance().listAll(name);
+		imagePaths = ImageDAO.getInstance().listAll(name);
 	}
 
-	public BufferedImage getLineImage(int p_y, ArrayList<int[][]> p_imageDatas)
-	{
-		BufferedImage s_bufImage = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-		for (int i = 0; i < 256; ++i)
-		{
-			// For every vertical line, grab/set the horizontal line
-			for (int j = 0; j < 256; ++j)
-			{
-				int s_rgb = 0;
-				// Loop through and get all of the horizontal lines add them up by color then divide by the count
-				for (int k = 0; k < p_imageDatas.size(); ++k)
-				{
-					int[][] s_currentImage = p_imageDatas.get(k);
-					s_rgb += s_currentImage[i][j];
-				}
-				s_rgb = s_rgb / p_imageDatas.size();
-				
-				s_bufImage.setRGB(j, i, s_rgb);
-			}
+	public void loadImageData() {
+		loadBoxDataMT();
+	}
+	
+	public void purgeImageData() {
+		boxData = new ArrayList<Integer[][]>();
+	}
+	
+	/**
+	 * This method retrieves images, on average, about 62% faster than the 
+	 * loadBoxData(String path) method 
+	 * @param path the path to the images
+	 */
+	private void loadBoxDataMT() {
+		if (boxData == null) {
+			boxData = new ArrayList<Integer[][]>();
 		}
-		return s_bufImage;
+		
+        // CREATE executor service
+        ExecutorService exec = Executors.newFixedThreadPool(imagePaths.length);
+        
+        long startTime = System.currentTimeMillis();
+        List<Callable<Integer[][]>> callables = new ArrayList<Callable<Integer[][]>>();
+        
+        int i = 0;
+        for (String child : imagePaths) {
+        	
+        	callables.add(new MyCallable(i++, new File(child)));
+
+        }
+        
+        // Now run the callables
+        List<Future<Integer[][]>> results;
+        try {
+        	results = exec.invokeAll(callables);
+        	for (Future<Integer[][]> result : results) {
+        		boxData.add(result.get());
+        	}
+        } catch (InterruptedException e) {
+        	e.printStackTrace();
+        } catch (ExecutionException e) {
+        	e.printStackTrace();
+        } finally {
+        	exec.shutdown();
+        }
+
+        
+        System.out.println("It took " + (System.currentTimeMillis() - startTime) + " milliseconds to read those images");
+		
 	}
 	
     public String getName() {
         return this.name;
     }
-
-    public IStudyImage getImage(int index) {
-        return images[index];
-    }
     
     public String getImagePath(int index) {
-    	return images[index].getPath();
+    	return imagePaths[index];
     }
     
     public int getImageCount() {
-        return images.length;
+        return imagePaths.length;
     }
     
+	class MyCallable implements Callable<Integer[][]> {
+		private final File child;
+		
+		MyCallable(int threadnumber, File child) {
+			this.child = child;
+		}
+		
+		public Integer[][] call() {
+			BufferedImage tmpImg = null;
+        	// Load the image
+			try {
+				//System.out.println("Trying to read " + child.getPath());
+				tmpImg = ImageIO.read(child);
+
+				// NOTE: Doesn't check extensions
+
+				// Add the file to the list of images
+				//System.out.println("Reading image " + child.getName());
+				int width = tmpImg.getWidth();
+				int height = tmpImg.getHeight();
+				Integer[][] tmpData = new Integer[width][height];
+				for (int x = 0; x < width; x++) {
+					for (int y = 0; y < height; y++) {
+						// Store the current x, y data into the array
+						tmpData[x][y] = tmpImg.getRGB(x, y);
+					}
+				}
+				return tmpData;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
+    
+	public int getPixel(int x, int y, int z) {
+		// If x, y or z exceeds the size, return 0
+		if (boxData.size() == 0 || z > boxData.size()) {
+			return 0;
+		}
+		if (x > boxData.get(0).length || y > boxData.get(0)[0].length) {
+			return 0;
+		}
+
+		return boxData.get(z)[x][y];
+		
+	}
+	
+	public int getMaxX() {
+		if (boxData.size() == 0) {
+			return 0;
+		}
+		return boxData.get(0).length;
+	}
+
+	public int getMaxY() {
+		if (boxData.size() == 0) {
+			return 0;
+		}
+		return boxData.get(0)[0].length;
+	}
+	
+	public int getMaxZ() {
+		return boxData.size();
+	}
 }

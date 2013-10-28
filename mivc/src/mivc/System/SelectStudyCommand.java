@@ -1,5 +1,6 @@
 package mivc.System;
 
+import mivc.System.IO.LocalSettings;
 import mivc.UI.StudyView;
 import mivc.UI.StudyView.ViewType;
 
@@ -23,8 +24,16 @@ public class SelectStudyCommand implements ICommand {
 		if (studyName.equals("")) {
 			return;
 		}
+		
+		// Purge the old study's image data
+		if (receiver.getCurrentStudy() != null) {
+			receiver.getCurrentStudy().purgeImageData();
+		}
+		
 		// Set the current study
 		receiver.setCurrentStudy(studyName);
+		// Load the study's image data
+		receiver.getCurrentStudy().loadImageData();
 		
 		// Save the settings as the default if necessary
 		if (defaultStudy) {
