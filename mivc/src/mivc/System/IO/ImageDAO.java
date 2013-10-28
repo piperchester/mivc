@@ -85,6 +85,9 @@ public class ImageDAO {
         
         
         for (File child : children) {
+        	if (child.isDirectory()) {
+        		continue;
+        	}
         	String cName = child.getName();
         	String extension = cName.substring(cName.lastIndexOf('.'))
             		.toLowerCase();

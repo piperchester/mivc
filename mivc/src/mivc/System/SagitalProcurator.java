@@ -58,7 +58,6 @@ public class SagitalProcurator implements ImageProcurator {
 	 */
 	@Override
 	public BufferedImage getReferenceImage(int index, Study study) {
-		System.out.println("Drawing line at " + index);
 		BufferedImage retVal = new BufferedImage(study.getMaxX(), 
 				study.getMaxY(),
 				BufferedImage.TYPE_INT_RGB);

@@ -174,9 +174,7 @@ public class Study {
         	// Load the image
 			try {
 				//System.out.println("Trying to read " + child.getPath());
-				System.out.println(child.getPath().substring(child.getPath().length()-3));
 				if (child.getPath().substring(child.getPath().length()-3).equals("acr")) {
-					System.out.println("Reading acr");
 					tmpImg = new MyImageIO().read(child);
 				} else {
 					tmpImg = ImageIO.read(child);

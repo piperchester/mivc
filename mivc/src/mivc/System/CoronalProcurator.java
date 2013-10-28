@@ -1,8 +1,10 @@
 package mivc.System;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -71,6 +73,9 @@ public class CoronalProcurator implements ImageProcurator {
     	
     	Graphics2D g2 = retVal.createGraphics();
     	g2.setColor(Color.yellow);
+    	g2.setColor(Color.yellow);
+    	Stroke brush = new BasicStroke(4);
+    	g2.setStroke(brush);
     	g2.drawLine(0, index, retVal.getWidth(), index);
     	g2.dispose();
     	
