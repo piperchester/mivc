@@ -121,5 +121,5 @@ public class ImageDAO {
 
     private static final ImageDAO INSTANCE = new ImageDAO();
     private static final String[] EXTENSIONS = new String[] 
-        {".jpeg", ".jpg"};
+        {".jpeg", ".jpg", ".acr"};
 }
