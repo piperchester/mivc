@@ -32,10 +32,21 @@ public class Study {
     private String name;
     private String[] imagePaths;
     private List<Integer[][]> boxData;
+    private List<Study> subStudies;
 	
 	public Study(String name) {
 		this.name = name;
 		imagePaths = ImageDAO.getInstance().listAll(name);
+	}
+	
+	public List<Study> getSubStudies()
+	{
+		return subStudies;
+	}
+	
+	public void setSubStudies(List<Study> p_studies)
+	{
+		subStudies = p_studies;
 	}
 
 	public void loadImageData() {

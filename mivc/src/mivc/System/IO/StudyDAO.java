@@ -37,20 +37,26 @@ public class StudyDAO {
      * Adds all studies within the files ArrayList to a String list of studies.
      * @return a String list of study names.
      */
-    public List<Study> listStudies()
+    public List<Study> listStudies(String... p_Path)
     {   
 
 //    	System.out.println("Scanning: " + rootPath);
     	
     	List<Study> studies = new ArrayList<Study>();
     	try {
-    		File file = new File(rootPath);
+    		String s_currentDirectory = (String) ((p_Path.length == 0) ? rootPath : p_Path[0]);
+    		File file = new File(s_currentDirectory);
             File[] children = file.listFiles();  // Array of pathnames 
             if (children != null) {
                 for (File child : children) {
         	    	if (child.isDirectory()){
 //        	    		System.out.println("Adding dir: " + child.getName());
-        	    		studies.add(new Study(child.getName()));
+        	    		Study s_newStudy = new Study(child.getName());
+        	    		// ht_head
+        	    		// ht_head/my_child_head
+        	    		// ht_head/my2
+        	    		s_newStudy.setSubStudies(listStudies(s_currentDirectory + "/" + child.getName()));
+        	    		studies.add(s_newStudy);
         	    	}
                 }
             }
