@@ -6,6 +6,14 @@ import java.util.List;
 import mivc.System.ImageGetter;
 import mivc.System.Study;
 
+/**
+ * Serves as an interface of the view of the Study. From this interface 
+ * the user will be able to implement methods on study viewing such as
+ * view toggling, image setting, etc
+ * 
+ * @author geofberl
+ * 
+ */
 public interface StudyView {
 	
 	// The following properties are to be concatenated with the study name

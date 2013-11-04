@@ -8,6 +8,13 @@ import java.awt.image.BufferedImage;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+/**
+ * This is the single view of the image from the study.
+ * 
+ * @author geofberl
+ * 
+ */
+
 @SuppressWarnings("serial")
 public class SingleView extends JPanel {
 

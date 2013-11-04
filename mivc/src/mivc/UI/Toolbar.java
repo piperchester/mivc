@@ -19,8 +19,12 @@ import mivc.System.SaveStudyCommand;
 import mivc.System.SaveViewCommand;
 import net.miginfocom.swing.MigLayout;
 
-/*
- * Toolbar.java
+/**
+ * Panel that contains various buttons for different actions
+ * within the system. For example, the toolbar contains the 
+ * view change button, save study button, etc.
+ * 
+ * @author berlgeof
  * 
  */
 

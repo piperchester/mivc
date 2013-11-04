@@ -9,6 +9,14 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Serves as the side image of the GUI that will be presented 
+ * in the main view of the application.
+ * 
+ * @author geofberl
+ * 
+ */
+
 @SuppressWarnings("serial")
 public class ReferenceView extends JPanel {
 

@@ -14,6 +14,14 @@ import javax.swing.WindowConstants;
 
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * View of the list of studies the user can select on startup.
+ * The user can also access this list when choosing a study.
+ * 
+ * @author geofberl
+ * 
+ */
+
 @SuppressWarnings("serial")
 public class StudyList extends JFrame implements ActionListener {
 

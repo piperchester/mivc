@@ -28,6 +28,14 @@ import mivc.System.StartUpCommand;
 import mivc.System.Study;
 
 
+/**
+ * This is the main view of the application. It is the frame that contains
+ * the toolbar, buttons, and other view components of the GUI.
+ * 
+ * @author geofberl
+ * 
+ */
+
 @SuppressWarnings("serial")
 public class MainView extends JFrame implements StudyView, ActionListener {
 
