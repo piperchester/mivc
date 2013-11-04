@@ -1,15 +1,15 @@
 package mivc.System;
 
 /**
- * An interface, considered part of the Command pattern.  It is used to 
- * govern the methods implemented in ConcreteCommand classes.
+ * The main responsibility of this interface is for our command pattern. 
+ * It is used to govern methods implemented in all concrete command classes.
  * 
  * @author berlgeof
  */
 public interface ICommand {
 
 	/**
-	 * Carries out the command.
+	 * A method to carry out the command.
 	 */
 	public void execute();
 	

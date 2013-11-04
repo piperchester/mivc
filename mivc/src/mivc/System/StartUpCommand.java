@@ -5,14 +5,33 @@ import mivc.System.IO.StudyDAO;
 import mivc.UI.StudyView;
 import mivc.UI.StudyView.ReconstructionType;
 
+/**
+ * This command is called when the system is initialized for the first 
+ * time. Its main responsibility is to load the studies from persistence 
+ * and provide them to the GUI.  If there is a default study, that study 
+ * will be sent to the GUI, otherwise, the GUI will be prompted to show a 
+ * list of studies for selection.  This class is also responsibile for 
+ * loading any previous settings from LocalSettings.
+ * 
+ * @author berlgeof
+ */
+
 public class StartUpCommand implements ICommand {
 
 	private StudyView receiver;
 	
+	/**
+	 * Single Arg constructor provides the reciever for the command
+	 * @param receiver the recipient for this command's actions.
+	 */
 	public StartUpCommand(StudyView receiver) {
 		this.receiver = receiver;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see mivc.System.ICommand#execute()
+	 */
 	@Override
 	public void execute() {
 		// Default to the Axial view

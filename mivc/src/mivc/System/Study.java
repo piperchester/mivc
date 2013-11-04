@@ -22,7 +22,10 @@ import javax.imageio.stream.FileImageInputStream;
 import mivc.System.IO.ImageDAO;
 
 /**
- * Holds images related to what is considered to be a study.
+ * Model Object for Study. Holds images related to the study by 
+ * encapsulating the study into its own class, we can isolate its data to 
+ * one place in the system. The Study Class handles reading image data 
+ * from the file system and storing them as a data structure.
  * 
  * @author Ty
  * 
@@ -34,32 +37,50 @@ public class Study {
     private List<Integer[][]> boxData;
     private List<Study> subStudies;
 	
+    /**
+     * Single arg constructor for naming this study
+     * @param name the name of the study.
+     */
 	public Study(String name) {
 		this.name = name;
 		imagePaths = ImageDAO.getInstance().listAll(name);
 	}
 	
+	/**
+	 * Get a list of sub studies
+	 * @return a list of sub studies
+	 */
 	public List<Study> getSubStudies()
 	{
 		return subStudies;
 	}
 	
+	/**
+	 * Set the sub studies
+	 * @param p_studies the list of sub studies to set
+	 */
 	public void setSubStudies(List<Study> p_studies)
 	{
 		subStudies = p_studies;
 	}
 
+	/**
+	 * Loads a three dimensional array of pixel information for gathering
+	 * reconstructed views.  Should only be called when images are actually
+	 * needed.  Doing so will save on resources
+	 */
 	public void loadImageData() {
 		loadBoxDataMT();
 	}
 	
+	/**
+	 * Clear the pixel data for garbage collection
+	 */
 	public void purgeImageData() {
 		boxData = new ArrayList<Integer[][]>();
 	}
 	
-	/**
-	 * @param path the path to the images
-	 */
+	/* Private method */
 	private void loadBoxDataMT() {
 		if (boxData == null) {
 			boxData = new ArrayList<Integer[][]>();
@@ -98,18 +119,25 @@ public class Study {
 		
 	}
 	
+	/**
+	 * Get the name of this study
+	 * @return the name of this study
+	 */
     public String getName() {
         return this.name;
     }
     
-    public String getImagePath(int index) {
-    	return imagePaths[index];
-    }
-    
+    /**
+     * Get a count of images contained in this study
+     * @return the number of images in this study
+     */
     public int getImageCount() {
         return imagePaths.length;
     }
     
+    /**
+     * A special inner class for reading ACR images
+     */
     class MyImageIO {
 
     	public static final int HEADER_OFFSET = 0x2000;
@@ -173,6 +201,11 @@ public class Study {
     	}
     }
     
+    /**
+     * A special inner class to allow image reading to be multi-threaded.
+     * 
+     * @author berlgeof
+     */
 	class MyCallable implements Callable<Integer[][]> {
 		private final File child;
 		
@@ -212,6 +245,13 @@ public class Study {
 		}
 	}
     
+	/**
+	 * Get the pixel for a specific coordinate
+	 * @param x the x position of the pixel
+	 * @param y the y position of the pixel
+	 * @param z the z position of the pixel
+	 * @return the pixel at the specified coordinate
+	 */
 	public int getPixel(int x, int y, int z) {
 		// If x, y or z exceeds the size, return 0
 		if (boxData.size() == 0 || z > boxData.size()) {
@@ -225,6 +265,10 @@ public class Study {
 		
 	}
 	
+	/**
+	 * Get the max X value of the 3D pixel array
+	 * @return the max X value of the 3D pixel array
+	 */
 	public int getMaxX() {
 		if (boxData.size() == 0) {
 			return 0;
@@ -232,6 +276,10 @@ public class Study {
 		return boxData.get(0).length;
 	}
 
+	/**
+	 * Get the max Y value of the 3D pixel array
+	 * @return the max Y value of the 3D pixel array
+	 */
 	public int getMaxY() {
 		if (boxData.size() == 0) {
 			return 0;
@@ -239,6 +287,10 @@ public class Study {
 		return boxData.get(0)[0].length;
 	}
 	
+	/**
+	 * Get the max Z value of the 3D pixel array
+	 * @return the max Z value of the 3D pixel array
+	 */
 	public int getMaxZ() {
 		return boxData.size();
 	}

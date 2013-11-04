@@ -2,8 +2,25 @@ package mivc.System;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * The main responsibility of this class is to get image reconstructions 
+ * from an axial perspective.  This class contains two methods which are 
+ * called from the client.  One method returns an image based on a given 
+ * index.  The other method returns a modified reference image.  This 
+ * image is always an axial image and has a yellow reference line painted 
+ * over it to show a reference of the reconstruction when compared to an 
+ * axial image.  In the case of this class specifically, the method 
+ * returns the same image as the one being viewed since Axial is the 
+ * default and there is now reconstruction done.
+ * 
+ * @author berlgeof
+ */
 public class AxialImageGetter implements ImageGetter {
 
+	/*
+	 * (non-Javadoc)
+	 * @see mivc.System.ImageGetter#getReconstructedImage(int, mivc.System.Study, int, int)
+	 */
 	@Override
 	public BufferedImage getReconstructedImage(int index, Study study, int min, int max) {
 		BufferedImage retVal = new BufferedImage(study.getMaxX(), 

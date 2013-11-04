@@ -3,14 +3,31 @@ package mivc.System;
 import mivc.UI.StudyView;
 import mivc.UI.StudyView.ReconstructionType;
 
+/**
+ * The main responsibility of this class is to provide the receiver with 
+ * the appropriate strategy for obtaining images based on the selected 
+ * reconstruction.  Once the strategy is updated, the imaging indexes are 
+ * set to zero which means when a new reconstruction is selected, the 
+ * images will always start back at the beginning of the study.
+ * 
+ * @author berlgeof
+ */
 public class ChangeReconstructionCommand implements ICommand {
 
 	private StudyView receiver;
 	
+	/**
+	 * Single Arg constructor provides the reciever for the command
+	 * @param receiver the recipient for this command's actions.
+	 */
 	public ChangeReconstructionCommand(StudyView receiver) {
 		this.receiver = receiver;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see mivc.System.ICommand#execute()
+	 */
 	@Override
 	public void execute() {
 		ReconstructionType imageType = receiver.getCurrentImageType();

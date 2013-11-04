@@ -10,12 +10,23 @@ public class SelectStudyCommand implements ICommand {
 	private String studyName;
 	private boolean defaultStudy;
 	
+	/**
+	 * A three arg constructor for setting the appropriate information to 
+	 * select a study
+	 * @param receiver the recipient of this command execution
+	 * @param sName the name of the study
+	 * @param defaultStudy whether or not this study was selected to be default
+	 */
 	public SelectStudyCommand(StudyView receiver, String sName, boolean defaultStudy) {
 		this.receiver = receiver;
 		this.studyName = sName;
 		this.defaultStudy = defaultStudy;
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see mivc.System.ICommand#execute()
+	 */
 	@Override
 	public void execute() {
 		if (studyName == null) {

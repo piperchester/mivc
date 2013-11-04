@@ -2,6 +2,15 @@ package mivc.System;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * The responsibilities of this class are to provide methods for specific 
+ * image manipulation functions.  Specifically this class would provide 
+ * methods for applying min/max pixel windowing on an image as well as 
+ * computing the statistical data for an image.  Currently the statistical 
+ * computations are not implemented.
+ * 
+ * @author berlgeof
+ */
 public class ImageUtil {
 
 	/**
@@ -40,6 +49,5 @@ public class ImageUtil {
 		}
 		return retVal;
 	}
-	
 	
 }

@@ -9,6 +9,17 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
+/**
+ * The main responsibility of this class is to get image reconstructions 
+ * from an axial perspective.  This class contains two methods which are 
+ * called from the client.  One method returns an image based on a given 
+ * index.  The other method returns a modified reference image.  This 
+ * image is always an axial image and has a yellow reference line painted 
+ * over it to show a reference of the reconstruction when compared to an 
+ * axial image.
+ * 
+ * @author berlgeof
+ */
 public class SagitalImageGetter implements ImageGetter {
 
 	@Override
