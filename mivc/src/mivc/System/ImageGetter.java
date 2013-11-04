@@ -2,7 +2,7 @@ package mivc.System;
 
 import java.awt.image.BufferedImage;
 
-public interface ImageProcurator {
+public interface ImageGetter {
 
 	public BufferedImage getReconstructedImage(int index, Study study, int min, 
 			int max);

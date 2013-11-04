@@ -22,7 +22,7 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import mivc.System.CommandHandler;
-import mivc.System.ImageProcurator;
+import mivc.System.ImageGetter;
 import mivc.System.SelectStudyCommand;
 import mivc.System.StartUpCommand;
 import mivc.System.Study;
@@ -43,7 +43,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	private CommandHandler invoker;
 	private Map<String, Study> studies;
 	private Study currentStudy;
-	private ImageProcurator currentProcurator;
+	private ImageGetter currentProcurator;
 	private int imageInterval = 0;
 	private int singleViewIndex = 0;
 	private BufferedImage[] currentImages = new BufferedImage[4];
@@ -360,7 +360,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	 * @param forceUpdate should the update of images be forced
 	 * @precondition imageInterval and singleViewIndex must be set previously
 	 */
-	private void updateViewImages(ImageProcurator procurator) {
+	private void updateViewImages(ImageGetter procurator) {
 		// If the current doesn't match the new, update currentProcurator
 		if (!procurator.equals(currentProcurator)) {
 			currentProcurator = procurator;
@@ -437,7 +437,7 @@ public class MainView extends JFrame implements StudyView, ActionListener {
 	}
 
 	@Override
-	public void updateImageProcurator(ImageProcurator procurator) {
+	public void updateImageProcurator(ImageGetter procurator) {
 		this.currentProcurator = procurator;
 	}
 

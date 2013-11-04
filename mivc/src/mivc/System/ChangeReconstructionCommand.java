@@ -18,13 +18,13 @@ public class ChangeReconstructionCommand implements ICommand {
 		// depending on the current type (Could avoid this with State Pattern)
 		// Update the ImageProcurator strategy
 		if (imageType == ReconstructionType.AXIAL) {
-			receiver.updateImageProcurator(new SagitalProcurator());
+			receiver.updateImageProcurator(new SagitalImageGetter());
 			receiver.updateImageType(ReconstructionType.SAGITAL);
 		} else if (imageType == ReconstructionType.SAGITAL) {
-			receiver.updateImageProcurator(new CoronalProcurator());
+			receiver.updateImageProcurator(new CoronalImageGetter());
 			receiver.updateImageType(ReconstructionType.CORONAL);
 		} else if (imageType == ReconstructionType.CORONAL) {
-			receiver.updateImageProcurator(new AxialProcurator());
+			receiver.updateImageProcurator(new AxialImageGetter());
 			receiver.updateImageType(ReconstructionType.AXIAL);
 		}
 		// Set the images back to 0 for safe processing.

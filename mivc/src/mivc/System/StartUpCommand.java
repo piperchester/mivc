@@ -17,7 +17,7 @@ public class StartUpCommand implements ICommand {
 	public void execute() {
 		// Default to the Axial view
 		receiver.updateImageType(ReconstructionType.AXIAL);
-		receiver.updateImageProcurator(new AxialProcurator());
+		receiver.updateImageProcurator(new AxialImageGetter());
 		
 		// Load settings
 		LocalSettings.getInstance().Load(LocalSettings.SETTINGS_PATH);

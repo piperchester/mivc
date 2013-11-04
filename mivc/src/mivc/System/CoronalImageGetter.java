@@ -9,26 +9,26 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
-public class SagitalProcurator implements ImageProcurator {
+public class CoronalImageGetter implements ImageGetter {
 
 	@Override
 	public BufferedImage getReconstructedImage(int index, Study study, int min, int max) {
-		// Make an image that is as tall as our normal images but only as wide as
+		// Make an image that is as wide as our normal images but only as tall as
 		// the number of images in our layered stack.
 		BufferedImage retVal = new BufferedImage(study.getMaxZ(), 
-				study.getMaxY(), BufferedImage.TYPE_INT_RGB);
+				study.getMaxX(), BufferedImage.TYPE_INT_RGB);
 		
 
-		// For each image in the list, grab that column of y values
+		// For each image in the list, grab that row of x values
 		for (int z = 0; z < study.getMaxZ(); z++) {
-			for (int y = 0; y < retVal.getHeight(); y++) {
-				retVal.setRGB(z, y, study.getPixel(index, y, z));
+			for (int x = 0; x < retVal.getWidth(); x++) {
+				retVal.setRGB(z, x, study.getPixel(x, index, z));
 			}
 		}
 		
 		
-		int newHeight = retVal.getHeight();
-		int newWidth = retVal.getWidth()*study.getMaxY()/study.getMaxZ();
+		int newHeight = retVal.getHeight()*study.getMaxX()/study.getMaxZ();
+		int newWidth = retVal.getWidth();
 		BufferedImage resized = new BufferedImage(newWidth, newHeight, 
 				BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = resized.createGraphics();
@@ -39,11 +39,12 @@ public class SagitalProcurator implements ImageProcurator {
 		g2.dispose();
 		
 		// Translate the image (flip it)
-		AffineTransform rotate = new AffineTransform();
-		rotate.rotate(Math.toRadians(-90.0), newWidth/2, newHeight/2);
-		AffineTransformOp op = new AffineTransformOp(rotate, 
+		AffineTransform flip = AffineTransform.getScaleInstance(1.0, -1.0);
+		flip.translate(0, -newHeight);
+		AffineTransformOp op = new AffineTransformOp(flip, 
 				AffineTransformOp.TYPE_BILINEAR);
 		resized = op.filter(resized, null);
+		
 		
     	if (min > 0 || max < 255) {
     		return ImageUtil.windowImage(resized, min, max);
@@ -51,6 +52,7 @@ public class SagitalProcurator implements ImageProcurator {
     		return resized;
     	}
 	}
+	
 	
 	/*
 	 * (non-Javadoc)
@@ -71,9 +73,10 @@ public class SagitalProcurator implements ImageProcurator {
     	
     	Graphics2D g2 = retVal.createGraphics();
     	g2.setColor(Color.yellow);
+    	g2.setColor(Color.yellow);
     	Stroke brush = new BasicStroke(4);
     	g2.setStroke(brush);
-    	g2.drawLine(index, 0, index, retVal.getHeight());
+    	g2.drawLine(0, index, retVal.getWidth(), index);
     	g2.dispose();
     	
     	return retVal;

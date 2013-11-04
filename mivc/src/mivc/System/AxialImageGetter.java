@@ -2,7 +2,7 @@ package mivc.System;
 
 import java.awt.image.BufferedImage;
 
-public class AxialProcurator implements ImageProcurator {
+public class AxialImageGetter implements ImageGetter {
 
 	@Override
 	public BufferedImage getReconstructedImage(int index, Study study, int min, int max) {

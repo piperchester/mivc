@@ -3,7 +3,7 @@ package mivc.UI;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import mivc.System.ImageProcurator;
+import mivc.System.ImageGetter;
 import mivc.System.Study;
 
 public interface StudyView {
@@ -75,5 +75,5 @@ public interface StudyView {
 	
 	public ReconstructionType getCurrentImageType();
 	
-	public void updateImageProcurator(ImageProcurator procurator);
+	public void updateImageProcurator(ImageGetter procurator);
 }
