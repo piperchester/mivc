@@ -19,7 +19,18 @@ import javax.imageio.ImageIO;
  */
 public class ImageDAO {
     
+	// Networkable images
+	private enum Repository
+	{
+		RLocal,
+		RRemote
+	}
+	
+	// You can set
 	private String rootPath = "studies";
+	
+	// Hold our current repository
+	Repository curRepo = Repository.RLocal;
 	
     protected ImageDAO() { }
     
