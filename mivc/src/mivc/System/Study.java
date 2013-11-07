@@ -28,12 +28,10 @@ import mivc.System.IO.ImageDAO;
  * from the file system and storing them as a data structure.
  * 
  * @author Ty
+ * @author act4122
  * 
  */
-/**
- * @author kiwidog
- *
- */
+
 public class Study {
 
     private String name;
