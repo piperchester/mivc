@@ -51,7 +51,7 @@ public class StudyDAO {
                 for (File child : children) {
         	    	if (child.isDirectory()){
 //        	    		System.out.println("Adding dir: " + child.getName());
-        	    		Study s_newStudy = new Study(child.getName());
+        	    		Study s_newStudy = new Study(child.getName(), child.getPath());
         	    		// ht_head
         	    		// ht_head/my_child_head
         	    		// ht_head/my2

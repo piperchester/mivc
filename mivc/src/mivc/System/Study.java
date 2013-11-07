@@ -30,9 +30,15 @@ import mivc.System.IO.ImageDAO;
  * @author Ty
  * 
  */
+/**
+ * @author kiwidog
+ *
+ */
 public class Study {
 
     private String name;
+    private String fullPath;
+    
     private String[] imagePaths;
     private List<Integer[][]> boxData;
     private List<Study> subStudies;
@@ -41,8 +47,9 @@ public class Study {
      * Single arg constructor for naming this study
      * @param name the name of the study.
      */
-	public Study(String name) {
+	public Study(String name, String fullPath) {
 		this.name = name;
+		this.fullPath = fullPath;
 		imagePaths = ImageDAO.getInstance().listAll(name);
 	}
 	
@@ -125,6 +132,14 @@ public class Study {
 	 */
     public String getName() {
         return this.name;
+    }
+    
+    /**
+     * Get the fulll path of the study
+     * @return the path of the study
+     */
+    public String getFullPath() {
+    	return this.fullPath;
     }
     
     /**
