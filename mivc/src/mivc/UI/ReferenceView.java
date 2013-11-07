@@ -7,23 +7,25 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 /**
- * This is the single view of the image from the study.
+ * Serves as the side image of the GUI that will be presented 
+ * in the main view of the application.
  * 
  * @author geofberl
  * 
  */
 
 @SuppressWarnings("serial")
-public class SingleView extends JPanel {
+public class ReferenceView extends JPanel {
 
 	private BufferedImage image;
 	
 	/**
 	 * A single image display for the GUI
 	 */
-	public SingleView() {
+	public ReferenceView() {
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		initializeComponents();
@@ -34,7 +36,8 @@ public class SingleView extends JPanel {
 	 * Initialize the components for the GUI
 	 */
 	private void initializeComponents() {
-		setPreferredSize(new Dimension(400, 400));
+		setPreferredSize(new Dimension(100, 100));
+		setBorder(new EmptyBorder(10,10,10,10));
 	}
 	
 	/**
@@ -48,8 +51,8 @@ public class SingleView extends JPanel {
 	 * Set the image to be displayed
 	 * @param imgs 0 to many images to be displayed
 	 */
-	public void setImages(BufferedImage... imgs) {
-		this.image = imgs[0];
+	public void setImage(BufferedImage img) {
+		this.image = img;
 		this.repaint();
 	}
 	
@@ -61,7 +64,6 @@ public class SingleView extends JPanel {
 			int x = (int) Math.floor((getWidth()-smSize) / 2);
 			int y = (int) Math.floor((getHeight()-smSize) / 2);
 			g.drawImage(image, x, y, smSize, smSize, null);
-			//g.drawImage(getSquareImage(image, smSize), x, y, smSize, smSize, null);
 		}
 	}
 	

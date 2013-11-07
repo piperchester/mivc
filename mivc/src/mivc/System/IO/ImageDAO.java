@@ -12,9 +12,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import mivc.System.IStudyImage;
-import mivc.System.StudyImage;
-
 /**
  * ImageManager handles basic IO operations related to images.
  * @author Ty
@@ -22,14 +19,24 @@ import mivc.System.StudyImage;
  */
 public class ImageDAO {
     
+	// Networkable images
+	private enum Repository
+	{
+		RLocal,
+		RRemote
+	}
+	
+	// You can set
 	private String rootPath = "studies";
+	
+	// Hold our current repository
+	Repository curRepo = Repository.RLocal;
 	
     protected ImageDAO() { }
     
     public static ImageDAO getInstance() { 
         return INSTANCE; 
     }
-
     
     /**
      * readImage
@@ -73,7 +80,7 @@ public class ImageDAO {
         ImageIO.write((RenderedImage) image, f.getName().substring(f.getName().lastIndexOf('.')), f);
     }
     
-    public IStudyImage[] listAll(String path) {
+    public String[] listAll(String path) {
     	// Create a file for the root folder
     	File file = new File(rootPath + "/" + path);
     	// Ensure it is a folder and is not hidden
@@ -82,13 +89,16 @@ public class ImageDAO {
         }
         
         // Create the return object use list because we are unsure of the size
-        List<IStudyImage> tmp = new ArrayList<IStudyImage>();
+        List<String> tmp = new ArrayList<String>();
         
         // List the files in the folder
         File[] children = file.listFiles();  // Array of pathnames 
         
         
         for (File child : children) {
+        	if (child.isDirectory()) {
+        		continue;
+        	}
         	String cName = child.getName();
         	String extension = cName.substring(cName.lastIndexOf('.'))
             		.toLowerCase();
@@ -96,13 +106,13 @@ public class ImageDAO {
             if (isAcceptableExtension(extension)) {
             	
             	// Add the file to the list of images
-            	tmp.add(new StudyImage(path + "/" + child.getName()));
+            	tmp.add(rootPath + "/" + path + "/" + child.getName());
             	
             }
         }
 
         // Now that we know the true size, convert to an array
-        IStudyImage[] retVal = new IStudyImage[tmp.size()];
+        String[] retVal = new String[tmp.size()];
 
         for (int i = 0; i < tmp.size(); i++) {
         	retVal[i] = tmp.get(i);
@@ -125,5 +135,5 @@ public class ImageDAO {
 
     private static final ImageDAO INSTANCE = new ImageDAO();
     private static final String[] EXTENSIONS = new String[] 
-        {".jpeg", ".jpg"};
+        {".jpeg", ".jpg", ".acr"};
 }

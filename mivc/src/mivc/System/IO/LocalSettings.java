@@ -1,7 +1,7 @@
 /**
  * 
  */
-package mivc.System;
+package mivc.System.IO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,10 +22,11 @@ import java.io.Serializable;
  * LocalSettingsManager.getInstance().Load(Path to Settings File);
  * LocalSettingsManager.getInstance().set("Hello", "Hello");
  */
-public class LocalSettingsManager implements Serializable {
+public class LocalSettings implements Serializable {
 
-	private static LocalSettingsManager m_instance = null;
+	private static LocalSettings m_instance = null;
 	private static final long serialVersionUID = 1L;
+	public static final String SETTINGS_PATH = "settings.prop";
 	private Map<String, String>	m_strings = new HashMap<String, String>();
 	private Map<String, Integer> m_ints = new HashMap<String, Integer>();
 	private Map<String, Boolean> m_bools = new HashMap<String, Boolean>();
@@ -48,8 +49,8 @@ public class LocalSettingsManager implements Serializable {
 			ObjectInputStream s_Ois =
 				new ObjectInputStream(s_Fis);
 			
-			LocalSettingsManager s_Tmp = 
-					(LocalSettingsManager)s_Ois.readObject();
+			LocalSettings s_Tmp = 
+					(LocalSettings)s_Ois.readObject();
 			
 			// Cleanup
 			s_Ois.close();
@@ -63,22 +64,23 @@ public class LocalSettingsManager implements Serializable {
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			System.err.println("No Settings Found... continuing with default");
+			//ex.printStackTrace();
 			return false;
 		}
 		
 		return true;
 	}
 	
-	protected LocalSettingsManager()
+	protected LocalSettings()
 	{
 		// Do nothing, start a blank slate
 	}
 	
-	public static LocalSettingsManager getInstance()
+	public static LocalSettings getInstance()
 	{
 		if (m_instance == null)
-			m_instance = new LocalSettingsManager();
+			m_instance = new LocalSettings();
 		
 		return m_instance;
 	}
